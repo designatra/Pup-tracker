@@ -1,0 +1,1411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#1C1917">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Potty Tracker">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231C1917'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle'%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%231C1917'/%3E%3Ctext x='50' y='68' font-size='55' text-anchor='middle'%3E%F0%9F%90%BE%3C/text%3E%3C/svg%3E">
+<title>Puppy Potty Tracker</title>
+<style>
+  :root {
+    --charcoal: #1C1917;
+    --charcoal-light: #2A2522;
+    --charcoal-lighter: #3A332E;
+    --cream: #F5F1EA;
+    --cream-dim: #B8AFA0;
+    --amber: #E8A23D;
+    --amber-dim: #6B4F26;
+    --sage: #7C9473;
+    --coral: #D97757;
+    --umber: #8B6F47;
+    --umber-dim: #4A3A26;
+    --dustyblue: #6E8B9E;
+    --dustyblue-dim: #2E4451;
+  }
+
+  * { box-sizing: border-box; }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
+  }
+
+  body {
+    margin: 0;
+    background: var(--charcoal);
+    color: var(--cream);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+    min-height: 100vh;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .wrap {
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 20px 16px 40px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  header h1 {
+    font-size: 1.05rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin: 0 0 2px;
+    color: var(--cream-dim);
+  }
+
+  /* Dog switcher */
+  .dog-switcher {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    padding: 4px 0 14px;
+    margin-bottom: 4px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .dog-switcher::-webkit-scrollbar { display: none; }
+  .dog-chip {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 4px 4px 4px 16px;
+    border-radius: 14px;
+    background: var(--charcoal-light);
+    border: 1.5px solid transparent;
+    color: var(--cream-dim);
+    white-space: nowrap;
+  }
+  .dog-chip.active {
+    background: rgba(232,162,61,0.15);
+    border-color: var(--amber);
+    color: var(--amber);
+  }
+  .dog-chip-name {
+    background: none;
+    border: none;
+    color: inherit;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 6px 4px;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  .dog-chip-edit {
+    background: none;
+    border: none;
+    color: inherit;
+    opacity: 0.6;
+    font-size: 0.85rem;
+    padding: 6px 8px;
+    cursor: pointer;
+    line-height: 1;
+  }
+  .dog-chip-edit:active { opacity: 1; }
+  .dog-chip.add-dog {
+    background: transparent;
+    border: 1.5px dashed var(--charcoal-lighter);
+    color: var(--cream-dim);
+    padding: 10px 16px;
+    font-size: 0.95rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  .storage-warning {
+    display: none;
+    background: rgba(217,119,87,0.15);
+    border: 1px solid rgba(217,119,87,0.4);
+    color: var(--coral);
+    font-size: 0.8rem;
+    border-radius: 12px;
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .sync-banner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--charcoal-light);
+    border-radius: 12px;
+    padding: 8px 12px;
+    margin-bottom: 14px;
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+  }
+  .sync-setup-btn {
+    background: none;
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 8px;
+    color: var(--cream-dim);
+    font-size: 0.72rem;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+
+  /* Main action button */
+  .log-btn {
+    width: 100%;
+    padding: 28px 16px;
+    border-radius: 24px;
+    border: none;
+    background: linear-gradient(180deg, var(--amber) 0%, #D6902E 100%);
+    color: #2A1B05;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    box-shadow: 0 8px 0 var(--amber-dim), 0 10px 20px rgba(0,0,0,0.4);
+    transform: translateY(0);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+    cursor: pointer;
+    margin-bottom: 10px;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .log-btn:active {
+    transform: translateY(6px);
+    box-shadow: 0 2px 0 var(--amber-dim), 0 4px 10px rgba(0,0,0,0.4);
+  }
+
+  .accident-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 16px;
+    border: 1.5px solid var(--charcoal-lighter);
+    background: transparent;
+    color: var(--coral);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 22px;
+  }
+  .accident-btn:active { background: rgba(217,119,87,0.1); }
+
+  .btn-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+  .secondary-btn {
+    flex: 1;
+    padding: 16px 10px;
+    border-radius: 18px;
+    border: none;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transform: translateY(0);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .poop-btn {
+    background: linear-gradient(180deg, var(--umber) 0%, #6E5636 100%);
+    color: #F5EFE4;
+    box-shadow: 0 5px 0 var(--umber-dim), 0 6px 14px rgba(0,0,0,0.35);
+  }
+  .poop-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--umber-dim), 0 2px 6px rgba(0,0,0,0.35);
+  }
+  .feed-btn {
+    background: linear-gradient(180deg, var(--dustyblue) 0%, #587486 100%);
+    color: #F0F6F9;
+    box-shadow: 0 5px 0 var(--dustyblue-dim), 0 6px 14px rgba(0,0,0,0.35);
+  }
+  .feed-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 var(--dustyblue-dim), 0 2px 6px rgba(0,0,0,0.35);
+  }
+
+  .status-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+  .status-row .status-card { flex: 1; margin-bottom: 0; }
+
+  .status-card {
+    background: var(--charcoal-light);
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 16px;
+  }
+  .status-card .label {
+    font-size: 0.8rem;
+    color: var(--cream-dim);
+    margin-bottom: 4px;
+  }
+  .status-card .value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1;
+  }
+  .status-card .value.warn { color: var(--coral); }
+  .status-card .value.ok { color: var(--sage); }
+  .status-card .sub {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin-top: 2px;
+  }
+  .status-card .avg-line {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid var(--charcoal-lighter);
+  }
+  .status-card .avg-line strong { color: var(--cream); }
+
+  .feed-goal-card {
+    background: var(--charcoal-light);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .feed-goal-text { display: flex; flex-direction: column; }
+  .feed-goal-text .label {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin-bottom: 2px;
+  }
+  .feed-goal-text .value {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--dustyblue);
+  }
+  .feed-goal-text .value.met { color: var(--sage); }
+  .goal-edit-btn {
+    background: none;
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 10px;
+    color: var(--cream-dim);
+    font-size: 0.75rem;
+    padding: 6px 12px;
+    cursor: pointer;
+  }
+
+  .next-feed-card {
+    background: linear-gradient(135deg, rgba(110,139,158,0.18), rgba(110,139,158,0.05));
+    border: 1px solid rgba(110,139,158,0.3);
+    border-radius: 16px;
+    padding: 14px 16px;
+    margin-bottom: 12px;
+  }
+  .next-feed-card .label {
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--dustyblue);
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+  .next-feed-card .text {
+    font-size: 0.92rem;
+    color: var(--cream);
+    line-height: 1.4;
+  }
+
+  .custom-time-link {
+    display: block;
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--cream-dim);
+    font-size: 0.8rem;
+    text-align: center;
+    padding: 6px;
+    margin-bottom: 18px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--charcoal-lighter);
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .modal-overlay.show { display: flex; }
+  .modal {
+    background: var(--charcoal-light);
+    border-radius: 20px;
+    padding: 22px;
+    width: 100%;
+    max-width: 360px;
+  }
+  .modal-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+  .modal-row {
+    margin-bottom: 14px;
+  }
+  .modal-label {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+    margin-bottom: 6px;
+  }
+  .modal-select, .modal-input {
+    width: 100%;
+    background: var(--charcoal);
+    border: 1.5px solid var(--charcoal-lighter);
+    border-radius: 10px;
+    color: var(--cream);
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    font-family: inherit;
+  }
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 18px;
+  }
+  .modal-btn {
+    flex: 1;
+    padding: 12px;
+    border-radius: 12px;
+    border: none;
+    font-size: 0.9rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+  .modal-btn.cancel {
+    background: transparent;
+    border: 1.5px solid var(--charcoal-lighter);
+    color: var(--cream-dim);
+  }
+  .modal-btn.confirm {
+    background: var(--amber);
+    color: #2A1B05;
+  }
+  .modal-btn.danger {
+    background: var(--coral);
+    color: #2A1B05;
+  }
+
+  /* Pattern insight */
+  .insight {
+    background: linear-gradient(135deg, rgba(124,148,115,0.18), rgba(124,148,115,0.05));
+    border: 1px solid rgba(124,148,115,0.3);
+    border-radius: 18px;
+    padding: 16px 18px;
+    margin-bottom: 22px;
+  }
+  .insight .label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--sage);
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .insight .text {
+    font-size: 0.95rem;
+    color: var(--cream);
+    line-height: 1.45;
+  }
+
+  /* Timeline */
+  .section-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin: 22px 0 10px 2px;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .tl-row {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    position: relative;
+  }
+
+  .tl-dot-col {
+    width: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+  .tl-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--amber);
+    margin-top: 6px;
+    flex-shrink: 0;
+  }
+  .tl-dot.accident { background: var(--coral); }
+  .tl-dot.poop { background: var(--umber); }
+  .tl-dot.feed { background: var(--dustyblue); }
+  .tl-line {
+    width: 2px;
+    flex: 1;
+    background: var(--charcoal-lighter);
+    margin: 2px 0;
+  }
+
+  .tl-content {
+    flex: 1;
+    padding-bottom: 18px;
+  }
+  .tl-time {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .tl-time .tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--coral);
+    margin-left: 6px;
+    text-transform: uppercase;
+  }
+  .tl-gap {
+    font-size: 0.8rem;
+    color: var(--cream-dim);
+    margin-top: 2px;
+  }
+  .gap-bar {
+    height: 5px;
+    border-radius: 3px;
+    background: var(--charcoal-lighter);
+    margin-top: 6px;
+    overflow: hidden;
+    max-width: 160px;
+  }
+  .gap-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    background: var(--sage);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 30px 16px;
+    color: var(--cream-dim);
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+  .empty-state .paw { font-size: 2rem; margin-bottom: 8px; display: block; }
+
+  .day-header {
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 18px 2px 8px;
+    padding-top: 10px;
+    border-top: 1px solid var(--charcoal-lighter);
+  }
+  .day-header:first-child { border-top: none; padding-top: 0; margin-top: 0; }
+
+  .row-actions {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+  }
+  .del-btn {
+    background: none;
+    border: none;
+    color: var(--cream-dim);
+    font-size: 0.8rem;
+    padding: 6px 8px;
+    cursor: pointer;
+  }
+  .del-btn:active { color: var(--coral); }
+
+  .footer-note {
+    text-align: center;
+    font-size: 0.75rem;
+    color: var(--charcoal-lighter);
+    margin-top: 28px;
+  }
+
+  .toast {
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--cream);
+    color: var(--charcoal);
+    padding: 10px 20px;
+    border-radius: 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    opacity: 0;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    pointer-events: none;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    z-index: 100;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header>
+    <h1>potty tracker</h1>
+  </header>
+
+  <div class="dog-switcher" id="dogSwitcher"></div>
+
+  <div class="storage-warning" id="storageWarning">
+    ⚠️ Having trouble syncing — changes are saved on this device but may not have reached the shared copy yet.
+  </div>
+
+  <div class="sync-banner" id="syncBanner" style="display:none;">
+    <span id="syncStatusText">Synced</span>
+    <button class="sync-setup-btn" id="syncSetupBtn">Sync settings</button>
+  </div>
+
+  <button class="log-btn" id="logBtn">🐾 She just peed</button>
+  <div class="btn-row">
+    <button class="secondary-btn poop-btn" id="poopBtn">💩 Pooped</button>
+    <button class="secondary-btn feed-btn" id="feedBtn">🍽️ Fed</button>
+  </div>
+  <button class="accident-btn" id="accidentBtn">Log an accident instead</button>
+
+  <div class="status-row">
+    <div class="status-card">
+      <div class="label">Since last pee</div>
+      <div class="value" id="sinceValue">—</div>
+      <div class="sub" id="lastTime">No trips yet</div>
+      <div class="avg-line" id="peeAvgLine"></div>
+    </div>
+    <div class="status-card">
+      <div class="label">Since last poop</div>
+      <div class="value" id="poopSinceValue">—</div>
+      <div class="sub" id="poopLastTime">None yet</div>
+      <div class="avg-line" id="poopAvgLine"></div>
+    </div>
+  </div>
+
+  <div class="next-feed-card" id="nextFeedCard" style="display:none;">
+    <div class="label">Next feeding</div>
+    <div class="text" id="nextFeedText"></div>
+  </div>
+
+  <div class="feed-goal-card" id="feedGoalCard">
+    <div class="feed-goal-text">
+      <span class="label">Feedings today</span>
+      <span class="value" id="feedGoalValue">0 of 3–4</span>
+    </div>
+    <button class="goal-edit-btn" id="goalEditBtn">Edit goal</button>
+  </div>
+
+  <button class="custom-time-link" id="customTimeBtn">+ Log with a custom time (backdate an entry)</button>
+
+  <div class="insight" id="insightCard" style="display:none;">
+    <div class="label">Pattern so far</div>
+    <div class="text" id="insightText"></div>
+  </div>
+
+  <div id="timelineWrap">
+    <div class="section-label">Log</div>
+    <div class="timeline" id="timeline">
+      <div class="empty-state">
+        <span class="paw">🐶</span>
+        Log pees, poops, and feedings — patterns will show up here.
+      </div>
+    </div>
+  </div>
+
+  <div class="footer-note">Stored on this device · tap an entry's "remove" to fix mistakes</div>
+</div>
+
+<div class="modal-overlay" id="timeModalOverlay">
+  <div class="modal">
+    <div class="modal-title">Log with a custom time</div>
+    <div class="modal-row">
+      <label class="modal-label">Type</label>
+      <select id="modalType" class="modal-select">
+        <option value="pee">🐾 Pee</option>
+        <option value="poop">💩 Poop</option>
+        <option value="feed">🍽️ Fed</option>
+        <option value="accident">⚠️ Accident</option>
+      </select>
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Date</label>
+      <input type="date" id="modalDate" class="modal-input">
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Time</label>
+      <input type="time" id="modalTime" class="modal-input">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="modalCancel">Cancel</button>
+      <button class="modal-btn confirm" id="modalConfirm">Log it</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="goalModalOverlay">
+  <div class="modal">
+    <div class="modal-title">Daily feeding goal</div>
+    <div class="modal-row">
+      <label class="modal-label">Min feedings/day</label>
+      <input type="number" id="goalMin" class="modal-input" min="1" max="10" value="3">
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Max feedings/day</label>
+      <input type="number" id="goalMax" class="modal-input" min="1" max="10" value="4">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="goalModalCancel">Cancel</button>
+      <button class="modal-btn confirm" id="goalModalConfirm">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addDogModalOverlay">
+  <div class="modal">
+    <div class="modal-title">Add a dog</div>
+    <div class="modal-row">
+      <label class="modal-label">What's their name?</label>
+      <input type="text" id="newDogName" class="modal-input" placeholder="e.g. Biscuit" autocomplete="off">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="addDogModalCancel">Cancel</button>
+      <button class="modal-btn confirm" id="addDogModalConfirm">Add dog</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="dogMenuModalOverlay">
+  <div class="modal">
+    <div class="modal-title" id="dogMenuTitle">Dog</div>
+    <div class="modal-row">
+      <label class="modal-label">Rename</label>
+      <input type="text" id="renameDogInput" class="modal-input">
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="dogMenuCancel">Cancel</button>
+      <button class="modal-btn confirm" id="dogMenuRename">Save name</button>
+    </div>
+    <div class="modal-actions" style="margin-top:8px;">
+      <button class="modal-btn danger" id="dogMenuDelete">Remove this dog</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="syncModalOverlay">
+  <div class="modal">
+    <div class="modal-title">Sync settings</div>
+    <div class="modal-row">
+      <label class="modal-label">JSONBin Master Key</label>
+      <input type="text" id="syncApiKey" class="modal-input" placeholder="$2a$10$...">
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Bin ID (leave blank to create one)</label>
+      <input type="text" id="syncBinId" class="modal-input" placeholder="auto-generated on first save">
+    </div>
+    <div class="modal-row" style="font-size:0.75rem; color:var(--cream-dim); line-height:1.4;">
+      Get a free Master Key at jsonbin.io (create account → API Keys). First device: leave Bin ID blank, tap Save — a Bin ID will appear. Copy that same Master Key + Bin ID into the other phone's sync settings to link them. All dogs share this one synced bin.
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="syncModalCancel">Cancel</button>
+      <button class="modal-btn confirm" id="syncModalConfirm">Save</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Logged!</div>
+
+<script>
+const STORAGE_KEY = 'tracker-data'; // { dogs: [{id,name}], activeDogId, entries: [...], feedGoals: {dogId: {min,max}} }
+const SYNC_CONFIG_KEY = 'sync-config';
+
+let dogs = [];
+let activeDogId = null;
+let entries = []; // {id, dogId, ts, type}
+let feedGoals = {}; // dogId -> {min, max}
+let syncConfig = { apiKey: '', binId: '' };
+let syncInFlight = false;
+
+function uid(prefix) { return (prefix||'e') + Date.now() + Math.random().toString(36).slice(2,7); }
+
+function defaultData() {
+  const dogId = uid('dog');
+  return {
+    dogs: [{ id: dogId, name: 'Foster Pup' }],
+    activeDogId: dogId,
+    entries: [],
+    feedGoals: { [dogId]: { min: 3, max: 4 } }
+  };
+}
+
+async function loadAll() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    const data = raw ? JSON.parse(raw) : defaultData();
+    dogs = data.dogs || [];
+    activeDogId = data.activeDogId || (dogs[0] && dogs[0].id);
+    entries = data.entries || [];
+    feedGoals = data.feedGoals || {};
+    if (dogs.length === 0) {
+      const d = defaultData();
+      dogs = d.dogs; activeDogId = d.activeDogId; feedGoals = d.feedGoals;
+    }
+    dogs.forEach(d => { if (!feedGoals[d.id]) feedGoals[d.id] = { min: 3, max: 4 }; });
+  } catch (e) {
+    const d = defaultData();
+    dogs = d.dogs; activeDogId = d.activeDogId; entries = d.entries; feedGoals = d.feedGoals;
+  }
+  entries.sort((a,b) => a.ts - b.ts);
+}
+
+function persistLocal() {
+  const data = { dogs, activeDogId, entries, feedGoals };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+let storageWarned = false;
+function flagStorageIssue() {
+  if (storageWarned) return;
+  storageWarned = true;
+  const banner = document.getElementById('storageWarning');
+  if (banner) banner.style.display = 'block';
+}
+function clearStorageIssue() {
+  storageWarned = false;
+  const banner = document.getElementById('storageWarning');
+  if (banner) banner.style.display = 'none';
+}
+
+// ---- Cloud sync (JSONBin) ----
+function loadSyncConfig() {
+  try {
+    const raw = localStorage.getItem(SYNC_CONFIG_KEY);
+    syncConfig = raw ? JSON.parse(raw) : { apiKey: '', binId: '' };
+  } catch (e) {
+    syncConfig = { apiKey: '', binId: '' };
+  }
+}
+function saveSyncConfig() {
+  localStorage.setItem(SYNC_CONFIG_KEY, JSON.stringify(syncConfig));
+}
+function syncEnabled() {
+  return !!(syncConfig.apiKey && syncConfig.binId);
+}
+function setSyncStatus(text) {
+  const el = document.getElementById('syncStatusText');
+  if (el) el.textContent = text;
+}
+function updateSyncBannerVisibility() {
+  const banner = document.getElementById('syncBanner');
+  if (!banner) return;
+  banner.style.display = 'flex';
+  setSyncStatus(syncEnabled() ? 'Synced across devices' : 'Not synced — saving on this device only');
+}
+
+async function jsonbinRequest(method, path, body) {
+  const res = await fetch('https://api.jsonbin.io/v3' + path, {
+    method,
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Master-Key': syncConfig.apiKey
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!res.ok) throw new Error('JSONBin request failed: ' + res.status);
+  return res.json();
+}
+
+async function pullFromCloud() {
+  if (!syncEnabled()) return;
+  try {
+    const data = await jsonbinRequest('GET', `/b/${syncConfig.binId}/latest`);
+    const remote = data.record || data;
+    if (remote) {
+      if (Array.isArray(remote.dogs) && remote.dogs.length) {
+        const localById = {}; dogs.forEach(d => localById[d.id] = d);
+        remote.dogs.forEach(d => localById[d.id] = d);
+        dogs = Object.values(localById);
+      }
+      if (Array.isArray(remote.entries)) {
+        const byId = {};
+        entries.forEach(e => byId[e.id] = e);
+        remote.entries.forEach(e => byId[e.id] = e);
+        entries = Object.values(byId).sort((a,b) => a.ts - b.ts);
+      }
+      if (remote.feedGoals) {
+        feedGoals = { ...feedGoals, ...remote.feedGoals };
+      }
+      if (remote.activeDogId && !dogs.find(d => d.id === activeDogId)) {
+        activeDogId = remote.activeDogId;
+      }
+      if (!dogs.find(d => d.id === activeDogId) && dogs.length) {
+        activeDogId = dogs[0].id;
+      }
+      persistLocal();
+    }
+    clearStorageIssue();
+  } catch (e) {
+    console.error('Cloud pull failed', e);
+    flagStorageIssue();
+  }
+}
+
+async function pushToCloud() {
+  if (!syncEnabled()) return;
+  if (syncInFlight) return;
+  syncInFlight = true;
+  try {
+    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals });
+    clearStorageIssue();
+  } catch (e) {
+    console.error('Cloud push failed', e);
+    flagStorageIssue();
+  } finally {
+    syncInFlight = false;
+  }
+}
+
+async function createCloudBin() {
+  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals });
+  const id = data.metadata && data.metadata.id;
+  if (!id) throw new Error('No bin id returned');
+  return id;
+}
+
+async function persistAndSync() {
+  try {
+    persistLocal();
+  } catch (e) {
+    console.error('Storage error', e);
+    flagStorageIssue();
+  }
+  pushToCloud();
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 1400);
+}
+
+function fmtTime(ts) {
+  return new Date(ts).toLocaleTimeString(undefined, {hour: 'numeric', minute: '2-digit'});
+}
+
+function fmtDayLabel(ts) {
+  const d = new Date(ts);
+  const today = new Date();
+  const yest = new Date(today); yest.setDate(today.getDate() - 1);
+  const sameDay = (a,b) => a.toDateString() === b.toDateString();
+  if (sameDay(d, today)) return 'Today';
+  if (sameDay(d, yest)) return 'Yesterday';
+  return d.toLocaleDateString(undefined, {weekday: 'long', month: 'short', day: 'numeric'});
+}
+
+function fmtDuration(ms) {
+  const mins = Math.round(ms / 60000);
+  if (mins < 60) return mins + 'm';
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  return m === 0 ? h + 'h' : h + 'h ' + m + 'm';
+}
+
+function fmtDurationLong(ms) {
+  const mins = Math.round(ms / 60000);
+  if (mins < 60) return mins + ' min';
+  const h = Math.floor(mins / 60);
+  const m = mins % 60;
+  const hPart = h + (h === 1 ? ' hour' : ' hours');
+  return m === 0 ? hPart : hPart + ' ' + m + ' min';
+}
+
+function fmtClock(ts) {
+  return new Date(ts).toLocaleTimeString(undefined, {hour: 'numeric', minute: '2-digit'});
+}
+
+// ---- Dog-scoped helpers ----
+function activeEntries() {
+  return entries.filter(e => e.dogId === activeDogId);
+}
+function activeGoal() {
+  return feedGoals[activeDogId] || { min: 3, max: 4 };
+}
+function activeDog() {
+  return dogs.find(d => d.id === activeDogId);
+}
+
+function avgGap(typeList) {
+  // typeList: array of entries of one type, sorted ascending by ts
+  const gaps = [];
+  for (let i = 1; i < typeList.length; i++) {
+    const gap = typeList[i].ts - typeList[i-1].ts;
+    if (gap < 16 * 3600000) gaps.push(gap); // ignore overnight-scale outliers
+  }
+  if (gaps.length === 0) return null;
+  const avg = gaps.reduce((a,b) => a+b, 0) / gaps.length;
+  const min = Math.min(...gaps);
+  const max = Math.max(...gaps);
+  return { avg, min, max, count: gaps.length };
+}
+
+function renderDogSwitcher() {
+  const wrap = document.getElementById('dogSwitcher');
+  let html = '';
+  dogs.forEach(dog => {
+    html += `
+      <div class="dog-chip ${dog.id === activeDogId ? 'active' : ''}">
+        <button class="dog-chip-name" data-dog-id="${dog.id}">${escapeHtml(dog.name)}</button>
+        <button class="dog-chip-edit" data-edit-id="${dog.id}" aria-label="Edit ${escapeHtml(dog.name)}">✎</button>
+      </div>`;
+  });
+  html += `<button class="dog-chip add-dog" id="addDogChip">+ Add dog</button>`;
+  wrap.innerHTML = html;
+
+  wrap.querySelectorAll('.dog-chip-name').forEach(btn => {
+    btn.addEventListener('click', () => {
+      activeDogId = btn.getAttribute('data-dog-id');
+      persistAndSync();
+      renderAll();
+    });
+  });
+  wrap.querySelectorAll('.dog-chip-edit').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openDogMenu(btn.getAttribute('data-edit-id'));
+    });
+  });
+  document.getElementById('addDogChip').addEventListener('click', openAddDogModal);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function renderStatus() {
+  const myEntries = activeEntries();
+  const sinceEl = document.getElementById('sinceValue');
+  const lastEl = document.getElementById('lastTime');
+  const peeAvgLine = document.getElementById('peeAvgLine');
+  const pees = myEntries.filter(e => e.type === 'pee' || e.type === 'accident');
+  if (pees.length === 0) {
+    sinceEl.textContent = '—';
+    sinceEl.className = 'value';
+    lastEl.textContent = 'No trips yet';
+    peeAvgLine.textContent = '';
+  } else {
+    const last = pees[pees.length - 1];
+    const elapsed = Date.now() - last.ts;
+    sinceEl.textContent = fmtDuration(elapsed);
+    const mins = elapsed / 60000;
+    sinceEl.className = 'value ' + (mins > 180 ? 'warn' : mins > 120 ? '' : 'ok');
+    lastEl.textContent = fmtTime(last.ts) + (last.type === 'accident' ? ' (accident)' : '');
+    const stats = avgGap(myEntries.filter(e => e.type === 'pee').sort((a,b)=>a.ts-b.ts));
+    peeAvgLine.innerHTML = stats ? `Avg every <strong>${fmtDurationLong(stats.avg)}</strong>` : '';
+  }
+
+  const poopSinceEl = document.getElementById('poopSinceValue');
+  const poopLastEl = document.getElementById('poopLastTime');
+  const poopAvgLine = document.getElementById('poopAvgLine');
+  const poops = myEntries.filter(e => e.type === 'poop').sort((a,b)=>a.ts-b.ts);
+  if (poops.length === 0) {
+    poopSinceEl.textContent = '—';
+    poopSinceEl.className = 'value';
+    poopLastEl.textContent = 'None yet';
+    poopAvgLine.textContent = '';
+  } else {
+    const last = poops[poops.length - 1];
+    const elapsed = Date.now() - last.ts;
+    poopSinceEl.textContent = fmtDuration(elapsed);
+    const mins = elapsed / 60000;
+    poopSinceEl.className = 'value ' + (mins > 480 ? 'warn' : '');
+    poopLastEl.textContent = fmtTime(last.ts);
+    const stats = avgGap(poops);
+    poopAvgLine.innerHTML = stats ? `Avg every <strong>${fmtDurationLong(stats.avg)}</strong>` : '';
+  }
+}
+
+function renderNextFeeding() {
+  const card = document.getElementById('nextFeedCard');
+  const text = document.getElementById('nextFeedText');
+  const myEntries = activeEntries();
+  const feeds = myEntries.filter(e => e.type === 'feed').sort((a,b)=>a.ts-b.ts);
+  if (feeds.length < 2) {
+    card.style.display = 'none';
+    return;
+  }
+  const stats = avgGap(feeds);
+  if (!stats) {
+    card.style.display = 'none';
+    return;
+  }
+  const lastFeed = feeds[feeds.length - 1];
+  const suggested = lastFeed.ts + stats.avg;
+  const goal = activeGoal();
+  const todayCount = feeds.filter(e => new Date(e.ts).toDateString() === new Date().toDateString()).length;
+  card.style.display = 'block';
+  let msg = `Based on her usual <strong>${fmtDurationLong(stats.avg)}</strong> gap between meals, next feeding around <strong>${fmtClock(suggested)}</strong>.`;
+  if (todayCount >= goal.max) {
+    msg += ` She's already had ${todayCount} feedings today — at her daily max.`;
+  } else if (todayCount < goal.min) {
+    msg += ` She's had ${todayCount} of ${goal.min}–${goal.max} feedings today.`;
+  }
+  text.innerHTML = msg;
+}
+
+function renderInsight() {
+  const card = document.getElementById('insightCard');
+  const text = document.getElementById('insightText');
+  const myEntries = activeEntries();
+  const pees = myEntries.filter(e => e.type === 'pee').sort((a,b)=>a.ts-b.ts);
+  const poops = myEntries.filter(e => e.type === 'poop').sort((a,b)=>a.ts-b.ts);
+  const feeds = myEntries.filter(e => e.type === 'feed').sort((a,b)=>a.ts-b.ts);
+
+  if (pees.length < 3) {
+    card.style.display = 'none';
+    return;
+  }
+  const peeStats = avgGap(pees);
+  card.style.display = 'block';
+  if (!peeStats) {
+    text.textContent = "Not enough same-day data yet to spot a pattern — keep logging!";
+    return;
+  }
+  const todayCount = pees.filter(e => new Date(e.ts).toDateString() === new Date().toDateString()).length;
+  const dogName = activeDog() ? activeDog().name : 'She';
+
+  let msg = `${dogName} tends to pee about every <strong>${fmtDurationLong(peeStats.avg)}</strong> during the day (ranging ${fmtDuration(peeStats.min)}–${fmtDuration(peeStats.max)}). `;
+  if (todayCount > 0) {
+    msg += `Out ${todayCount} time${todayCount === 1 ? '' : 's'} today. `;
+  }
+
+  const poopStats = avgGap(poops);
+  if (poopStats) {
+    msg += `Poops about every <strong>${fmtDurationLong(poopStats.avg)}</strong>. `;
+  }
+
+  if (feeds.length > 0 && poops.length > 0) {
+    const afterFeedGaps = [];
+    poops.forEach(poop => {
+      const priorFeed = [...feeds].filter(f => f.ts < poop.ts).sort((a,b) => b.ts - a.ts)[0];
+      if (priorFeed && (poop.ts - priorFeed.ts) < 3 * 3600000) {
+        afterFeedGaps.push(poop.ts - priorFeed.ts);
+      }
+    });
+    if (afterFeedGaps.length >= 2) {
+      const avgAfterFeed = afterFeedGaps.reduce((a,b) => a+b, 0) / afterFeedGaps.length;
+      msg += `Usually poops about <strong>${fmtDurationLong(avgAfterFeed)}</strong> after eating. `;
+    }
+  }
+
+  const accidentCount = myEntries.filter(e => e.type === 'accident').length;
+  if (accidentCount > 0) {
+    msg += `${accidentCount} accident${accidentCount === 1 ? '' : 's'} logged — try taking out a bit before the usual gap to get ahead of it.`;
+  } else {
+    msg += `Good rule of thumb: head outside a little before that average gap, especially after meals, naps, or play.`;
+  }
+  text.innerHTML = msg;
+}
+
+function entryIcon(type) {
+  if (type === 'poop') return '💩';
+  if (type === 'feed') return '🍽️';
+  if (type === 'accident') return '⚠️';
+  return '🐾';
+}
+
+function renderTimeline() {
+  const wrap = document.getElementById('timeline');
+  const myEntries = activeEntries();
+  if (myEntries.length === 0) {
+    wrap.innerHTML = `<div class="empty-state"><span class="paw">🐶</span>Log pees, poops, and feedings — patterns will show up here.</div>`;
+    return;
+  }
+  const sorted = [...myEntries].sort((a,b) => b.ts - a.ts);
+  let html = '';
+  let lastDayLabel = null;
+  sorted.forEach((entry, idx) => {
+    const dayLabel = fmtDayLabel(entry.ts);
+    if (dayLabel !== lastDayLabel) {
+      html += `<div class="day-header">${dayLabel}</div>`;
+      lastDayLabel = dayLabel;
+    }
+    const sameFamily = (t) => (t === 'pee' || t === 'accident') ? 'potty' : t;
+    const family = sameFamily(entry.type);
+    const olderSameFamily = [...myEntries].filter(e => e.ts < entry.ts && sameFamily(e.type) === family).sort((a,b) => b.ts - a.ts)[0];
+    let gapHtml = '';
+    if (olderSameFamily) {
+      const gap = entry.ts - olderSameFamily.ts;
+      const pct = Math.max(6, Math.min(100, (gap / (4*3600000)) * 100));
+      const gapLabel = entry.type === 'feed' ? 'since previous feeding' : entry.type === 'poop' ? 'since previous poop' : 'since previous trip';
+      gapHtml = `<div class="tl-gap">${fmtDuration(gap)} ${gapLabel}</div>
+        <div class="gap-bar"><div class="gap-bar-fill" style="width:${pct}%"></div></div>`;
+    }
+    html += `
+      <div class="tl-row">
+        <div class="tl-dot-col">
+          <div class="tl-dot ${entry.type}"></div>
+          ${idx < sorted.length - 1 ? '<div class="tl-line"></div>' : ''}
+        </div>
+        <div class="tl-content">
+          <div class="tl-time">${entryIcon(entry.type)} ${fmtTime(entry.ts)}<span class="tag" style="display:${entry.type==='accident'?'inline':'none'}">accident</span>
+            <span class="row-actions"><button class="del-btn" data-id="${entry.id}">remove</button></span>
+          </div>
+          ${gapHtml}
+        </div>
+      </div>`;
+  });
+  wrap.innerHTML = html;
+
+  wrap.querySelectorAll('.del-btn').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      const id = e.target.getAttribute('data-id');
+      entries = entries.filter(en => en.id !== id);
+      await persistAndSync();
+      renderAll();
+    });
+  });
+}
+
+function renderFeedGoal() {
+  const valueEl = document.getElementById('feedGoalValue');
+  const goal = activeGoal();
+  const todayFeeds = activeEntries().filter(e => e.type === 'feed' && new Date(e.ts).toDateString() === new Date().toDateString()).length;
+  valueEl.textContent = `${todayFeeds} of ${goal.min}–${goal.max}`;
+  valueEl.className = 'value' + (todayFeeds >= goal.min ? ' met' : '');
+}
+
+function renderAll() {
+  renderDogSwitcher();
+  renderStatus();
+  renderNextFeeding();
+  renderInsight();
+  renderTimeline();
+  renderFeedGoal();
+}
+
+async function logEntry(type) {
+  entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type });
+  entries.sort((a,b) => a.ts - b.ts);
+  await persistAndSync();
+  renderAll();
+  const toastMsg = { pee: 'Logged! 🐾', poop: 'Poop logged 💩', feed: 'Feeding logged 🍽️', accident: 'Accident logged' };
+  showToast(toastMsg[type] || 'Logged!');
+}
+
+document.getElementById('logBtn').addEventListener('click', () => logEntry('pee'));
+document.getElementById('poopBtn').addEventListener('click', () => logEntry('poop'));
+document.getElementById('feedBtn').addEventListener('click', () => logEntry('feed'));
+document.getElementById('accidentBtn').addEventListener('click', () => logEntry('accident'));
+
+// Custom time modal
+const timeModalOverlay = document.getElementById('timeModalOverlay');
+function pad2(n) { return String(n).padStart(2, '0'); }
+function openTimeModal() {
+  const now = new Date();
+  document.getElementById('modalDate').value = `${now.getFullYear()}-${pad2(now.getMonth()+1)}-${pad2(now.getDate())}`;
+  document.getElementById('modalTime').value = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+  document.getElementById('modalType').value = 'pee';
+  timeModalOverlay.classList.add('show');
+}
+document.getElementById('customTimeBtn').addEventListener('click', openTimeModal);
+document.getElementById('modalCancel').addEventListener('click', () => timeModalOverlay.classList.remove('show'));
+timeModalOverlay.addEventListener('click', (e) => { if (e.target === timeModalOverlay) timeModalOverlay.classList.remove('show'); });
+
+document.getElementById('modalConfirm').addEventListener('click', async () => {
+  const type = document.getElementById('modalType').value;
+  const dateVal = document.getElementById('modalDate').value;
+  const timeVal = document.getElementById('modalTime').value;
+  if (!dateVal || !timeVal) return;
+  const ts = new Date(`${dateVal}T${timeVal}`).getTime();
+  if (isNaN(ts)) return;
+  entries.push({ id: uid(), dogId: activeDogId, ts, type });
+  entries.sort((a,b) => a.ts - b.ts);
+  await persistAndSync();
+  renderAll();
+  timeModalOverlay.classList.remove('show');
+  showToast('Entry logged for ' + fmtTime(ts));
+});
+
+// Goal modal
+const goalModalOverlay = document.getElementById('goalModalOverlay');
+document.getElementById('goalEditBtn').addEventListener('click', () => {
+  const goal = activeGoal();
+  document.getElementById('goalMin').value = goal.min;
+  document.getElementById('goalMax').value = goal.max;
+  goalModalOverlay.classList.add('show');
+});
+document.getElementById('goalModalCancel').addEventListener('click', () => goalModalOverlay.classList.remove('show'));
+goalModalOverlay.addEventListener('click', (e) => { if (e.target === goalModalOverlay) goalModalOverlay.classList.remove('show'); });
+document.getElementById('goalModalConfirm').addEventListener('click', async () => {
+  const min = parseInt(document.getElementById('goalMin').value, 10) || 1;
+  const max = parseInt(document.getElementById('goalMax').value, 10) || min;
+  feedGoals[activeDogId] = { min, max: Math.max(min, max) };
+  await persistAndSync();
+  renderFeedGoal();
+  goalModalOverlay.classList.remove('show');
+});
+
+// Add dog modal
+const addDogModalOverlay = document.getElementById('addDogModalOverlay');
+function openAddDogModal() {
+  document.getElementById('newDogName').value = '';
+  addDogModalOverlay.classList.add('show');
+  setTimeout(() => document.getElementById('newDogName').focus(), 50);
+}
+document.getElementById('addDogModalCancel').addEventListener('click', () => addDogModalOverlay.classList.remove('show'));
+addDogModalOverlay.addEventListener('click', (e) => { if (e.target === addDogModalOverlay) addDogModalOverlay.classList.remove('show'); });
+document.getElementById('addDogModalConfirm').addEventListener('click', async () => {
+  const name = document.getElementById('newDogName').value.trim();
+  if (!name) {
+    showToast('Enter a name first');
+    return;
+  }
+  const newId = uid('dog');
+  dogs.push({ id: newId, name });
+  feedGoals[newId] = { min: 3, max: 4 };
+  activeDogId = newId;
+  await persistAndSync();
+  renderAll();
+  addDogModalOverlay.classList.remove('show');
+  showToast(`${name} added 🐾`);
+});
+document.getElementById('newDogName').addEventListener('keydown', (e) => {
+  if (e.key === 'Enter') document.getElementById('addDogModalConfirm').click();
+});
+
+// Dog menu modal (rename / remove) via long-press or right-click
+const dogMenuModalOverlay = document.getElementById('dogMenuModalOverlay');
+let dogMenuTargetId = null;
+function openDogMenu(dogId) {
+  const dog = dogs.find(d => d.id === dogId);
+  if (!dog) return;
+  dogMenuTargetId = dogId;
+  document.getElementById('dogMenuTitle').textContent = dog.name;
+  document.getElementById('renameDogInput').value = dog.name;
+  dogMenuModalOverlay.classList.add('show');
+}
+document.getElementById('dogMenuCancel').addEventListener('click', () => dogMenuModalOverlay.classList.remove('show'));
+dogMenuModalOverlay.addEventListener('click', (e) => { if (e.target === dogMenuModalOverlay) dogMenuModalOverlay.classList.remove('show'); });
+document.getElementById('dogMenuRename').addEventListener('click', async () => {
+  const newName = document.getElementById('renameDogInput').value.trim();
+  if (!newName || !dogMenuTargetId) return;
+  const dog = dogs.find(d => d.id === dogMenuTargetId);
+  if (dog) dog.name = newName;
+  await persistAndSync();
+  renderAll();
+  dogMenuModalOverlay.classList.remove('show');
+});
+document.getElementById('dogMenuDelete').addEventListener('click', async () => {
+  if (!dogMenuTargetId) return;
+  if (dogs.length <= 1) {
+    showToast("Can't remove your only dog");
+    return;
+  }
+  dogs = dogs.filter(d => d.id !== dogMenuTargetId);
+  entries = entries.filter(e => e.dogId !== dogMenuTargetId);
+  delete feedGoals[dogMenuTargetId];
+  if (activeDogId === dogMenuTargetId) activeDogId = dogs[0].id;
+  await persistAndSync();
+  renderAll();
+  dogMenuModalOverlay.classList.remove('show');
+});
+
+// Sync settings modal
+const syncModalOverlay = document.getElementById('syncModalOverlay');
+document.getElementById('syncSetupBtn').addEventListener('click', () => {
+  document.getElementById('syncApiKey').value = syncConfig.apiKey || '';
+  document.getElementById('syncBinId').value = syncConfig.binId || '';
+  syncModalOverlay.classList.add('show');
+});
+document.getElementById('syncModalCancel').addEventListener('click', () => syncModalOverlay.classList.remove('show'));
+syncModalOverlay.addEventListener('click', (e) => { if (e.target === syncModalOverlay) syncModalOverlay.classList.remove('show'); });
+
+document.getElementById('syncModalConfirm').addEventListener('click', async () => {
+  const apiKey = document.getElementById('syncApiKey').value.trim();
+  const binIdInput = document.getElementById('syncBinId').value.trim();
+  if (!apiKey) {
+    showToast('Enter a Master Key first');
+    return;
+  }
+  syncConfig.apiKey = apiKey;
+  setSyncStatus('Connecting…');
+  try {
+    if (binIdInput) {
+      syncConfig.binId = binIdInput;
+      saveSyncConfig();
+      await pullFromCloud();
+      await pushToCloud();
+    } else {
+      const newId = await createCloudBin();
+      syncConfig.binId = newId;
+      saveSyncConfig();
+      showToast('Bin created — copy the Bin ID to your other phone');
+    }
+    updateSyncBannerVisibility();
+    renderAll();
+    syncModalOverlay.classList.remove('show');
+    document.getElementById('syncBinId').value = syncConfig.binId;
+  } catch (e) {
+    console.error(e);
+    showToast('Could not connect — check your Master Key');
+  }
+});
+
+// live-update the "time since" counter
+setInterval(renderStatus, 30000);
+
+// periodic pull so other phones / other dogs' entries show up here too
+setInterval(async () => {
+  if (syncEnabled()) {
+    await pullFromCloud();
+    renderAll();
+  }
+}, 20000);
+
+(async function init() {
+  loadSyncConfig();
+  await loadAll();
+  updateSyncBannerVisibility();
+  renderAll();
+  if (syncEnabled()) {
+    await pullFromCloud();
+    renderAll();
+  }
+})();
+</script>
+
+</body>
+</html>
