@@ -385,6 +385,26 @@
     padding: 12px 16px;
     margin-bottom: 12px;
   }
+  .med-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 6px;
+  }
+  .med-card-header .label {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin-bottom: 0;
+  }
+  .med-manage-btn {
+    background: none;
+    border: none;
+    color: #8A6D9E;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 2px 4px;
+  }
   .med-status-card .label {
     font-size: 0.75rem;
     color: var(--cream-dim);
@@ -394,11 +414,23 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 5px 0;
+    width: 100%;
+    padding: 10px 8px;
+    margin: 0 -8px;
+    background: none;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    -webkit-tap-highlight-color: transparent;
   }
+  .med-status-row:active { background: rgba(138,109,158,0.12); }
   .med-status-row + .med-status-row {
     border-top: 1px solid var(--charcoal-lighter);
   }
+  .med-status-row.done { opacity: 0.55; }
+  .med-status-info { min-width: 0; }
   .med-status-name {
     font-size: 0.9rem;
     font-weight: 700;
@@ -414,6 +446,7 @@
     font-weight: 700;
     color: #8A6D9E;
     flex-shrink: 0;
+    margin-left: 10px;
   }
   .med-status-count.done { color: var(--sage); }
 
@@ -541,6 +574,22 @@
     box-sizing: border-box;
     overflow-x: hidden;
   }
+  .wizard-bars {
+    display: flex;
+    gap: 5px;
+    margin-bottom: 18px;
+  }
+  .wizard-bar {
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--charcoal-lighter);
+    overflow: hidden;
+  }
+  .wizard-bar.filled {
+    background: var(--amber);
+  }
+
   .modal-title {
     font-family: 'Fraunces', Georgia, serif;
     font-size: 1.25rem;
@@ -997,7 +1046,10 @@
   </div>
 
   <div class="med-status-card" id="medStatusCard" style="display:none;">
-    <div class="label">Medication today</div>
+    <div class="med-card-header">
+      <div class="label">Medication today</div>
+      <button class="med-manage-btn" id="medManageBtn">Manage</button>
+    </div>
     <div id="medStatusList"></div>
   </div>
 
@@ -1041,6 +1093,19 @@
     <div id="medPickerList"></div>
     <div class="modal-actions">
       <button class="modal-btn cancel" id="medPickerCancel">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="addMedModalOverlay">
+  <div class="modal">
+    <div class="modal-title" id="addMedModalTitle">Add medication</div>
+    <div class="modal-row" style="font-size:0.78rem; color:var(--cream-dim);">For <span id="addMedDogName">this dog</span></div>
+    <div id="addMedList"></div>
+    <button type="button" class="med-add-row-btn" id="addMedAddBtn">+ Add another medication</button>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="addMedCancel">Cancel</button>
+      <button class="modal-btn confirm" id="addMedSave">Save</button>
     </div>
   </div>
 </div>
@@ -1111,32 +1176,47 @@
 
 <div class="modal-overlay" id="addDogModalOverlay">
   <div class="modal">
-    <div class="modal-title">Add a dog</div>
-    <div class="modal-row">
-      <label class="modal-label">What's their name?</label>
-      <input type="text" id="newDogName" class="modal-input" placeholder="e.g. Biscuit" autocomplete="off">
+    <div class="wizard-bars" id="addDogBars">
+      <div class="wizard-bar"><span></span></div>
+      <div class="wizard-bar"><span></span></div>
     </div>
-    <div class="modal-row">
-      <label class="modal-label">Male or female?</label>
-      <div class="sex-toggle" id="newDogSexToggle" data-value="female">
-        <button type="button" class="sex-toggle-opt active" data-sex="female">Female</button>
-        <button type="button" class="sex-toggle-opt" data-sex="male">Male</button>
+
+    <div class="wizard-page" data-page="0">
+      <div class="modal-title">Add a dog</div>
+      <div class="modal-row">
+        <label class="modal-label">What's their name?</label>
+        <input type="text" id="newDogName" class="modal-input" placeholder="e.g. Biscuit" autocomplete="off">
+      </div>
+      <div class="modal-row">
+        <label class="modal-label">Male or female?</label>
+        <div class="sex-toggle" id="newDogSexToggle" data-value="female">
+          <button type="button" class="sex-toggle-opt active" data-sex="female">Female</button>
+          <button type="button" class="sex-toggle-opt" data-sex="male">Male</button>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" id="addDogCancel1">Cancel</button>
+        <button class="modal-btn confirm" id="addDogNext">Next</button>
       </div>
     </div>
-    <div class="modal-row">
-      <label class="modal-label">Does this dog take any medication?</label>
-      <div class="sex-toggle" id="newDogMedToggle" data-value="no">
-        <button type="button" class="sex-toggle-opt" data-med="yes">Yes</button>
-        <button type="button" class="sex-toggle-opt active" data-med="no">No</button>
+
+    <div class="wizard-page" data-page="1" style="display:none;">
+      <div class="modal-title">Medication</div>
+      <div class="modal-row">
+        <label class="modal-label">Does <span id="addDogNamePronoun">this dog</span> take any medication?</label>
+        <div class="sex-toggle" id="newDogMedToggle" data-value="no">
+          <button type="button" class="sex-toggle-opt" data-med="yes">Yes</button>
+          <button type="button" class="sex-toggle-opt active" data-med="no">No</button>
+        </div>
       </div>
-    </div>
-    <div id="newDogMedSection" style="display:none;">
-      <div id="newDogMedList"></div>
-      <button type="button" class="med-add-row-btn" id="newDogAddMedBtn">+ Add another medication</button>
-    </div>
-    <div class="modal-actions">
-      <button class="modal-btn cancel" id="addDogModalCancel">Cancel</button>
-      <button class="modal-btn confirm" id="addDogModalConfirm">Add dog</button>
+      <div id="newDogMedSection" style="display:none;">
+        <div id="newDogMedList"></div>
+        <button type="button" class="med-add-row-btn" id="newDogAddMedBtn">+ Add another medication</button>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" id="addDogBack">Back</button>
+        <button class="modal-btn confirm" id="addDogModalConfirm">Add dog</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1154,11 +1234,6 @@
         <button type="button" class="sex-toggle-opt active" data-sex="female">Female</button>
         <button type="button" class="sex-toggle-opt" data-sex="male">Male</button>
       </div>
-    </div>
-    <div class="modal-row">
-      <label class="modal-label">Medications</label>
-      <div id="editDogMedList"></div>
-      <button type="button" class="med-add-row-btn" id="editDogAddMedBtn">+ Add a medication</button>
     </div>
     <div class="modal-actions">
       <button class="modal-btn cancel" id="dogMenuCancel">Cancel</button>
@@ -1208,9 +1283,14 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '1.2.0'; // bump this on every update; shown in footer and used for auto-update
+const APP_VERSION = '1.3.0'; // bump this on every update; shown in footer and used for auto-update
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '1.3.0', date: 'Jun 2026', notes: [
+    'Tap a medication row to log its dose',
+    'Fulfilled doses grey out with a check; extra doses ask first',
+    'Manage medications (add/edit/remove) from the medication card'
+  ]},
   { version: '1.2.0', date: 'Jun 2026', notes: [
     'Pee and poop now share the top row as primary buttons',
     'Floating + button to quickly add a medication (and future items)',
@@ -1846,14 +1926,28 @@ function renderMedication() {
     const given = medDosesToday(m.id);
     const done = given >= m.count;
     const timesLabel = m.times && m.times.length ? m.times.join(', ') : 'daily';
-    return `<div class="med-status-row">
-      <div>
+    return `<button class="med-status-row${done ? ' done' : ''}" data-med-id="${m.id}">
+      <div class="med-status-info">
         <div class="med-status-name">${escapeHtml(m.name)}</div>
         <div class="med-status-sub">${escapeHtml(m.type ? m.type + ' · ' : '')}${escapeHtml(timesLabel)}</div>
       </div>
       <div class="med-status-count ${done ? 'done' : ''}">${done ? '✓ ' : ''}${given} of ${m.count} today</div>
-    </div>`;
+    </button>`;
   }).join('');
+
+  list.querySelectorAll('.med-status-row[data-med-id]').forEach(row => {
+    row.addEventListener('click', () => {
+      const medId = row.getAttribute('data-med-id');
+      const med = meds.find(x => x.id === medId);
+      if (!med) return;
+      const given = medDosesToday(medId);
+      if (given >= med.count) {
+        // soft-warn: already fulfilled today
+        if (!confirm(`${med.name} has already had all ${med.count} dose${med.count === 1 ? '' : 's'} today. Log an extra dose anyway?`)) return;
+      }
+      logMedDose(medId);
+    });
+  });
 }
 
 function renderAll() {
@@ -2022,6 +2116,18 @@ function makeMedEditor(listElId, addBtnId) {
   function blankMed() {
     return { id: uid('med'), name: '', type: '', count: 1, times: ['morning'] };
   }
+  // Pull current values out of the DOM inputs into `working` so nothing typed
+  // is lost when we re-render (e.g. after tapping a time chip).
+  function syncFromDom() {
+    listEl.querySelectorAll('.med-edit-row').forEach(row => {
+      const idx = parseInt(row.getAttribute('data-idx'), 10);
+      if (!working[idx]) return;
+      const nameEl = row.querySelector('.med-name');
+      const typeEl = row.querySelector('.med-type');
+      if (nameEl) working[idx].name = nameEl.value;
+      if (typeEl) working[idx].type = typeEl.value;
+    });
+  }
   function render() {
     listEl.innerHTML = working.map((m, i) => `
       <div class="med-edit-row" data-idx="${i}">
@@ -2039,17 +2145,18 @@ function makeMedEditor(listElId, addBtnId) {
       row.querySelector('.med-type').addEventListener('input', e => { working[idx].type = e.target.value; });
       row.querySelectorAll('.med-time-chip').forEach(chip => {
         chip.addEventListener('click', () => {
+          syncFromDom();
           const t = chip.getAttribute('data-time');
           const times = working[idx].times;
           if (times.includes(t)) { working[idx].times = times.filter(x => x !== t); }
           else { times.push(t); }
-          // keep canonical order
           working[idx].times = MED_TIMES.filter(x => working[idx].times.includes(x));
           working[idx].count = working[idx].times.length || 1;
           render();
         });
       });
       row.querySelector('[data-remove]').addEventListener('click', () => {
+        syncFromDom();
         working.splice(idx, 1);
         render();
       });
@@ -2057,6 +2164,7 @@ function makeMedEditor(listElId, addBtnId) {
   }
 
   document.getElementById(addBtnId).addEventListener('click', () => {
+    syncFromDom();
     working.push(blankMed());
     render();
   });
@@ -2065,6 +2173,7 @@ function makeMedEditor(listElId, addBtnId) {
     set(meds) { working = (meds || []).map(m => ({ ...m, times: [...(m.times||[])] })); render(); },
     addOneBlank() { working.push(blankMed()); render(); },
     get() {
+      syncFromDom();
       // drop empty (no name) meds; ensure count matches times
       return working
         .filter(m => m.name.trim())
@@ -2076,7 +2185,7 @@ function makeMedEditor(listElId, addBtnId) {
           count: (m.times.length || 1)
         }));
     },
-    isEmpty() { return working.filter(m => m.name.trim()).length === 0; }
+    isEmpty() { syncFromDom(); return working.filter(m => m.name.trim()).length === 0; }
   };
 }
 
@@ -2125,19 +2234,30 @@ document.getElementById('medPickerCancel').addEventListener('click', () => docum
 document.getElementById('medPickerOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('medPickerOverlay')) document.getElementById('medPickerOverlay').classList.remove('show'); });
 
 const addDogMedEditor = makeMedEditor('newDogMedList', 'newDogAddMedBtn');
-const editDogMedEditor = makeMedEditor('editDogMedList', 'editDogAddMedBtn');
+const addMedEditor = makeMedEditor('addMedList', 'addMedAddBtn');
 
-// Add dog modal
+// Add dog wizard
 const addDogModalOverlay = document.getElementById('addDogModalOverlay');
+let addDogPage = 0;
+function goToAddDogPage(page) {
+  addDogPage = page;
+  addDogModalOverlay.querySelectorAll('.wizard-page').forEach(p => {
+    p.style.display = parseInt(p.getAttribute('data-page'), 10) === page ? 'block' : 'none';
+  });
+  addDogModalOverlay.querySelectorAll('.wizard-bar').forEach((bar, i) => {
+    bar.classList.toggle('filled', i <= page);
+  });
+}
 function openAddDogModal() {
   document.getElementById('newDogName').value = '';
   setSexToggle('newDogSexToggle', 'female');
   setMedToggle('no');
   addDogMedEditor.set([]);
+  goToAddDogPage(0);
   addDogModalOverlay.classList.add('show');
   setTimeout(() => document.getElementById('newDogName').focus(), 50);
 }
-// Medication yes/no toggle in add-dog modal
+// Medication yes/no toggle in add-dog wizard
 function setMedToggle(value) {
   const toggle = document.getElementById('newDogMedToggle');
   toggle.dataset.value = value;
@@ -2150,13 +2270,23 @@ function setMedToggle(value) {
 document.getElementById('newDogMedToggle').querySelectorAll('.sex-toggle-opt').forEach(btn => {
   btn.addEventListener('click', () => setMedToggle(btn.getAttribute('data-med')));
 });
-document.getElementById('addDogModalCancel').addEventListener('click', () => addDogModalOverlay.classList.remove('show'));
+document.getElementById('addDogCancel1').addEventListener('click', () => addDogModalOverlay.classList.remove('show'));
+document.getElementById('addDogNext').addEventListener('click', () => {
+  const name = document.getElementById('newDogName').value.trim();
+  if (!name) { showToast('Enter a name first'); return; }
+  const dogName = name;
+  // Personalize the medication question with the dog's name
+  document.getElementById('addDogNamePronoun').textContent = dogName;
+  goToAddDogPage(1);
+});
+document.getElementById('addDogBack').addEventListener('click', () => goToAddDogPage(0));
 addDogModalOverlay.addEventListener('click', (e) => { if (e.target === addDogModalOverlay) addDogModalOverlay.classList.remove('show'); });
 document.getElementById('addDogModalConfirm').addEventListener('click', async () => {
   const name = document.getElementById('newDogName').value.trim();
   const sex = getSexToggle('newDogSexToggle');
   if (!name) {
     showToast('Enter a name first');
+    goToAddDogPage(0);
     return;
   }
   const meds = document.getElementById('newDogMedToggle').dataset.value === 'yes' ? addDogMedEditor.get() : [];
@@ -2170,7 +2300,7 @@ document.getElementById('addDogModalConfirm').addEventListener('click', async ()
   showToast(`${name} added 🐾`);
 });
 document.getElementById('newDogName').addEventListener('keydown', (e) => {
-  if (e.key === 'Enter') document.getElementById('addDogModalConfirm').click();
+  if (e.key === 'Enter') document.getElementById('addDogNext').click();
 });
 
 // Dog menu modal (rename / remove) via long-press or right-click
@@ -2183,7 +2313,6 @@ function openDogMenu(dogId) {
   document.getElementById('dogMenuTitle').textContent = dog.name;
   document.getElementById('renameDogInput').value = dog.name;
   setSexToggle('editDogSexToggle', dog.sex);
-  editDogMedEditor.set(dog.meds || []);
   dogMenuModalOverlay.classList.add('show');
 }
 document.getElementById('dogMenuCancel').addEventListener('click', () => dogMenuModalOverlay.classList.remove('show'));
@@ -2196,7 +2325,6 @@ document.getElementById('dogMenuRename').addEventListener('click', async () => {
   if (dog) {
     dog.name = newName;
     dog.sex = newSex;
-    dog.meds = editDogMedEditor.get();
   }
   await persistAndSync();
   renderAll();
@@ -2251,13 +2379,48 @@ function closeFabSheet() { fabSheetOverlay.classList.remove('show'); }
 document.getElementById('fab').addEventListener('click', () => fabSheetOverlay.classList.add('show'));
 document.getElementById('fabCancel').addEventListener('click', closeFabSheet);
 fabSheetOverlay.addEventListener('click', (e) => { if (e.target === fabSheetOverlay) closeFabSheet(); });
+const addMedModalOverlay = document.getElementById('addMedModalOverlay');
+let medModalMode = 'add'; // 'add' = append new meds; 'manage' = edit full list
+function openMedModal(mode) {
+  if (!activeDogId) return;
+  const dog = activeDog();
+  medModalMode = mode;
+  document.getElementById('addMedDogName').textContent = dog ? dog.name : 'this dog';
+  document.getElementById('addMedModalTitle').textContent = mode === 'manage' ? 'Manage medications' : 'Add medication';
+  if (mode === 'manage') {
+    addMedEditor.set(dog.meds || []);
+    if (addMedEditor.isEmpty()) addMedEditor.addOneBlank();
+  } else {
+    addMedEditor.set([]);
+    addMedEditor.addOneBlank();
+  }
+  addMedModalOverlay.classList.add('show');
+}
 document.getElementById('fabAddMed').addEventListener('click', () => {
   closeFabSheet();
-  // Jump straight into the active dog's edit modal with a fresh med row ready
-  if (activeDogId) {
-    openDogMenu(activeDogId);
-    editDogMedEditor.addOneBlank();
+  openMedModal('add');
+});
+document.getElementById('medManageBtn').addEventListener('click', () => openMedModal('manage'));
+document.getElementById('addMedCancel').addEventListener('click', () => addMedModalOverlay.classList.remove('show'));
+addMedModalOverlay.addEventListener('click', (e) => { if (e.target === addMedModalOverlay) addMedModalOverlay.classList.remove('show'); });
+document.getElementById('addMedSave').addEventListener('click', async () => {
+  const dog = activeDog();
+  if (!dog) return;
+  const editedMeds = addMedEditor.get();
+  if (medModalMode === 'manage') {
+    // Replace the whole list (allows edits and removals)
+    dog.meds = editedMeds;
+  } else {
+    if (editedMeds.length === 0) {
+      showToast('Enter a medication name first');
+      return;
+    }
+    dog.meds = (dog.meds || []).concat(editedMeds);
   }
+  await persistAndSync();
+  renderAll();
+  addMedModalOverlay.classList.remove('show');
+  showToast(medModalMode === 'manage' ? 'Medications updated 💊' : 'Medication added 💊');
 });
 document.getElementById('fabAddNote').addEventListener('click', () => { closeFabSheet(); openNoteModal(null); });
 document.getElementById('fabAddDog').addEventListener('click', () => { closeFabSheet(); openAddDogModal(); });
