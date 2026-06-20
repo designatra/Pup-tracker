@@ -151,6 +151,21 @@
     padding: 5px 10px;
     cursor: pointer;
   }
+  .sync-banner-actions {
+    display: flex;
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .sync-setup-btn.spinning {
+    opacity: 0.6;
+  }
+  @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  .spin-icon {
+    display: inline-block;
+  }
+  .spinning .spin-icon {
+    animation: spin 0.7s linear infinite;
+  }
 
   /* Main action button */
   .log-btn {
@@ -351,6 +366,8 @@
     padding: 22px;
     width: 100%;
     max-width: 360px;
+    box-sizing: border-box;
+    overflow-x: hidden;
   }
   .modal-title {
     font-size: 1.05rem;
@@ -368,6 +385,8 @@
   }
   .modal-select, .modal-input {
     width: 100%;
+    max-width: 100%;
+    min-width: 0;
     background: var(--charcoal);
     border: 1.5px solid var(--charcoal-lighter);
     border-radius: 10px;
@@ -375,6 +394,27 @@
     padding: 10px 12px;
     font-size: 0.95rem;
     font-family: inherit;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type="date"].modal-input,
+  input[type="time"].modal-input {
+    display: block;
+    color-scheme: dark;
+  }
+  /* Prevent the native date/time picker's internal fields from forcing extra width */
+  input[type="date"].modal-input::-webkit-date-and-time-value,
+  input[type="time"].modal-input::-webkit-date-and-time-value {
+    text-align: left;
+  }
+  .modal-row-split {
+    display: flex;
+    gap: 10px;
+  }
+  .modal-row-split > div {
+    flex: 1;
+    min-width: 0;
   }
   .modal-actions {
     display: flex;
@@ -590,7 +630,10 @@
 
   <div class="sync-banner" id="syncBanner" style="display:none;">
     <span id="syncStatusText">Synced</span>
-    <button class="sync-setup-btn" id="syncSetupBtn">Sync settings</button>
+    <div class="sync-banner-actions">
+      <button class="sync-setup-btn" id="refreshBtn" title="Reload latest data and app version"><span class="spin-icon">⟳</span> Refresh</button>
+      <button class="sync-setup-btn" id="syncSetupBtn">Sync settings</button>
+    </div>
   </div>
 
   <button class="log-btn" id="logBtn">🐾 She just peed</button>
@@ -1352,6 +1395,26 @@ document.getElementById('dogMenuDelete').addEventListener('click', async () => {
   await persistAndSync();
   renderAll();
   dogMenuModalOverlay.classList.remove('show');
+});
+
+// Refresh button: pull latest data immediately, then force-reload the page
+// bypassing the browser cache so any app updates get picked up too.
+document.getElementById('refreshBtn').addEventListener('click', async () => {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  try {
+    if (syncEnabled()) {
+      await pullFromCloud();
+      renderAll();
+    }
+  } catch (e) {
+    console.error('Manual refresh pull failed', e);
+  }
+  // Cache-busting hard reload: re-fetch this same URL with a fresh query param,
+  // forcing the browser to download the latest version instead of a cached copy.
+  const url = new URL(window.location.href);
+  url.searchParams.set('_r', Date.now());
+  window.location.replace(url.toString());
 });
 
 // Sync settings modal
