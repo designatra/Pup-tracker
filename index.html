@@ -1160,6 +1160,14 @@ async function persistAndSync() {
     console.error('Storage error', e);
     flagStorageIssue();
   }
+  // Pull-before-push: merge in whatever another device may have changed since
+  // our last sync, BEFORE sending our own update up. Without this, two devices
+  // editing close together can overwrite each other (last writer clobbers the
+  // first). The merge is safe — entries union by id, deletions honored via
+  // tombstones — so our local change survives and theirs isn't lost.
+  if (syncEnabled()) {
+    await pullFromCloud();
+  }
   await pushToCloud();
 }
 
