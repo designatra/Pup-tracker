@@ -56,7 +56,9 @@
   }
 
   header {
-    text-align: center;
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
     margin-bottom: 14px;
   }
 
@@ -65,9 +67,23 @@
     font-size: 1.7rem;
     font-weight: 600;
     letter-spacing: -0.01em;
-    margin: 0 0 2px;
+    margin: 0;
     color: var(--cream);
   }
+
+  .version-link {
+    background: none;
+    border: none;
+    color: var(--cream-dim);
+    font-family: monospace;
+    font-size: 0.78rem;
+    cursor: pointer;
+    padding: 4px 6px;
+    text-decoration: underline;
+    text-decoration-color: var(--charcoal-lighter);
+    flex-shrink: 0;
+  }
+  .version-link:active { color: var(--amber); }
 
   /* Dog switcher */
   .dog-switcher {
@@ -666,6 +682,32 @@
     color: #C9BFA3;
     margin-top: 28px;
   }
+  .changelog-entry {
+    margin-bottom: 16px;
+  }
+  .changelog-ver {
+    font-family: monospace;
+    font-weight: 700;
+    font-size: 0.9rem;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .changelog-date {
+    font-weight: 400;
+    color: var(--cream-dim);
+    margin-left: 8px;
+    font-size: 0.78rem;
+  }
+  .changelog-notes {
+    margin: 0;
+    padding-left: 18px;
+  }
+  .changelog-notes li {
+    font-size: 0.85rem;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
 
   .toast {
     position: fixed;
@@ -695,6 +737,7 @@
 <div class="wrap">
   <header>
     <h1>Potty Tracker</h1>
+    <button class="version-link" id="versionLink">v—</button>
   </header>
 
   <div class="dog-switcher" id="dogSwitcher"></div>
@@ -901,9 +944,32 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="changelogModalOverlay">
+  <div class="modal">
+    <div class="modal-title">What's new</div>
+    <div class="modal-row" style="font-size:0.75rem; color:var(--cream-dim);">Currently running <span id="changelogCurrentVersion" style="font-family:monospace;"></span></div>
+    <div id="changelogList"></div>
+    <div class="modal-actions">
+      <button class="modal-btn confirm" id="changelogClose">Close</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast">Logged!</div>
 
 <script>
+const APP_VERSION = '1.0.0'; // bump this on every update; shown in footer and used for auto-update
+// Changelog shown when tapping the version number. Newest first.
+const CHANGELOG = [
+  { version: '1.0.0', date: 'Jun 2026', notes: [
+    'Multi-dog support with per-dog logs, averages, and feeding goals',
+    'Pee, poop, feeding, accident, and note logging',
+    'Cross-device sync with deletions that propagate (tombstones)',
+    'Pull-before-push so simultaneous edits don\u2019t overwrite each other',
+    'Auto-update: app refreshes itself when a new version is published',
+    'Warm serif theme and custom app icon'
+  ]}
+];
 const STORAGE_KEY = 'tracker-data'; // { dogs: [{id,name}], activeDogId, entries: [...], feedGoals: {dogId: {min,max}} }
 const SYNC_CONFIG_KEY = 'sync-config';
 
@@ -1737,6 +1803,12 @@ document.getElementById('refreshBtn').addEventListener('click', async () => {
   window.location.replace(url.toString());
 });
 
+// Changelog modal (opened via version link in header)
+const changelogModalOverlay = document.getElementById('changelogModalOverlay');
+document.getElementById('versionLink').addEventListener('click', openChangelog);
+document.getElementById('changelogClose').addEventListener('click', () => changelogModalOverlay.classList.remove('show'));
+changelogModalOverlay.addEventListener('click', (e) => { if (e.target === changelogModalOverlay) changelogModalOverlay.classList.remove('show'); });
+
 // Sync settings modal
 const syncModalOverlay = document.getElementById('syncModalOverlay');
 document.getElementById('syncSetupBtn').addEventListener('click', () => {
@@ -1805,7 +1877,57 @@ setInterval(async () => {
   }
 }, 20000);
 
+// Show the running version in the footer.
+function renderVersion() {
+  const el = document.getElementById('versionLink');
+  if (el) el.textContent = 'v' + APP_VERSION;
+}
+
+// Changelog modal
+function openChangelog() {
+  document.getElementById('changelogCurrentVersion').textContent = 'v' + APP_VERSION;
+  const list = document.getElementById('changelogList');
+  list.innerHTML = CHANGELOG.map(rel => `
+    <div class="changelog-entry">
+      <div class="changelog-ver">v${rel.version}<span class="changelog-date">${rel.date || ''}</span></div>
+      <ul class="changelog-notes">
+        ${rel.notes.map(n => `<li>${escapeHtml(n)}</li>`).join('')}
+      </ul>
+    </div>`).join('');
+  document.getElementById('changelogModalOverlay').classList.add('show');
+}
+
+// Auto-update: re-fetch this same page from the server (cache-busted) and look
+// for the APP_VERSION baked into it. If the server has a newer version than
+// what's currently running, reload once to pick it up. This means pushing a new
+// version to GitHub updates everyone's app automatically on next launch —
+// no delete-and-re-add needed.
+async function checkForUpdate() {
+  try {
+    const res = await fetch(window.location.pathname + '?_v=' + Date.now(), { cache: 'no-store' });
+    if (!res.ok) return;
+    const html = await res.text();
+    const m = html.match(/const APP_VERSION = '([^']+)'/);
+    if (!m) return;
+    const serverVersion = m[1];
+    if (serverVersion && serverVersion !== APP_VERSION) {
+      // Guard against reload loops: only auto-reload once per detected version.
+      const reloadedFor = sessionStorage.getItem('reloadedForVersion');
+      if (reloadedFor !== serverVersion) {
+        sessionStorage.setItem('reloadedForVersion', serverVersion);
+        const url = new URL(window.location.href);
+        url.searchParams.set('_v', Date.now());
+        window.location.replace(url.toString());
+      }
+    }
+  } catch (e) {
+    // Offline or fetch blocked — fine, just keep running the current version.
+    console.log('Update check skipped:', e);
+  }
+}
+
 (async function init() {
+  renderVersion();
   loadSyncConfig();
   await loadAll();
   updateSyncBannerVisibility();
@@ -1834,6 +1956,8 @@ setInterval(async () => {
     }
   }
   renderAll();
+  // Check for a newer version in the background after the app is up.
+  checkForUpdate();
 })();
 </script>
 
