@@ -1283,9 +1283,12 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '1.3.0'; // bump this on every update; shown in footer and used for auto-update
+const APP_VERSION = '1.3.1'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '1.3.1', date: 'Jun 2026', notes: [
+    'Fixed: added medications no longer vanish after saving (sync was overwriting them)'
+  ]},
   { version: '1.3.0', date: 'Jun 2026', notes: [
     'Tap a medication row to log its dose',
     'Fulfilled doses grey out with a check; extra doses ask first',
@@ -1319,6 +1322,7 @@ let entries = []; // {id, dogId, ts, type}
 let feedGoals = {}; // dogId -> {min, max}
 let deletedEntryIds = {}; // id -> deletion timestamp (tombstones so deletes sync across devices)
 let deletedDogIds = {};   // id -> deletion timestamp
+let deletedMedIds = {};   // med id -> deletion timestamp (so removed meds don't resync)
 let syncConfig = { apiKey: '', binId: '' };
 let syncInFlight = false;
 
@@ -1366,6 +1370,7 @@ async function loadAll() {
     feedGoals = data.feedGoals || {};
     deletedEntryIds = data.deletedEntryIds || {};
     deletedDogIds = data.deletedDogIds || {};
+    deletedMedIds = data.deletedMedIds || {};
     if (dogs.length === 0) {
       const d = defaultData();
       dogs = d.dogs; activeDogId = d.activeDogId; feedGoals = d.feedGoals;
@@ -1383,7 +1388,7 @@ async function loadAll() {
 }
 
 function persistLocal() {
-  const data = { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds };
+  const data = { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds, deletedMedIds };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -1490,9 +1495,33 @@ async function pullFromCloud() {
           if (!deletedDogIds[id]) deletedDogIds[id] = remote.deletedDogIds[id];
         }
       }
+      if (remote.deletedMedIds) {
+        for (const id in remote.deletedMedIds) {
+          if (!deletedMedIds[id]) deletedMedIds[id] = remote.deletedMedIds[id];
+        }
+      }
       if (Array.isArray(remote.dogs) && remote.dogs.length) {
         const localById = {}; dogs.forEach(d => localById[d.id] = d);
-        remote.dogs.forEach(d => localById[d.id] = d);
+        remote.dogs.forEach(rd => {
+          const local = localById[rd.id];
+          if (!local) {
+            localById[rd.id] = rd;
+            return;
+          }
+          // Merge meds by id (union) so a med added on either device survives.
+          const medsById = {};
+          (local.meds || []).forEach(m => { medsById[m.id] = m; });
+          (rd.meds || []).forEach(m => { if (!medsById[m.id]) medsById[m.id] = m; });
+          // Drop any med that's been tombstoned (removed via Manage).
+          Object.keys(medsById).forEach(id => { if (deletedMedIds[id]) delete medsById[id]; });
+          // Keep local name/sex (this device may have just edited them); fall
+          // back to remote only if local is missing.
+          localById[rd.id] = {
+            ...rd,
+            ...local,
+            meds: Object.values(medsById)
+          };
+        });
         dogs = Object.values(localById);
       }
       if (Array.isArray(remote.entries)) {
@@ -1535,7 +1564,7 @@ async function pushToCloud() {
   }
   syncInFlight = true;
   try {
-    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds });
+    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds, deletedMedIds });
     clearStorageIssue();
     syncDiag.lastPushAt = Date.now();
     syncDiag.lastEntryCount = entries.length;
@@ -1555,7 +1584,7 @@ async function pushToCloud() {
 }
 
 async function createCloudBin() {
-  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds });
+  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds, deletedMedIds });
   const id = data.metadata && data.metadata.id;
   if (!id) throw new Error('No bin id returned');
   return id;
@@ -2408,6 +2437,9 @@ document.getElementById('addMedSave').addEventListener('click', async () => {
   if (!dog) return;
   const editedMeds = addMedEditor.get();
   if (medModalMode === 'manage') {
+    // Record tombstones for any med that was removed in this edit
+    const keptIds = new Set(editedMeds.map(m => m.id));
+    (dog.meds || []).forEach(m => { if (!keptIds.has(m.id)) deletedMedIds[m.id] = Date.now(); });
     // Replace the whole list (allows edits and removals)
     dog.meds = editedMeds;
   } else {
