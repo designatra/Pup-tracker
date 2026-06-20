@@ -911,10 +911,23 @@ let dogs = [];
 let activeDogId = null;
 let entries = []; // {id, dogId, ts, type}
 let feedGoals = {}; // dogId -> {min, max}
+let deletedEntryIds = {}; // id -> deletion timestamp (tombstones so deletes sync across devices)
+let deletedDogIds = {};   // id -> deletion timestamp
 let syncConfig = { apiKey: '', binId: '' };
 let syncInFlight = false;
 
 function uid(prefix) { return (prefix||'e') + Date.now() + Math.random().toString(36).slice(2,7); }
+
+// Apply tombstones: drop anything that's been marked deleted, and clean up
+// feed goals / active dog for removed dogs. Safe to call repeatedly.
+function applyTombstones() {
+  entries = entries.filter(e => !deletedEntryIds[e.id]);
+  dogs = dogs.filter(d => !deletedDogIds[d.id]);
+  Object.keys(feedGoals).forEach(id => { if (deletedDogIds[id]) delete feedGoals[id]; });
+  if (!dogs.find(d => d.id === activeDogId) && dogs.length) {
+    activeDogId = dogs[0].id;
+  }
+}
 
 function defaultData() {
   const dogId = uid('dog');
@@ -945,21 +958,25 @@ async function loadAll() {
     activeDogId = data.activeDogId || (dogs[0] && dogs[0].id);
     entries = data.entries || [];
     feedGoals = data.feedGoals || {};
+    deletedEntryIds = data.deletedEntryIds || {};
+    deletedDogIds = data.deletedDogIds || {};
     if (dogs.length === 0) {
       const d = defaultData();
       dogs = d.dogs; activeDogId = d.activeDogId; feedGoals = d.feedGoals;
     }
     dogs.forEach(d => { if (!feedGoals[d.id]) feedGoals[d.id] = { min: 3, max: 4 }; });
     dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
+    applyTombstones();
   } catch (e) {
     const d = defaultData();
     dogs = d.dogs; activeDogId = d.activeDogId; entries = d.entries; feedGoals = d.feedGoals;
+    deletedEntryIds = {}; deletedDogIds = {};
   }
   entries.sort((a,b) => a.ts - b.ts);
 }
 
 function persistLocal() {
-  const data = { dogs, activeDogId, entries, feedGoals };
+  const data = { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -1055,6 +1072,17 @@ async function pullFromCloud() {
     const data = await jsonbinRequest('GET', `/b/${syncConfig.binId}/latest`);
     const remote = data.record || data;
     if (remote) {
+      // Merge tombstones first (union, keeping earliest deletion time per id)
+      if (remote.deletedEntryIds) {
+        for (const id in remote.deletedEntryIds) {
+          if (!deletedEntryIds[id]) deletedEntryIds[id] = remote.deletedEntryIds[id];
+        }
+      }
+      if (remote.deletedDogIds) {
+        for (const id in remote.deletedDogIds) {
+          if (!deletedDogIds[id]) deletedDogIds[id] = remote.deletedDogIds[id];
+        }
+      }
       if (Array.isArray(remote.dogs) && remote.dogs.length) {
         const localById = {}; dogs.forEach(d => localById[d.id] = d);
         remote.dogs.forEach(d => localById[d.id] = d);
@@ -1072,10 +1100,9 @@ async function pullFromCloud() {
       if (remote.activeDogId && !dogs.find(d => d.id === activeDogId)) {
         activeDogId = remote.activeDogId;
       }
-      if (!dogs.find(d => d.id === activeDogId) && dogs.length) {
-        activeDogId = dogs[0].id;
-      }
       dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
+      // Apply tombstones AFTER merging so deleted items don't get re-added
+      applyTombstones();
       persistLocal();
     }
     clearStorageIssue();
@@ -1100,7 +1127,7 @@ async function pushToCloud() {
   }
   syncInFlight = true;
   try {
-    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals });
+    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds });
     clearStorageIssue();
     syncDiag.lastPushAt = Date.now();
     syncDiag.lastEntryCount = entries.length;
@@ -1120,7 +1147,7 @@ async function pushToCloud() {
 }
 
 async function createCloudBin() {
-  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals });
+  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, deletedEntryIds, deletedDogIds });
   const id = data.metadata && data.metadata.id;
   if (!id) throw new Error('No bin id returned');
   return id;
@@ -1426,6 +1453,7 @@ function renderTimeline() {
   wrap.querySelectorAll('.del-btn[data-id]').forEach(btn => {
     btn.addEventListener('click', async (e) => {
       const id = e.target.getAttribute('data-id');
+      deletedEntryIds[id] = Date.now();
       entries = entries.filter(en => en.id !== id);
       await persistAndSync();
       renderAll();
@@ -1526,6 +1554,7 @@ document.getElementById('noteModalConfirm').addEventListener('click', async () =
 
 document.getElementById('noteModalDelete').addEventListener('click', async () => {
   if (!noteEditTargetId) return;
+  deletedEntryIds[noteEditTargetId] = Date.now();
   entries = entries.filter(e => e.id !== noteEditTargetId);
   await persistAndSync();
   renderAll();
@@ -1669,6 +1698,8 @@ document.getElementById('dogMenuDelete').addEventListener('click', async () => {
     showToast("Can't remove your only dog");
     return;
   }
+  deletedDogIds[dogMenuTargetId] = Date.now();
+  entries.filter(e => e.dogId === dogMenuTargetId).forEach(e => { deletedEntryIds[e.id] = Date.now(); });
   dogs = dogs.filter(d => d.id !== dogMenuTargetId);
   entries = entries.filter(e => e.dogId !== dogMenuTargetId);
   delete feedGoals[dogMenuTargetId];
@@ -1753,9 +1784,14 @@ document.getElementById('syncModalDisconnect').addEventListener('click', () => {
 // live-update the "time since" counter
 setInterval(renderStatus, 30000);
 
-// periodic pull so other phones / other dogs' entries show up here too
+// periodic pull so other phones / other dogs' entries show up here too.
+// Skipped while a modal is open, so a background pull can't yank data out
+// from under someone mid-typing (e.g. writing a note).
+function anyModalOpen() {
+  return !!document.querySelector('.modal-overlay.show');
+}
 setInterval(async () => {
-  if (syncEnabled()) {
+  if (syncEnabled() && !anyModalOpen() && !syncInFlight) {
     await pullFromCloud();
     renderAll();
   }
@@ -1765,11 +1801,31 @@ setInterval(async () => {
   loadSyncConfig();
   await loadAll();
   updateSyncBannerVisibility();
-  renderAll();
   if (syncEnabled()) {
+    // If this device has no local dogs yet, don't show/use the fabricated
+    // default "Foster Pup" until we've actually checked whether real data
+    // already exists in the cloud — otherwise a second device with empty
+    // localStorage creates its own dog and never switches to the synced one.
+    const isFreshLocalDevice = dogs.length === 1 && dogs[0].name === 'Foster Pup' && entries.length === 0;
     await pullFromCloud();
-    renderAll();
+    if (isFreshLocalDevice && dogs.length > 1) {
+      // Cloud had real dogs beyond our fabricated placeholder — drop the
+      // placeholder and switch to whatever the cloud says is active.
+      const placeholderId = dogs.find(d => d.name === 'Foster Pup' && !entries.some(e => e.dogId === d.id))?.id;
+      // Only remove it if it's truly unused (no entries, no feed goal edits beyond default)
+      if (placeholderId && !entries.some(e => e.dogId === placeholderId)) {
+        deletedDogIds[placeholderId] = Date.now();
+        dogs = dogs.filter(d => d.id !== placeholderId);
+        delete feedGoals[placeholderId];
+        if (activeDogId === placeholderId) {
+          activeDogId = dogs[0].id;
+        }
+        persistLocal();
+        await pushToCloud();
+      }
+    }
   }
+  renderAll();
 })();
 </script>
 
