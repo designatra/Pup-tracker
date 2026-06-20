@@ -835,12 +835,14 @@ function updateSyncBannerVisibility() {
 }
 
 async function jsonbinRequest(method, path, body) {
+  const headers = {
+    'Content-Type': 'application/json',
+    'X-Master-Key': syncConfig.apiKey
+  };
+  if (method === 'GET') headers['X-Bin-Meta'] = 'false';
   const res = await fetch('https://api.jsonbin.io/v3' + path, {
     method,
-    headers: {
-      'Content-Type': 'application/json',
-      'X-Master-Key': syncConfig.apiKey
-    },
+    headers,
     body: body ? JSON.stringify(body) : undefined
   });
   if (!res.ok) throw new Error('JSONBin request failed: ' + res.status);
@@ -882,9 +884,14 @@ async function pullFromCloud() {
   }
 }
 
+let pushQueued = false;
+
 async function pushToCloud() {
   if (!syncEnabled()) return;
-  if (syncInFlight) return;
+  if (syncInFlight) {
+    pushQueued = true; // another push is requested; run again after current finishes
+    return;
+  }
   syncInFlight = true;
   try {
     await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals });
@@ -894,6 +901,10 @@ async function pushToCloud() {
     flagStorageIssue();
   } finally {
     syncInFlight = false;
+    if (pushQueued) {
+      pushQueued = false;
+      await pushToCloud(); // re-push with latest data so nothing logged during the wait gets lost
+    }
   }
 }
 
@@ -911,7 +922,7 @@ async function persistAndSync() {
     console.error('Storage error', e);
     flagStorageIssue();
   }
-  pushToCloud();
+  await pushToCloud();
 }
 
 function showToast(msg) {
