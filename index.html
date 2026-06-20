@@ -574,11 +574,206 @@
     box-sizing: border-box;
     overflow-x: hidden;
   }
+  .dog-info-line {
+    font-size: 0.78rem;
+    color: var(--cream-dim);
+    margin: -4px 2px 14px;
+    line-height: 1.4;
+  }
+  .dog-info-line .age-tag {
+    color: var(--amber);
+    font-weight: 700;
+  }
+  .dog-info-line .foster-tag {
+    color: var(--dustyblue);
+    font-weight: 700;
+  }
+
+  .about-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 16px;
+    padding: 10px 12px;
+    margin-bottom: 16px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+  }
+  .about-card:active { background: var(--charcoal); }
+  .about-avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: var(--amber-dim);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+  }
+  .about-avatar-placeholder { font-size: 1.5rem; }
+  .about-card-text { flex: 1; min-width: 0; }
+  .about-card-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--cream);
+  }
+  .about-card-sub {
+    font-size: 0.76rem;
+    color: var(--cream-dim);
+    margin-top: 1px;
+  }
+  .about-card-chevron {
+    font-size: 1.5rem;
+    color: var(--cream-dim);
+    flex-shrink: 0;
+  }
+
+  .about-modal { max-width: 380px; }
+  .about-header {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    margin-bottom: 18px;
+  }
+  .about-photo-wrap { text-align: center; flex-shrink: 0; }
+  .about-photo {
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--amber-dim);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    background-size: cover;
+    background-position: center;
+    margin: 0 auto 6px;
+  }
+  .about-photo .about-avatar-placeholder { font-size: 2.4rem; }
+  .about-photo-btn {
+    background: none;
+    border: none;
+    color: var(--amber);
+    font-size: 0.72rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+  }
+  .about-headline { min-width: 0; }
+  .about-name {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--cream);
+    line-height: 1.1;
+  }
+  .about-meta {
+    font-size: 0.8rem;
+    color: var(--cream-dim);
+    margin-top: 4px;
+    line-height: 1.4;
+  }
+  .about-stat-group { margin-bottom: 16px; }
+  .about-stat-group-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--amber);
+    margin-bottom: 6px;
+  }
+  .about-stat {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5px 0;
+    font-size: 0.88rem;
+    border-bottom: 1px solid var(--charcoal-lighter);
+  }
+  .about-stat:last-child { border-bottom: none; }
+  .about-stat-label { color: var(--cream-dim); }
+  .about-stat-value { color: var(--cream); font-weight: 700; text-align: right; }
+  .about-footer-note {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    text-align: center;
+    margin: 8px 0 14px;
+    line-height: 1.4;
+  }
+  .personality-trait { margin-bottom: 10px; }
+  .personality-trait-head {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    margin-bottom: 4px;
+  }
+  .personality-trait-name { color: var(--cream); font-weight: 600; }
+  .personality-trait-pct { color: var(--cream-dim); }
+  .personality-bar-track {
+    height: 8px;
+    background: var(--charcoal-lighter);
+    border-radius: 5px;
+    overflow: hidden;
+  }
+  .personality-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--amber), var(--sage));
+    border-radius: 5px;
+    transition: width 0.4s ease;
+  }
+  .personality-summary {
+    font-size: 0.86rem;
+    color: var(--cream);
+    line-height: 1.5;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--charcoal-lighter);
+  }
+  .personality-regen {
+    background: none;
+    border: none;
+    color: var(--amber);
+    font-size: 0.74rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 8px 0 0;
+  }
+  .personality-loading {
+    font-size: 0.85rem;
+    color: var(--cream-dim);
+    text-align: center;
+    padding: 12px;
+  }
+
   .wizard-bars {
     display: flex;
     gap: 5px;
     margin-bottom: 18px;
   }
+  .age-help {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .age-preview {
+    background: var(--amber-dim);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 14px;
+    font-size: 0.85rem;
+    color: var(--cream);
+    line-height: 1.45;
+  }
+  .age-preview strong { font-weight: 700; }
   .wizard-bar {
     flex: 1;
     height: 3px;
@@ -621,14 +816,27 @@
     appearance: none;
   }
   input[type="date"].modal-input,
-  input[type="time"].modal-input {
+  input[type="time"].modal-input,
+  input[type="datetime-local"].modal-input {
     display: block;
+    width: 100%;
+    min-height: 46px;
+    font-size: 1rem;
+    line-height: 1.4;
     color-scheme: light;
   }
-  /* Prevent the native date/time picker's internal fields from forcing extra width */
+  /* Make the native picker's value fill the field rather than shrink to content */
   input[type="date"].modal-input::-webkit-date-and-time-value,
-  input[type="time"].modal-input::-webkit-date-and-time-value {
+  input[type="time"].modal-input::-webkit-date-and-time-value,
+  input[type="datetime-local"].modal-input::-webkit-date-and-time-value {
     text-align: left;
+    width: 100%;
+  }
+  input[type="date"].modal-input::-webkit-datetime-edit,
+  input[type="time"].modal-input::-webkit-datetime-edit,
+  input[type="datetime-local"].modal-input::-webkit-datetime-edit {
+    width: 100%;
+    padding: 0;
   }
   .modal-row-split {
     display: flex;
@@ -993,6 +1201,15 @@
 
   <div class="dog-switcher" id="dogSwitcher"></div>
 
+  <button class="about-card" id="aboutCard">
+    <div class="about-avatar" id="aboutAvatar"><span class="about-avatar-placeholder">🐶</span></div>
+    <div class="about-card-text">
+      <div class="about-card-name" id="aboutCardName">Dog</div>
+      <div class="about-card-sub" id="aboutCardSub">Tap to see the full profile</div>
+    </div>
+    <div class="about-card-chevron">›</div>
+  </button>
+
   <div class="storage-warning" id="storageWarning">
     ⚠️ Having trouble syncing — changes are saved on this device but may not have reached the shared copy yet.
   </div>
@@ -1014,7 +1231,7 @@
     <button class="secondary-btn med-btn" id="medBtn" style="display:none;">💊 Medication</button>
     <button class="secondary-btn feed-btn" id="feedBtn">🍽️ Fed</button>
   </div>
-  <button class="accident-btn" id="accidentBtn">Log an accident instead</button>
+  <button class="accident-btn" id="accidentBtn">⚠️ Log an accident instead</button>
   <button class="note-btn" id="noteBtn">📝 Add a note</button>
 
   <div class="status-row">
@@ -1083,6 +1300,19 @@
     <button class="fab-sheet-opt" id="fabAddDog">🐶 Add a dog</button>
     <button class="fab-sheet-opt" id="fabCustomTime">🕒 Log with a custom time</button>
     <button class="fab-sheet-cancel" id="fabCancel">Cancel</button>
+  </div>
+</div>
+
+<div class="modal-overlay" id="accidentTypeOverlay">
+  <div class="modal">
+    <div class="modal-title">Log an accident</div>
+    <div class="modal-row" style="font-size:0.82rem; color:var(--cream-dim);">What was the accident?</div>
+    <button class="med-picker-opt" id="accidentPee"><div class="mp-name">💦 Pee</div></button>
+    <button class="med-picker-opt" id="accidentPoop"><div class="mp-name">💩 Poop</div></button>
+    <button class="med-picker-opt" id="accidentBoth"><div class="mp-name">💦💩 Both</div></button>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="accidentTypeCancel">Cancel</button>
+    </div>
   </div>
 </div>
 
@@ -1174,9 +1404,39 @@
   </div>
 </div>
 
+<div class="modal-overlay" id="editEntryOverlay">
+  <div class="modal">
+    <div class="modal-title" id="editEntryTitle">Edit entry</div>
+    <div class="modal-row">
+      <label class="modal-label">Date &amp; time</label>
+      <input type="datetime-local" id="editEntryTime" class="modal-input">
+    </div>
+    <div class="modal-row" id="editEntryAccidentRow" style="display:none;">
+      <label class="modal-label">What was the accident?</label>
+      <div class="sex-toggle" id="editEntryAccidentToggle" data-value="pee">
+        <button type="button" class="sex-toggle-opt" data-atype="pee">💦 Pee</button>
+        <button type="button" class="sex-toggle-opt" data-atype="poop">💩 Poop</button>
+        <button type="button" class="sex-toggle-opt" data-atype="both">Both</button>
+      </div>
+    </div>
+    <div class="modal-row" id="editEntryNoteRow" style="display:none;">
+      <label class="modal-label">Note</label>
+      <textarea id="editEntryNoteText" class="modal-input note-textarea" rows="4"></textarea>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="editEntryCancel">Cancel</button>
+      <button class="modal-btn confirm" id="editEntrySave">Save</button>
+    </div>
+    <div class="modal-actions" style="margin-top:8px;">
+      <button class="modal-btn danger" id="editEntryDelete">Delete this log</button>
+    </div>
+  </div>
+</div>
+
 <div class="modal-overlay" id="addDogModalOverlay">
   <div class="modal">
     <div class="wizard-bars" id="addDogBars">
+      <div class="wizard-bar"><span></span></div>
       <div class="wizard-bar"><span></span></div>
       <div class="wizard-bar"><span></span></div>
     </div>
@@ -1186,6 +1446,10 @@
       <div class="modal-row">
         <label class="modal-label">What's their name?</label>
         <input type="text" id="newDogName" class="modal-input" placeholder="e.g. Biscuit" autocomplete="off">
+      </div>
+      <div class="modal-row">
+        <label class="modal-label">Breed (optional)</label>
+        <input type="text" id="newDogBreed" class="modal-input" placeholder="e.g. German shepherd mix" autocomplete="off">
       </div>
       <div class="modal-row">
         <label class="modal-label">Male or female?</label>
@@ -1201,6 +1465,36 @@
     </div>
 
     <div class="wizard-page" data-page="1" style="display:none;">
+      <div class="modal-title">Age</div>
+      <div class="modal-row">
+        <label class="modal-label">Do you know <span id="addDogAgeName">their</span> birthday?</label>
+        <div class="sex-toggle" id="newDogAgeMode" data-value="no">
+          <button type="button" class="sex-toggle-opt" data-mode="exact">Yes</button>
+          <button type="button" class="sex-toggle-opt active" data-mode="age">No</button>
+        </div>
+      </div>
+      <div class="modal-row" id="ageModeExact" style="display:none;">
+        <label class="modal-label">Birthday</label>
+        <input type="date" id="newDogExactDate" class="modal-input">
+      </div>
+      <div class="modal-row" id="ageModeAge">
+        <label class="modal-label">About how old?</label>
+        <input type="text" id="newDogAgeInput" class="modal-input" placeholder="e.g. 14 weeks, or 2 months 3 weeks" autocomplete="off">
+        <div class="age-help">Type it however you like — "14 weeks", "2 months 3 weeks", "1 year". We'll pick a memorable birthday near that age, and you can change it later.</div>
+      </div>
+      <div id="agePreview" class="age-preview" style="display:none;"></div>
+      <div class="modal-row">
+        <label class="modal-label">Fostering since</label>
+        <input type="date" id="newDogFosterStart" class="modal-input">
+        <div class="age-help">Defaults to today — change it if you got them earlier.</div>
+      </div>
+      <div class="modal-actions">
+        <button class="modal-btn cancel" id="addDogBackToName">Back</button>
+        <button class="modal-btn confirm" id="addDogToMed">Next</button>
+      </div>
+    </div>
+
+    <div class="wizard-page" data-page="2" style="display:none;">
       <div class="modal-title">Medication</div>
       <div class="modal-row">
         <label class="modal-label">Does <span id="addDogNamePronoun">this dog</span> take any medication?</label>
@@ -1229,11 +1523,25 @@
       <input type="text" id="renameDogInput" class="modal-input">
     </div>
     <div class="modal-row">
+      <label class="modal-label">Breed</label>
+      <input type="text" id="editDogBreed" class="modal-input" placeholder="e.g. German shepherd mix">
+    </div>
+    <div class="modal-row">
       <label class="modal-label">Male or female?</label>
       <div class="sex-toggle" id="editDogSexToggle" data-value="female">
         <button type="button" class="sex-toggle-opt active" data-sex="female">Female</button>
         <button type="button" class="sex-toggle-opt" data-sex="male">Male</button>
       </div>
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Birthdate</label>
+      <input type="date" id="editDogBirthdate" class="modal-input">
+      <div class="age-help" id="editDogAgeHelp"></div>
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Fostering since</label>
+      <input type="date" id="editDogFosterStart" class="modal-input">
+      <div class="age-help" id="editDogFosterHelp"></div>
     </div>
     <div class="modal-actions">
       <button class="modal-btn cancel" id="dogMenuCancel">Cancel</button>
@@ -1241,6 +1549,39 @@
     </div>
     <div class="modal-actions" style="margin-top:8px;">
       <button class="modal-btn danger" id="dogMenuDelete">Remove this dog</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="aboutModalOverlay">
+  <div class="modal about-modal">
+    <div class="about-header">
+      <div class="about-photo-wrap">
+        <div class="about-photo" id="aboutPhoto"><span class="about-avatar-placeholder">🐶</span></div>
+        <button class="about-photo-btn" id="aboutPhotoBtn">Add photo</button>
+        <input type="file" id="aboutPhotoInput" accept="image/*" style="display:none;">
+      </div>
+      <div class="about-headline">
+        <div class="about-name" id="aboutName">Dog</div>
+        <div class="about-meta" id="aboutMeta"></div>
+      </div>
+    </div>
+    <div id="aboutStats"></div>
+
+    <div class="about-stat-group" id="personalitySection">
+      <div class="about-stat-group-title">Personality</div>
+      <div id="personalityContent">
+        <div class="personality-empty" id="personalityEmpty">
+          <p class="age-help" id="personalityHint">Add a few notes about how she's acting, then generate a personality read from them.</p>
+          <button class="med-add-row-btn" id="generatePersonalityBtn">✨ Generate personality profile</button>
+        </div>
+        <div id="personalityResult" style="display:none;"></div>
+      </div>
+    </div>
+
+    <div class="about-footer-note">Auto-generated from everything logged so far — handy to share with adopters.</div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="aboutClose">Close</button>
     </div>
   </div>
 </div>
@@ -1283,9 +1624,47 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '1.3.1'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '1.9.1'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '1.9.1', date: 'Jun 2026', notes: [
+    'Tidied up: age and foster info now live only in the profile card'
+  ]},
+  { version: '1.9.0', date: 'Jun 2026', notes: [
+    'Every log now has an edit button — change the time or delete it',
+    'Edit an accident\u2019s type (pee/poop/both) after logging',
+    'Warning icon added to the accident button'
+  ]},
+  { version: '1.8.0', date: 'Jun 2026', notes: [
+    'Accidents now ask if it was pee, poop, or both',
+    'Accident type counts toward the pee and poop trackers'
+  ]},
+  { version: '1.7.0', date: 'Jun 2026', notes: [
+    'Personality profile: AI reads your notes and charts traits + a summary',
+    'Foster duration now shows on the avatar card too'
+  ]},
+  { version: '1.6.0', date: 'Jun 2026', notes: [
+    'About card: tap to see a full auto-generated profile for adopters',
+    'Add a photo for each dog',
+    'Profile gathers potty patterns, feeding, meds, age, and foster time',
+    'Set "fostering since" right in the add-a-dog flow'
+  ]},
+  { version: '1.5.0', date: 'Jun 2026', notes: [
+    'Foster duration counter: see how long you\u2019ve fostered each dog',
+    'Set/correct the "fostering since" date in the dog\u2019s profile'
+  ]},
+  { version: '1.4.2', date: 'Jun 2026', notes: [
+    'Fixed: birthday date field was too small/hard to tap — now full width'
+  ]},
+  { version: '1.4.1', date: 'Jun 2026', notes: [
+    'Age step now asks if you know the birthday; if not, type the age freely',
+    'Free-form age understands compound values like "2 months 3 weeks"'
+  ]},
+  { version: '1.4.0', date: 'Jun 2026', notes: [
+    'Age tracker: set a birthdate from a known age or date range',
+    'When the birthdate is unknown, the app picks a memorable date and explains why',
+    'Added a breed field for each dog'
+  ]},
   { version: '1.3.1', date: 'Jun 2026', notes: [
     'Fixed: added medications no longer vanish after saving (sync was overwriting them)'
   ]},
@@ -1328,6 +1707,135 @@ let syncInFlight = false;
 
 function uid(prefix) { return (prefix||'e') + Date.now() + Math.random().toString(36).slice(2,7); }
 
+// ---- Age tracker ----
+// Memorable date anchors (month is 1-based). Used to pick a fun, easy-to-remember
+// birthdate near a computed target when the real one is unknown. The app finds
+// the closest anchor within the allowed window and explains the choice.
+const DATE_FACTS = [
+  { m: 1, d: 1, why: "New Year's Day — a fresh start for a fresh pup" },
+  { m: 2, d: 2, why: "Groundhog Day — she popped out to check for her shadow" },
+  { m: 2, d: 14, why: "Valentine's Day — a real sweetheart" },
+  { m: 3, d: 14, why: "Pi Day (3.14) — irrationally cute" },
+  { m: 3, d: 17, why: "St. Patrick's Day — the luck of the Irish" },
+  { m: 4, d: 1, why: "April Fools' Day — a little goofball" },
+  { m: 4, d: 22, why: "Earth Day — a nature lover at heart" },
+  { m: 5, d: 4, why: "Star Wars Day (May the 4th) — the Force is strong with this one" },
+  { m: 6, d: 21, why: "Summer Solstice — born on the longest, sunniest day" },
+  { m: 7, d: 4, why: "Independence Day — a free spirit" },
+  { m: 8, d: 8, why: "International Cat Day — ironic for a dog, but she owns it" },
+  { m: 8, d: 26, why: "National Dog Day — what else could it be?" },
+  { m: 9, d: 19, why: "Talk Like a Pirate Day — arrr, a scallywag" },
+  { m: 10, d: 4, why: "World Animal Day — fitting for a rescue" },
+  { m: 10, d: 31, why: "Halloween — a little spooky, a lot of treat" },
+  { m: 11, d: 11, why: "11/11 — make a wish, she's the lucky one" },
+  { m: 12, d: 21, why: "Winter Solstice — born on the coziest night of the year" },
+  { m: 12, d: 25, why: "Christmas — the best gift under the tree" }
+];
+
+function daysBetween(a, b) {
+  return Math.round((b - a) / (1000 * 60 * 60 * 24));
+}
+
+// Parse an age string into days. Handles single units ("14 weeks") and compound
+// ones ("2 months 3 weeks", "1 year 2 months"). Accepts abbreviations like
+// "2mo", "3w", "5d", "1y". Returns total days, or null if nothing parseable.
+function parseAgeToDays(str) {
+  if (!str) return null;
+  const per = { day: 1, week: 7, month: 30.44, year: 365.25 };
+  // Find all "<number> <unit>" pairs anywhere in the string.
+  const re = /(\d+(?:\.\d+)?)\s*(years?|yrs?|y|months?|mos?|mon|m|weeks?|wks?|w|days?|d)\b/gi;
+  let total = 0, found = false, match;
+  while ((match = re.exec(str)) !== null) {
+    const n = parseFloat(match[1]);
+    let u = match[2].toLowerCase();
+    let key;
+    if (u.startsWith('y')) key = 'year';
+    else if (u === 'm' || u.startsWith('mo') || u.startsWith('mon') || u.startsWith('month')) key = 'month';
+    else if (u.startsWith('w')) key = 'week';
+    else if (u.startsWith('d')) key = 'day';
+    if (key) { total += n * per[key]; found = true; }
+  }
+  return found ? Math.round(total) : null;
+}
+
+// Given a target date and an allowed +/- window (in days), find the closest
+// memorable anchor within that window. Returns {date, why} or null.
+function pickMemorableBirthdate(targetDate, windowDays) {
+  let best = null;
+  // Check anchors in the target year and neighboring years (handles year edges)
+  const years = [targetDate.getFullYear() - 1, targetDate.getFullYear(), targetDate.getFullYear() + 1];
+  DATE_FACTS.forEach(f => {
+    years.forEach(y => {
+      const cand = new Date(y, f.m - 1, f.d);
+      const dist = Math.abs(daysBetween(cand, targetDate));
+      if (dist <= windowDays && (!best || dist < best.dist)) {
+        best = { date: cand, why: f.why, dist };
+      }
+    });
+  });
+  return best ? { date: best.date, why: best.why } : null;
+}
+
+// Format an age from a birthdate to a human string (weeks for young pups, then months, then years).
+function ageFromBirthdate(birthdateMs) {
+  if (!birthdateMs) return null;
+  const days = daysBetween(new Date(birthdateMs), new Date());
+  if (days < 0) return 'not born yet';
+  if (days < 14) return `${days} day${days === 1 ? '' : 's'} old`;
+  if (days < 98) { // under ~14 weeks, show weeks
+    const w = Math.floor(days / 7);
+    return `${w} week${w === 1 ? '' : 's'} old`;
+  }
+  if (days < 730) { // under 2 years, show months
+    const months = Math.floor(days / 30.44);
+    return `${months} month${months === 1 ? '' : 's'} old`;
+  }
+  const years = Math.floor(days / 365.25);
+  const remMonths = Math.floor((days - years * 365.25) / 30.44);
+  return remMonths > 0 ? `${years}y ${remMonths}m old` : `${years} year${years === 1 ? '' : 's'} old`;
+}
+
+function fmtBirthdate(ms) {
+  if (!ms) return '';
+  return new Date(ms).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
+}
+
+// For dogs created before this feature existed, estimate the foster-start date
+// as their earliest logged entry (when tracking began), falling back to now.
+function backfillFosterStart() {
+  dogs.forEach(d => {
+    if (d.fosterStart) return;
+    const dogEntries = entries.filter(e => e.dogId === d.id);
+    if (dogEntries.length) {
+      d.fosterStart = Math.min(...dogEntries.map(e => e.ts));
+    } else {
+      d.fosterStart = Date.now();
+    }
+  });
+}
+
+// Human-friendly duration since a timestamp: days for the first stretch, then
+// weeks/months, kept simple and readable for a foster handoff.
+function fosterDuration(startMs) {
+  if (!startMs) return null;
+  const days = daysBetween(new Date(startMs), new Date());
+  if (days <= 0) return 'today';
+  if (days === 1) return '1 day';
+  if (days < 14) return `${days} days`;
+  if (days < 60) {
+    const w = Math.floor(days / 7);
+    const remD = days - w * 7;
+    return remD ? `${w} week${w === 1 ? '' : 's'}, ${remD} day${remD === 1 ? '' : 's'}` : `${w} weeks`;
+  }
+  const months = Math.floor(days / 30.44);
+  const remDays = Math.round(days - months * 30.44);
+  if (remDays >= 7) {
+    const w = Math.floor(remDays / 7);
+    return `${months} month${months === 1 ? '' : 's'}, ${w} week${w === 1 ? '' : 's'}`;
+  }
+  return `${months} month${months === 1 ? '' : 's'}`;
+}
+
 // Apply tombstones: drop anything that's been marked deleted, and clean up
 // feed goals / active dog for removed dogs. Safe to call repeatedly.
 function applyTombstones() {
@@ -1342,7 +1850,7 @@ function applyTombstones() {
 function defaultData() {
   const dogId = uid('dog');
   return {
-    dogs: [{ id: dogId, name: 'Foster Pup', sex: 'female', meds: [] }],
+    dogs: [{ id: dogId, name: 'Foster Pup', sex: 'female', breed: '', birthdate: null, birthdateReason: '', fosterStart: Date.now(), meds: [] }],
     activeDogId: dogId,
     entries: [],
     feedGoals: { [dogId]: { min: 3, max: 4 } }
@@ -1378,6 +1886,8 @@ async function loadAll() {
     dogs.forEach(d => { if (!feedGoals[d.id]) feedGoals[d.id] = { min: 3, max: 4 }; });
     dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
     dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
+    dogs.forEach(d => { if (d.breed === undefined) d.breed = ''; if (d.birthdate === undefined) d.birthdate = null; if (d.birthdateReason === undefined) d.birthdateReason = ''; });
+    backfillFosterStart();
     applyTombstones();
   } catch (e) {
     const d = defaultData();
@@ -1538,6 +2048,8 @@ async function pullFromCloud() {
       }
       dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
       dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
+      dogs.forEach(d => { if (d.breed === undefined) d.breed = ''; if (d.birthdate === undefined) d.birthdate = null; if (d.birthdateReason === undefined) d.birthdateReason = ''; });
+      backfillFosterStart();
       // Apply tombstones AFTER merging so deleted items don't get re-added
       applyTombstones();
       persistLocal();
@@ -1713,7 +2225,9 @@ function renderStatus() {
   const sinceEl = document.getElementById('sinceValue');
   const lastEl = document.getElementById('lastTime');
   const peeAvgLine = document.getElementById('peeAvgLine');
-  const pees = myEntries.filter(e => e.type === 'pee' || e.type === 'accident');
+  const isPeeEvent = e => e.type === 'pee' || (e.type === 'accident' && (e.accidentType === 'pee' || e.accidentType === 'both' || !e.accidentType));
+  const isPoopEvent = e => e.type === 'poop' || (e.type === 'accident' && (e.accidentType === 'poop' || e.accidentType === 'both'));
+  const pees = myEntries.filter(isPeeEvent);
   if (pees.length === 0) {
     sinceEl.textContent = '—';
     sinceEl.className = 'value';
@@ -1726,14 +2240,14 @@ function renderStatus() {
     const mins = elapsed / 60000;
     sinceEl.className = 'value ' + (mins > 180 ? 'warn' : mins > 120 ? '' : 'ok');
     lastEl.textContent = fmtTime(last.ts) + (last.type === 'accident' ? ' (accident)' : '');
-    const stats = avgGap(myEntries.filter(e => e.type === 'pee').sort((a,b)=>a.ts-b.ts));
+    const stats = avgGap(pees.slice().sort((a,b)=>a.ts-b.ts));
     peeAvgLine.innerHTML = stats ? `Avg every <strong>${fmtDurationLong(stats.avg)}</strong>` : '';
   }
 
   const poopSinceEl = document.getElementById('poopSinceValue');
   const poopLastEl = document.getElementById('poopLastTime');
   const poopAvgLine = document.getElementById('poopAvgLine');
-  const poops = myEntries.filter(e => e.type === 'poop').sort((a,b)=>a.ts-b.ts);
+  const poops = myEntries.filter(isPoopEvent).sort((a,b)=>a.ts-b.ts);
   if (poops.length === 0) {
     poopSinceEl.textContent = '—';
     poopSinceEl.className = 'value';
@@ -1885,9 +2399,7 @@ function renderTimeline() {
     const medHtml = entry.type === 'med'
       ? `<div class="tl-gap">${escapeHtml(medNameFor(entry.medId))}</div>`
       : '';
-    const actionHtml = entry.type === 'note'
-      ? `<button class="del-btn" data-edit-note-id="${entry.id}">edit</button>`
-      : `<button class="del-btn" data-id="${entry.id}">remove</button>`;
+    const actionHtml = `<button class="del-btn" data-edit-id="${entry.id}">edit</button>`;
     html += `
       <div class="tl-row">
         <div class="tl-dot-col">
@@ -1895,7 +2407,7 @@ function renderTimeline() {
           ${idx < sorted.length - 1 ? '<div class="tl-line"></div>' : ''}
         </div>
         <div class="tl-content">
-          <div class="tl-time">${entryIcon(entry.type)} ${fmtTime(entry.ts)}<span class="tag" style="display:${entry.type==='accident'?'inline':'none'}">accident</span>
+          <div class="tl-time">${entryIcon(entry.type)} ${fmtTime(entry.ts)}<span class="tag" style="display:${entry.type==='accident'?'inline':'none'}">accident${entry.type === 'accident' && entry.accidentType ? ' · ' + (entry.accidentType === 'both' ? 'pee + poop' : entry.accidentType) : ''}</span>
             <span class="row-actions">${actionHtml}</span>
           </div>
           ${noteHtml}
@@ -1906,19 +2418,11 @@ function renderTimeline() {
   });
   wrap.innerHTML = html;
 
-  wrap.querySelectorAll('.del-btn[data-id]').forEach(btn => {
-    btn.addEventListener('click', async (e) => {
-      const id = e.target.getAttribute('data-id');
-      deletedEntryIds[id] = Date.now();
-      entries = entries.filter(en => en.id !== id);
-      await persistAndSync();
-      renderAll();
-    });
+  wrap.querySelectorAll('.del-btn[data-edit-id]').forEach(btn => {
+    btn.addEventListener('click', () => openEditEntry(btn.getAttribute('data-edit-id')));
   });
   wrap.querySelectorAll('[data-edit-note-id]').forEach(el => {
-    el.addEventListener('click', () => {
-      openNoteModal(el.getAttribute('data-edit-note-id'));
-    });
+    el.addEventListener('click', () => openEditEntry(el.getAttribute('data-edit-note-id')));
   });
 }
 
@@ -1979,8 +2483,263 @@ function renderMedication() {
   });
 }
 
+function renderAboutCard() {
+  const dog = activeDog();
+  const card = document.getElementById('aboutCard');
+  if (!dog) { card.style.display = 'none'; return; }
+  card.style.display = 'flex';
+  document.getElementById('aboutCardName').textContent = dog.name;
+  // Avatar
+  const avatar = document.getElementById('aboutAvatar');
+  if (dog.photo) {
+    avatar.style.backgroundImage = `url(${dog.photo})`;
+    avatar.innerHTML = '';
+  } else {
+    avatar.style.backgroundImage = '';
+    avatar.innerHTML = '<span class="about-avatar-placeholder">🐶</span>';
+  }
+  // One-line summary
+  const bits = [];
+  if (dog.breed) bits.push(dog.breed);
+  if (dog.birthdate) bits.push(ageFromBirthdate(dog.birthdate));
+  if (dog.fosterStart) bits.push('🏠 ' + fosterDuration(dog.fosterStart));
+  const sub = bits.length ? bits.join(' · ') : 'Tap to see the full profile';
+  document.getElementById('aboutCardSub').textContent = sub;
+}
+
+// Build the auto-computed "about this dog" stats for adopter handoff.
+function computeAboutStats() {
+  const dog = activeDog();
+  const es = activeEntries().slice().sort((a,b) => a.ts - b.ts);
+  const byType = t => es.filter(e => e.type === t);
+  const isPee = e => e.type === 'pee' || (e.type === 'accident' && (e.accidentType === 'pee' || e.accidentType === 'both' || !e.accidentType));
+  const isPoop = e => e.type === 'poop' || (e.type === 'accident' && (e.accidentType === 'poop' || e.accidentType === 'both'));
+  const pees = es.filter(isPee), poops = es.filter(isPoop), feeds = byType('feed'),
+        accidents = byType('accident'), medDoses = byType('med');
+
+  const trackedDays = es.length ? Math.max(1, daysBetween(new Date(es[0].ts), new Date()) + 1) : 0;
+  const peeGap = avgGap(pees);
+  const poopGap = avgGap(poops);
+  const fmtHrs = ms => {
+    const h = ms / 3600000;
+    if (h < 1) return `${Math.round(h * 60)} min`;
+    return `${h.toFixed(1)} hr`;
+  };
+
+  // House-training trend: accidents in first half vs second half of tracked period
+  let trend = null;
+  if (accidents.length >= 2 && es.length > 4) {
+    const firstTs = es[0].ts, lastTs = es[es.length-1].ts;
+    const mid = firstTs + (lastTs - firstTs) / 2;
+    const early = accidents.filter(a => a.ts < mid).length;
+    const late = accidents.filter(a => a.ts >= mid).length;
+    if (late < early) trend = 'improving — fewer accidents lately';
+    else if (late > early) trend = 'more accidents recently';
+    else trend = 'holding steady';
+  }
+
+  const groups = [];
+
+  // Basics
+  const basics = [];
+  if (dog.breed) basics.push(['Breed', dog.breed]);
+  basics.push(['Sex', dog.sex === 'male' ? 'Male' : 'Female']);
+  if (dog.birthdate) {
+    basics.push(['Age', ageFromBirthdate(dog.birthdate)]);
+    basics.push(['Birthday', fmtBirthdate(dog.birthdate) + (dog.birthdateReason ? ' (estimated)' : '')]);
+  }
+  if (dog.fosterStart) basics.push(['In foster care', fosterDuration(dog.fosterStart)]);
+  groups.push({ title: 'About', rows: basics });
+
+  // Potty
+  const potty = [];
+  potty.push(['Pees logged', `${pees.length}`]);
+  potty.push(['Poops logged', `${poops.length}`]);
+  if (peeGap) potty.push(['Typical time between pees', fmtHrs(peeGap.avg)]);
+  if (poopGap) potty.push(['Typical time between poops', fmtHrs(poopGap.avg)]);
+  if (trackedDays) {
+    potty.push(['Pees per day (avg)', (pees.length / trackedDays).toFixed(1)]);
+    potty.push(['Poops per day (avg)', (poops.length / trackedDays).toFixed(1)]);
+  }
+  potty.push(['Accidents', `${accidents.length}`]);
+  if (trend) potty.push(['House-training', trend]);
+  groups.push({ title: 'Potty habits', rows: potty });
+
+  // Feeding
+  const feeding = [];
+  feeding.push(['Feedings logged', `${feeds.length}`]);
+  if (trackedDays) feeding.push(['Feedings per day (avg)', (feeds.length / trackedDays).toFixed(1)]);
+  groups.push({ title: 'Feeding', rows: feeding });
+
+  // Medication
+  if (dog.meds && dog.meds.length) {
+    const medRows = dog.meds.map(m => [m.name, `${(m.times && m.times.join(', ')) || 'daily'}${m.type ? ' · ' + m.type : ''}`]);
+    medRows.push(['Doses logged', `${medDoses.length}`]);
+    groups.push({ title: 'Medication', rows: medRows });
+  }
+
+  // Tracking
+  groups.push({ title: 'Tracking', rows: [
+    ['Days tracked', `${trackedDays}`],
+    ['Total entries', `${es.length}`]
+  ]});
+
+  return groups;
+}
+
+function openAbout() {
+  const dog = activeDog();
+  if (!dog) return;
+  document.getElementById('aboutName').textContent = dog.name;
+  const metaBits = [];
+  if (dog.breed) metaBits.push(escapeHtml(dog.breed));
+  if (dog.birthdate) metaBits.push(ageFromBirthdate(dog.birthdate));
+  if (dog.fosterStart) metaBits.push('fostered ' + fosterDuration(dog.fosterStart));
+  document.getElementById('aboutMeta').innerHTML = metaBits.join(' · ');
+
+  const photo = document.getElementById('aboutPhoto');
+  if (dog.photo) {
+    photo.style.backgroundImage = `url(${dog.photo})`;
+    photo.innerHTML = '';
+  } else {
+    photo.style.backgroundImage = '';
+    photo.innerHTML = '<span class="about-avatar-placeholder">🐶</span>';
+  }
+  document.getElementById('aboutPhotoBtn').textContent = dog.photo ? 'Change photo' : 'Add photo';
+
+  const groups = computeAboutStats();
+  document.getElementById('aboutStats').innerHTML = groups.map(g => `
+    <div class="about-stat-group">
+      <div class="about-stat-group-title">${escapeHtml(g.title)}</div>
+      ${g.rows.map(([label, val]) => `
+        <div class="about-stat">
+          <span class="about-stat-label">${escapeHtml(label)}</span>
+          <span class="about-stat-value">${escapeHtml(String(val))}</span>
+        </div>`).join('')}
+    </div>`).join('');
+
+  renderPersonality();
+  document.getElementById('aboutModalOverlay').classList.add('show');
+}
+
+// Notes for the active dog, oldest first
+function activeNotes() {
+  return activeEntries()
+    .filter(e => e.type === 'note' && e.text && e.text.trim())
+    .sort((a,b) => a.ts - b.ts);
+}
+
+// Render the personality section: cached result, empty state, or stale prompt.
+function renderPersonality() {
+  const dog = activeDog();
+  const empty = document.getElementById('personalityEmpty');
+  const result = document.getElementById('personalityResult');
+  const hint = document.getElementById('personalityHint');
+  const genBtn = document.getElementById('generatePersonalityBtn');
+  const notes = activeNotes();
+
+  if (notes.length < 3) {
+    empty.style.display = 'block';
+    result.style.display = 'none';
+    hint.textContent = `Add at least 3 notes about how ${dog && dog.sex === 'male' ? 'he' : 'she'}'s acting (you have ${notes.length}), then generate a personality read from them.`;
+    genBtn.style.display = 'none';
+    return;
+  }
+
+  if (dog.personality && dog.personality.traits) {
+    empty.style.display = 'none';
+    result.style.display = 'block';
+    const p = dog.personality;
+    const stale = p.noteCount && notes.length > p.noteCount;
+    result.innerHTML = `
+      ${p.traits.map(t => `
+        <div class="personality-trait">
+          <div class="personality-trait-head">
+            <span class="personality-trait-name">${escapeHtml(t.name)}</span>
+            <span class="personality-trait-pct">${Math.round(t.score)}%</span>
+          </div>
+          <div class="personality-bar-track"><div class="personality-bar-fill" style="width:${Math.max(2, Math.min(100, t.score))}%"></div></div>
+        </div>`).join('')}
+      <div class="personality-summary">${escapeHtml(p.summary)}</div>
+      <button class="personality-regen" id="regenPersonalityBtn">${stale ? '↻ Update with newer notes' : '↻ Regenerate'}</button>
+    `;
+    document.getElementById('regenPersonalityBtn').addEventListener('click', generatePersonality);
+    return;
+  }
+
+  // Enough notes, no cached result yet
+  empty.style.display = 'block';
+  result.style.display = 'none';
+  hint.textContent = `Generate a personality read from the ${notes.length} notes you've logged.`;
+  genBtn.style.display = 'block';
+}
+
+async function generatePersonality() {
+  const dog = activeDog();
+  const notes = activeNotes();
+  if (!dog || notes.length < 3) return;
+  const content = document.getElementById('personalityContent');
+  const prevHtml = content.innerHTML;
+  content.innerHTML = `<div class="personality-loading">Reading ${notes.length} notes…</div>`;
+
+  const notesText = notes.map(n => '- ' + n.text.trim()).join('\n');
+  const pronoun = dog.sex === 'male' ? 'he' : 'she';
+  const prompt = `You are helping a dog foster caregiver build a personality profile for an adopter handoff. Below are timestamped care notes about a dog named ${dog.name}${dog.breed ? ' (' + dog.breed + ')' : ''}. Read them and infer ${pronoun === 'he' ? 'his' : 'her'} personality.
+
+Notes (oldest to newest):
+${notesText}
+
+Respond ONLY with valid JSON, no markdown, in exactly this shape:
+{
+  "traits": [
+    {"name": "Playful", "score": 0-100},
+    {"name": "Affectionate", "score": 0-100},
+    {"name": "Confident", "score": 0-100},
+    {"name": "Calm", "score": 0-100},
+    {"name": "Sociable", "score": 0-100}
+  ],
+  "summary": "2-3 warm, honest sentences describing ${dog.name}'s temperament for a potential adopter, grounded in the notes. Note any growth over time if visible."
+}
+Base scores on evidence in the notes. If a trait isn't observable, give it a modest score rather than guessing high. Weight more recent notes a bit more heavily.`;
+
+  try {
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 1000,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+    const data = await response.json();
+    const text = data.content.filter(b => b.type === 'text').map(b => b.text).join('').trim();
+    const clean = text.replace(/```json|```/g, '').trim();
+    const parsed = JSON.parse(clean);
+    if (!parsed.traits || !Array.isArray(parsed.traits)) throw new Error('bad shape');
+    dog.personality = {
+      traits: parsed.traits,
+      summary: parsed.summary || '',
+      generatedAt: Date.now(),
+      noteCount: notes.length
+    };
+    await persistAndSync();
+    renderPersonality();
+  } catch (err) {
+    console.error('Personality generation failed', err);
+    content.innerHTML = prevHtml;
+    // rewire the buttons that prevHtml restored
+    const g = document.getElementById('generatePersonalityBtn');
+    if (g) g.addEventListener('click', generatePersonality);
+    const r = document.getElementById('regenPersonalityBtn');
+    if (r) r.addEventListener('click', generatePersonality);
+    showToast("Couldn't generate — check your connection and try again");
+  }
+}
+
 function renderAll() {
   renderDogSwitcher();
+  renderAboutCard();
   renderActionLabels();
   renderStatus();
   renderNextFeeding();
@@ -1999,10 +2758,26 @@ async function logEntry(type) {
   showToast(toastMsg[type] || 'Logged!');
 }
 
+// Log an accident with a subtype so it counts toward the right tracker(s).
+async function logAccident(accidentType) {
+  entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type: 'accident', accidentType });
+  entries.sort((a,b) => a.ts - b.ts);
+  await persistAndSync();
+  renderAll();
+  const label = { pee: 'Pee accident logged', poop: 'Poop accident logged', both: 'Accident logged (pee + poop)' };
+  showToast(label[accidentType] || 'Accident logged');
+}
+
 document.getElementById('logBtn').addEventListener('click', () => logEntry('pee'));
 document.getElementById('poopBtn').addEventListener('click', () => logEntry('poop'));
 document.getElementById('feedBtn').addEventListener('click', () => logEntry('feed'));
-document.getElementById('accidentBtn').addEventListener('click', () => logEntry('accident'));
+const accidentTypeOverlay = document.getElementById('accidentTypeOverlay');
+document.getElementById('accidentBtn').addEventListener('click', () => accidentTypeOverlay.classList.add('show'));
+document.getElementById('accidentTypeCancel').addEventListener('click', () => accidentTypeOverlay.classList.remove('show'));
+accidentTypeOverlay.addEventListener('click', (e) => { if (e.target === accidentTypeOverlay) accidentTypeOverlay.classList.remove('show'); });
+document.getElementById('accidentPee').addEventListener('click', () => { accidentTypeOverlay.classList.remove('show'); logAccident('pee'); });
+document.getElementById('accidentPoop').addEventListener('click', () => { accidentTypeOverlay.classList.remove('show'); logAccident('poop'); });
+document.getElementById('accidentBoth').addEventListener('click', () => { accidentTypeOverlay.classList.remove('show'); logAccident('both'); });
 
 // Note modal (handles both adding a new note and editing/deleting an existing one)
 const noteModalOverlay = document.getElementById('noteModalOverlay');
@@ -2060,6 +2835,83 @@ document.getElementById('noteModalDelete').addEventListener('click', async () =>
   renderAll();
   noteModalOverlay.classList.remove('show');
   showToast('Note deleted');
+});
+
+// ---- Unified edit-entry modal (all log types) ----
+const editEntryOverlay = document.getElementById('editEntryOverlay');
+let editEntryTargetId = null;
+const ENTRY_LABELS = { pee: 'pee', poop: 'poop', feed: 'feeding', accident: 'accident', note: 'note', med: 'medication' };
+
+function toLocalInputValue(ts) {
+  const d = new Date(ts);
+  return `${d.getFullYear()}-${pad2(d.getMonth()+1)}-${pad2(d.getDate())}T${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
+}
+function setEditAccidentToggle(value) {
+  const t = document.getElementById('editEntryAccidentToggle');
+  t.dataset.value = value;
+  t.querySelectorAll('.sex-toggle-opt').forEach(b => b.classList.toggle('active', b.getAttribute('data-atype') === value));
+}
+function openEditEntry(entryId) {
+  const entry = entries.find(e => e.id === entryId);
+  if (!entry) return;
+  editEntryTargetId = entryId;
+  let label = ENTRY_LABELS[entry.type] || 'entry';
+  if (entry.type === 'med') label = medNameFor(entry.medId);
+  document.getElementById('editEntryTitle').textContent = 'Edit ' + label;
+  document.getElementById('editEntryTime').value = toLocalInputValue(entry.ts);
+  // Accident type row
+  const accRow = document.getElementById('editEntryAccidentRow');
+  if (entry.type === 'accident') {
+    accRow.style.display = 'block';
+    setEditAccidentToggle(entry.accidentType || 'pee');
+  } else {
+    accRow.style.display = 'none';
+  }
+  // Note text row
+  const noteRow = document.getElementById('editEntryNoteRow');
+  if (entry.type === 'note') {
+    noteRow.style.display = 'block';
+    document.getElementById('editEntryNoteText').value = entry.text || '';
+  } else {
+    noteRow.style.display = 'none';
+  }
+  editEntryOverlay.classList.add('show');
+}
+document.getElementById('editEntryAccidentToggle').querySelectorAll('.sex-toggle-opt').forEach(btn => {
+  btn.addEventListener('click', () => setEditAccidentToggle(btn.getAttribute('data-atype')));
+});
+document.getElementById('editEntryCancel').addEventListener('click', () => editEntryOverlay.classList.remove('show'));
+editEntryOverlay.addEventListener('click', (e) => { if (e.target === editEntryOverlay) editEntryOverlay.classList.remove('show'); });
+document.getElementById('editEntrySave').addEventListener('click', async () => {
+  const entry = entries.find(e => e.id === editEntryTargetId);
+  if (!entry) return;
+  const tVal = document.getElementById('editEntryTime').value;
+  if (tVal) {
+    const newTs = new Date(tVal).getTime();
+    if (!isNaN(newTs)) entry.ts = newTs;
+  }
+  if (entry.type === 'accident') {
+    entry.accidentType = document.getElementById('editEntryAccidentToggle').dataset.value;
+  }
+  if (entry.type === 'note') {
+    const text = document.getElementById('editEntryNoteText').value.trim();
+    if (!text) { showToast('Note text cannot be empty'); return; }
+    entry.text = text;
+  }
+  entries.sort((a,b) => a.ts - b.ts);
+  await persistAndSync();
+  renderAll();
+  editEntryOverlay.classList.remove('show');
+  showToast('Updated');
+});
+document.getElementById('editEntryDelete').addEventListener('click', async () => {
+  if (!editEntryTargetId) return;
+  deletedEntryIds[editEntryTargetId] = Date.now();
+  entries = entries.filter(e => e.id !== editEntryTargetId);
+  await persistAndSync();
+  renderAll();
+  editEntryOverlay.classList.remove('show');
+  showToast('Log removed');
 });
 
 // Custom time modal
@@ -2268,6 +3120,8 @@ const addMedEditor = makeMedEditor('addMedList', 'addMedAddBtn');
 // Add dog wizard
 const addDogModalOverlay = document.getElementById('addDogModalOverlay');
 let addDogPage = 0;
+let computedBirthdate = null;     // ms
+let computedBirthdateReason = ''; // why string
 function goToAddDogPage(page) {
   addDogPage = page;
   addDogModalOverlay.querySelectorAll('.wizard-page').forEach(p => {
@@ -2279,13 +3133,73 @@ function goToAddDogPage(page) {
 }
 function openAddDogModal() {
   document.getElementById('newDogName').value = '';
+  document.getElementById('newDogBreed').value = '';
   setSexToggle('newDogSexToggle', 'female');
   setMedToggle('no');
   addDogMedEditor.set([]);
+  // reset age inputs
+  setAgeMode('age');
+  document.getElementById('newDogAgeInput').value = '';
+  document.getElementById('newDogExactDate').value = '';
+  document.getElementById('agePreview').style.display = 'none';
+  document.getElementById('newDogFosterStart').value = new Date().toISOString().slice(0,10);
+  computedBirthdate = null; computedBirthdateReason = '';
   goToAddDogPage(0);
   addDogModalOverlay.classList.add('show');
   setTimeout(() => document.getElementById('newDogName').focus(), 50);
 }
+// Age mode toggle: 'exact' = known birthday (date picker), 'age' = free-form age
+function setAgeMode(mode) {
+  const toggle = document.getElementById('newDogAgeMode');
+  toggle.dataset.value = mode;
+  toggle.querySelectorAll('.sex-toggle-opt').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-mode') === mode);
+  });
+  document.getElementById('ageModeExact').style.display = mode === 'exact' ? 'block' : 'none';
+  document.getElementById('ageModeAge').style.display = mode === 'age' ? 'block' : 'none';
+  updateAgePreview();
+}
+document.getElementById('newDogAgeMode').querySelectorAll('.sex-toggle-opt').forEach(btn => {
+  btn.addEventListener('click', () => setAgeMode(btn.getAttribute('data-mode')));
+});
+
+// Compute a birthdate from the chosen age mode. Returns {birthdate, reason} or null.
+function computeBirthdateFromInputs() {
+  const mode = document.getElementById('newDogAgeMode').dataset.value;
+  if (mode === 'exact') {
+    const v = document.getElementById('newDogExactDate').value;
+    if (!v) return null;
+    const d = new Date(v + 'T12:00:00');
+    return { birthdate: d.getTime(), reason: '' };
+  }
+  // mode === 'age': free-form age text
+  const days = parseAgeToDays(document.getElementById('newDogAgeInput').value);
+  if (!days) return null;
+  const target = new Date();
+  target.setHours(12, 0, 0, 0);
+  target.setDate(target.getDate() - days);
+  // search window: ~12% of the age, min 5 days, max 21, so the memorable date stays close
+  const windowDays = Math.min(21, Math.max(5, Math.round(days * 0.12)));
+  const pick = pickMemorableBirthdate(target, windowDays);
+  if (pick) return { birthdate: pick.date.getTime(), reason: pick.why };
+  return { birthdate: target.getTime(), reason: '' };
+}
+function updateAgePreview() {
+  const result = computeBirthdateFromInputs();
+  const el = document.getElementById('agePreview');
+  if (!result) { el.style.display = 'none'; computedBirthdate = null; return; }
+  computedBirthdate = result.birthdate;
+  computedBirthdateReason = result.reason;
+  const ageStr = ageFromBirthdate(result.birthdate);
+  let html = `<strong>${fmtBirthdate(result.birthdate)}</strong> — ${ageStr}`;
+  if (result.reason) html += `<br>🎂 ${escapeHtml(result.reason)}`;
+  el.innerHTML = html;
+  el.style.display = 'block';
+}
+['newDogAgeInput','newDogExactDate'].forEach(id => {
+  document.getElementById(id).addEventListener('input', updateAgePreview);
+});
+
 // Medication yes/no toggle in add-dog wizard
 function setMedToggle(value) {
   const toggle = document.getElementById('newDogMedToggle');
@@ -2300,27 +3214,45 @@ document.getElementById('newDogMedToggle').querySelectorAll('.sex-toggle-opt').f
   btn.addEventListener('click', () => setMedToggle(btn.getAttribute('data-med')));
 });
 document.getElementById('addDogCancel1').addEventListener('click', () => addDogModalOverlay.classList.remove('show'));
+// Page 0 -> 1 (name -> age)
 document.getElementById('addDogNext').addEventListener('click', () => {
   const name = document.getElementById('newDogName').value.trim();
   if (!name) { showToast('Enter a name first'); return; }
-  const dogName = name;
-  // Personalize the medication question with the dog's name
-  document.getElementById('addDogNamePronoun').textContent = dogName;
+  document.getElementById('addDogAgeName').textContent = name + "'s";
+  document.getElementById('addDogNamePronoun').textContent = name;
+  updateAgePreview();
   goToAddDogPage(1);
 });
-document.getElementById('addDogBack').addEventListener('click', () => goToAddDogPage(0));
+// Page 1 -> 0 (age -> name)
+document.getElementById('addDogBackToName').addEventListener('click', () => goToAddDogPage(0));
+// Page 1 -> 2 (age -> medication)
+document.getElementById('addDogToMed').addEventListener('click', () => {
+  updateAgePreview(); // lock in computed birthdate
+  goToAddDogPage(2);
+});
+// Page 2 -> 1 (medication -> age)
+document.getElementById('addDogBack').addEventListener('click', () => goToAddDogPage(1));
 addDogModalOverlay.addEventListener('click', (e) => { if (e.target === addDogModalOverlay) addDogModalOverlay.classList.remove('show'); });
 document.getElementById('addDogModalConfirm').addEventListener('click', async () => {
   const name = document.getElementById('newDogName').value.trim();
   const sex = getSexToggle('newDogSexToggle');
+  const breed = document.getElementById('newDogBreed').value.trim();
   if (!name) {
     showToast('Enter a name first');
     goToAddDogPage(0);
     return;
   }
   const meds = document.getElementById('newDogMedToggle').dataset.value === 'yes' ? addDogMedEditor.get() : [];
+  const fsVal = document.getElementById('newDogFosterStart').value;
+  const fosterStart = fsVal ? new Date(fsVal + 'T12:00:00').getTime() : Date.now();
   const newId = uid('dog');
-  dogs.push({ id: newId, name, sex, meds });
+  dogs.push({
+    id: newId, name, sex, breed,
+    birthdate: computedBirthdate || null,
+    birthdateReason: computedBirthdate ? computedBirthdateReason : '',
+    fosterStart: fosterStart,
+    meds
+  });
   feedGoals[newId] = { min: 3, max: 4 };
   activeDogId = newId;
   await persistAndSync();
@@ -2341,9 +3273,32 @@ function openDogMenu(dogId) {
   dogMenuTargetId = dogId;
   document.getElementById('dogMenuTitle').textContent = dog.name;
   document.getElementById('renameDogInput').value = dog.name;
+  document.getElementById('editDogBreed').value = dog.breed || '';
   setSexToggle('editDogSexToggle', dog.sex);
+  const bdInput = document.getElementById('editDogBirthdate');
+  bdInput.value = dog.birthdate ? new Date(dog.birthdate).toISOString().slice(0,10) : '';
+  const fsInput = document.getElementById('editDogFosterStart');
+  fsInput.value = dog.fosterStart ? new Date(dog.fosterStart).toISOString().slice(0,10) : '';
+  updateEditAgeHelp();
+  updateEditFosterHelp();
   dogMenuModalOverlay.classList.add('show');
 }
+function updateEditAgeHelp() {
+  const v = document.getElementById('editDogBirthdate').value;
+  const help = document.getElementById('editDogAgeHelp');
+  if (!v) { help.textContent = ''; return; }
+  const ms = new Date(v + 'T12:00:00').getTime();
+  help.textContent = ageFromBirthdate(ms) + ' · ' + fmtBirthdate(ms);
+}
+function updateEditFosterHelp() {
+  const v = document.getElementById('editDogFosterStart').value;
+  const help = document.getElementById('editDogFosterHelp');
+  if (!v) { help.textContent = ''; return; }
+  const ms = new Date(v + 'T12:00:00').getTime();
+  help.textContent = 'Fostered ' + fosterDuration(ms);
+}
+document.getElementById('editDogBirthdate').addEventListener('input', updateEditAgeHelp);
+document.getElementById('editDogFosterStart').addEventListener('input', updateEditFosterHelp);
 document.getElementById('dogMenuCancel').addEventListener('click', () => dogMenuModalOverlay.classList.remove('show'));
 dogMenuModalOverlay.addEventListener('click', (e) => { if (e.target === dogMenuModalOverlay) dogMenuModalOverlay.classList.remove('show'); });
 document.getElementById('dogMenuRename').addEventListener('click', async () => {
@@ -2354,6 +3309,19 @@ document.getElementById('dogMenuRename').addEventListener('click', async () => {
   if (dog) {
     dog.name = newName;
     dog.sex = newSex;
+    dog.breed = document.getElementById('editDogBreed').value.trim();
+    const bdVal = document.getElementById('editDogBirthdate').value;
+    if (bdVal) {
+      const newMs = new Date(bdVal + 'T12:00:00').getTime();
+      if (newMs !== dog.birthdate) { dog.birthdate = newMs; dog.birthdateReason = ''; } // manual set clears the auto reason
+    } else {
+      dog.birthdate = null;
+      dog.birthdateReason = '';
+    }
+    const fsVal = document.getElementById('editDogFosterStart').value;
+    if (fsVal) {
+      dog.fosterStart = new Date(fsVal + 'T12:00:00').getTime();
+    }
   }
   await persistAndSync();
   renderAll();
@@ -2399,6 +3367,54 @@ document.getElementById('refreshBtn').addEventListener('click', async () => {
 // Changelog modal (opened via version link in header)
 const changelogModalOverlay = document.getElementById('changelogModalOverlay');
 document.getElementById('versionLink').addEventListener('click', openChangelog);
+// About / profile card
+document.getElementById('aboutCard').addEventListener('click', openAbout);
+document.getElementById('aboutClose').addEventListener('click', () => document.getElementById('aboutModalOverlay').classList.remove('show'));
+document.getElementById('aboutModalOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('aboutModalOverlay')) document.getElementById('aboutModalOverlay').classList.remove('show'); });
+document.getElementById('aboutPhotoBtn').addEventListener('click', () => document.getElementById('aboutPhotoInput').click());
+document.getElementById('generatePersonalityBtn').addEventListener('click', generatePersonality);
+document.getElementById('aboutPhotoInput').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    const dataUrl = await downscaleImage(file, 400); // cap at 400px, keeps the synced blob small
+    const dog = activeDog();
+    if (dog) {
+      dog.photo = dataUrl;
+      await persistAndSync();
+      renderAll();
+      openAbout(); // refresh the modal with the new photo
+    }
+  } catch (err) {
+    console.error('Photo error', err);
+    showToast("Couldn't load that image");
+  }
+  e.target.value = ''; // allow re-selecting the same file
+});
+
+// Downscale + compress an image file to a JPEG data URL no larger than maxDim on its longest side.
+function downscaleImage(file, maxDim) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => {
+      const img = new Image();
+      img.onload = () => {
+        let { width, height } = img;
+        if (width > height && width > maxDim) { height = Math.round(height * maxDim / width); width = maxDim; }
+        else if (height > maxDim) { width = Math.round(width * maxDim / height); height = maxDim; }
+        const canvas = document.createElement('canvas');
+        canvas.width = width; canvas.height = height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        resolve(canvas.toDataURL('image/jpeg', 0.8));
+      };
+      img.onerror = reject;
+      img.src = reader.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 document.getElementById('changelogClose').addEventListener('click', () => changelogModalOverlay.classList.remove('show'));
 changelogModalOverlay.addEventListener('click', (e) => { if (e.target === changelogModalOverlay) changelogModalOverlay.classList.remove('show'); });
 
