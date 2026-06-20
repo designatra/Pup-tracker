@@ -287,6 +287,15 @@
     transform: translateY(4px);
     box-shadow: 0 1px 0 #3A5460, 0 2px 6px rgba(94,124,138,0.25);
   }
+  .med-btn {
+    background: linear-gradient(180deg, #8A6D9E 0%, #6E5680 100%);
+    color: #FFFCF6;
+    box-shadow: 0 5px 0 #574066, 0 6px 14px rgba(138,109,158,0.25);
+  }
+  .med-btn:active {
+    transform: translateY(4px);
+    box-shadow: 0 1px 0 #574066, 0 2px 6px rgba(138,109,158,0.25);
+  }
 
   .status-row {
     display: flex;
@@ -358,6 +367,111 @@
     padding: 6px 12px;
     cursor: pointer;
   }
+
+  .med-status-card {
+    background: var(--charcoal-light);
+    border-radius: 16px;
+    padding: 12px 16px;
+    margin-bottom: 12px;
+  }
+  .med-status-card .label {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin-bottom: 8px;
+  }
+  .med-status-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 0;
+  }
+  .med-status-row + .med-status-row {
+    border-top: 1px solid var(--charcoal-lighter);
+  }
+  .med-status-name {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .med-status-sub {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    margin-top: 1px;
+  }
+  .med-status-count {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #8A6D9E;
+    flex-shrink: 0;
+  }
+  .med-status-count.done { color: var(--sage); }
+
+  .med-edit-row {
+    background: var(--charcoal);
+    border: 1.5px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    padding: 10px;
+    margin-bottom: 10px;
+  }
+  .med-edit-row .modal-input, .med-edit-row .modal-select { margin-bottom: 8px; }
+  .med-edit-row .modal-input:last-child, .med-edit-row .modal-select:last-child { margin-bottom: 0; }
+  .med-times-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 8px;
+  }
+  .med-time-chip {
+    flex: 1;
+    min-width: 64px;
+    background: var(--charcoal-light);
+    border: 1.5px solid var(--charcoal-lighter);
+    border-radius: 9px;
+    color: var(--cream-dim);
+    font-size: 0.78rem;
+    font-weight: 600;
+    font-family: inherit;
+    padding: 8px 4px;
+    cursor: pointer;
+  }
+  .med-time-chip.active {
+    background: #8A6D9E;
+    border-color: #8A6D9E;
+    color: #FFFCF6;
+  }
+  .med-remove-link {
+    background: none;
+    border: none;
+    color: var(--coral);
+    font-size: 0.75rem;
+    padding: 2px 0;
+    cursor: pointer;
+  }
+  .med-add-row-btn {
+    width: 100%;
+    background: none;
+    border: 1.5px dashed var(--charcoal-lighter);
+    border-radius: 12px;
+    color: var(--cream-dim);
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 10px;
+    cursor: pointer;
+    margin-bottom: 4px;
+  }
+  .med-picker-opt {
+    width: 100%;
+    text-align: left;
+    background: var(--charcoal);
+    border: 1.5px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    padding: 12px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    color: var(--cream);
+  }
+  .med-picker-opt .mp-name { font-size: 0.95rem; font-weight: 700; }
+  .med-picker-opt .mp-sub { font-size: 0.75rem; color: var(--cream-dim); margin-top: 2px; }
 
   .next-feed-card {
     background: linear-gradient(135deg, rgba(110,139,158,0.18), rgba(110,139,158,0.05));
@@ -587,6 +701,7 @@
   .tl-dot.poop { background: var(--umber); }
   .tl-dot.feed { background: var(--dustyblue); }
   .tl-dot.note { background: var(--cream-dim); }
+  .tl-dot.med { background: #8A6D9E; }
   .tl-line {
     width: 2px;
     flex: 1;
@@ -760,6 +875,7 @@
     <button class="secondary-btn poop-btn" id="poopBtn">💩 Pooped</button>
     <button class="secondary-btn feed-btn" id="feedBtn">🍽️ Fed</button>
   </div>
+  <button class="secondary-btn med-btn" id="medBtn" style="display:none; width:100%; margin-bottom:14px;">💊 Log medication</button>
   <button class="accident-btn" id="accidentBtn">Log an accident instead</button>
   <button class="note-btn" id="noteBtn">📝 Add a note</button>
 
@@ -791,6 +907,11 @@
     <button class="goal-edit-btn" id="goalEditBtn">Edit goal</button>
   </div>
 
+  <div class="med-status-card" id="medStatusCard" style="display:none;">
+    <div class="label">Medication today</div>
+    <div id="medStatusList"></div>
+  </div>
+
   <button class="custom-time-link" id="customTimeBtn">+ Log with a custom time (backdate an entry)</button>
 
   <div class="insight" id="insightCard" style="display:none;">
@@ -809,6 +930,17 @@
   </div>
 
   <div class="footer-note">Stored on this device · tap an entry's "remove" to fix mistakes</div>
+</div>
+
+<div class="modal-overlay" id="medPickerOverlay">
+  <div class="modal">
+    <div class="modal-title">Log medication</div>
+    <div class="modal-row" style="font-size:0.78rem; color:var(--cream-dim);">Which medication did you give?</div>
+    <div id="medPickerList"></div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="medPickerCancel">Cancel</button>
+    </div>
+  </div>
 </div>
 
 <div class="modal-overlay" id="timeModalOverlay">
@@ -889,6 +1021,17 @@
         <button type="button" class="sex-toggle-opt" data-sex="male">Male</button>
       </div>
     </div>
+    <div class="modal-row">
+      <label class="modal-label">Does this dog take any medication?</label>
+      <div class="sex-toggle" id="newDogMedToggle" data-value="no">
+        <button type="button" class="sex-toggle-opt" data-med="yes">Yes</button>
+        <button type="button" class="sex-toggle-opt active" data-med="no">No</button>
+      </div>
+    </div>
+    <div id="newDogMedSection" style="display:none;">
+      <div id="newDogMedList"></div>
+      <button type="button" class="med-add-row-btn" id="newDogAddMedBtn">+ Add another medication</button>
+    </div>
     <div class="modal-actions">
       <button class="modal-btn cancel" id="addDogModalCancel">Cancel</button>
       <button class="modal-btn confirm" id="addDogModalConfirm">Add dog</button>
@@ -909,6 +1052,11 @@
         <button type="button" class="sex-toggle-opt active" data-sex="female">Female</button>
         <button type="button" class="sex-toggle-opt" data-sex="male">Male</button>
       </div>
+    </div>
+    <div class="modal-row">
+      <label class="modal-label">Medications</label>
+      <div id="editDogMedList"></div>
+      <button type="button" class="med-add-row-btn" id="editDogAddMedBtn">+ Add a medication</button>
     </div>
     <div class="modal-actions">
       <button class="modal-btn cancel" id="dogMenuCancel">Cancel</button>
@@ -958,9 +1106,14 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '1.0.0'; // bump this on every update; shown in footer and used for auto-update
+const APP_VERSION = '1.1.0'; // bump this on every update; shown in footer and used for auto-update
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '1.1.0', date: 'Jun 2026', notes: [
+    'Medication tracking: add meds per dog (name, type, frequency)',
+    'New \uD83D\uDC8A button to log doses and see what\u2019s due today',
+    'Add medications when creating a new dog'
+  ]},
   { version: '1.0.0', date: 'Jun 2026', notes: [
     'Multi-dog support with per-dog logs, averages, and feeding goals',
     'Pee, poop, feeding, accident, and note logging',
@@ -998,7 +1151,7 @@ function applyTombstones() {
 function defaultData() {
   const dogId = uid('dog');
   return {
-    dogs: [{ id: dogId, name: 'Foster Pup', sex: 'female' }],
+    dogs: [{ id: dogId, name: 'Foster Pup', sex: 'female', meds: [] }],
     activeDogId: dogId,
     entries: [],
     feedGoals: { [dogId]: { min: 3, max: 4 } }
@@ -1032,6 +1185,7 @@ async function loadAll() {
     }
     dogs.forEach(d => { if (!feedGoals[d.id]) feedGoals[d.id] = { min: 3, max: 4 }; });
     dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
+    dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
     applyTombstones();
   } catch (e) {
     const d = defaultData();
@@ -1167,6 +1321,7 @@ async function pullFromCloud() {
         activeDogId = remote.activeDogId;
       }
       dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
+      dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
       // Apply tombstones AFTER merging so deleted items don't get re-added
       applyTombstones();
       persistLocal();
@@ -1469,7 +1624,14 @@ function entryIcon(type) {
   if (type === 'feed') return '🍽️';
   if (type === 'accident') return '⚠️';
   if (type === 'note') return '📝';
+  if (type === 'med') return '💊';
   return '💦';
+}
+
+function medNameFor(medId) {
+  const dog = activeDog();
+  const med = dog && (dog.meds || []).find(m => m.id === medId);
+  return med ? med.name : 'Medication';
 }
 
 function renderTimeline() {
@@ -1491,7 +1653,7 @@ function renderTimeline() {
     const sameFamily = (t) => (t === 'pee' || t === 'accident') ? 'potty' : t;
     const family = sameFamily(entry.type);
     let gapHtml = '';
-    if (entry.type !== 'note') {
+    if (entry.type !== 'note' && entry.type !== 'med') {
       const olderSameFamily = [...myEntries].filter(e => e.ts < entry.ts && sameFamily(e.type) === family).sort((a,b) => b.ts - a.ts)[0];
       if (olderSameFamily) {
         const gap = entry.ts - olderSameFamily.ts;
@@ -1503,6 +1665,9 @@ function renderTimeline() {
     }
     const noteHtml = entry.type === 'note' && entry.text
       ? `<div class="tl-note-text" data-edit-note-id="${entry.id}" style="cursor:pointer;">${escapeHtml(entry.text)}</div>`
+      : '';
+    const medHtml = entry.type === 'med'
+      ? `<div class="tl-gap">${escapeHtml(medNameFor(entry.medId))}</div>`
       : '';
     const actionHtml = entry.type === 'note'
       ? `<button class="del-btn" data-edit-note-id="${entry.id}">edit</button>`
@@ -1518,6 +1683,7 @@ function renderTimeline() {
             <span class="row-actions">${actionHtml}</span>
           </div>
           ${noteHtml}
+          ${medHtml}
           ${gapHtml}
         </div>
       </div>`;
@@ -1554,6 +1720,35 @@ function renderActionLabels() {
   if (logBtn) logBtn.textContent = `💦 ${p.subjCap} just peed`;
 }
 
+function renderMedication() {
+  const dog = activeDog();
+  const meds = (dog && dog.meds) || [];
+  const btn = document.getElementById('medBtn');
+  const card = document.getElementById('medStatusCard');
+
+  if (meds.length === 0) {
+    btn.style.display = 'none';
+    card.style.display = 'none';
+    return;
+  }
+  btn.style.display = 'block';
+  card.style.display = 'block';
+
+  const list = document.getElementById('medStatusList');
+  list.innerHTML = meds.map(m => {
+    const given = medDosesToday(m.id);
+    const done = given >= m.count;
+    const timesLabel = m.times && m.times.length ? m.times.join(', ') : 'daily';
+    return `<div class="med-status-row">
+      <div>
+        <div class="med-status-name">${escapeHtml(m.name)}</div>
+        <div class="med-status-sub">${escapeHtml(m.type ? m.type + ' · ' : '')}${escapeHtml(timesLabel)}</div>
+      </div>
+      <div class="med-status-count ${done ? 'done' : ''}">${done ? '✓ ' : ''}${given} of ${m.count} today</div>
+    </div>`;
+  }).join('');
+}
+
 function renderAll() {
   renderDogSwitcher();
   renderActionLabels();
@@ -1562,6 +1757,7 @@ function renderAll() {
   renderInsight();
   renderTimeline();
   renderFeedGoal();
+  renderMedication();
 }
 
 async function logEntry(type) {
@@ -1709,14 +1905,144 @@ function setSexToggle(toggleId, value) {
 setupSexToggle('newDogSexToggle');
 setupSexToggle('editDogSexToggle');
 
+// ---- Medication editor (shared by add-dog and edit-dog modals) ----
+const MED_TIMES = ['morning', 'midday', 'evening', 'night'];
+// Each editor instance keeps a working array of meds; rendered into a container.
+function makeMedEditor(listElId, addBtnId) {
+  let working = []; // [{id, name, type, count, times:[]}]
+  const listEl = document.getElementById(listElId);
+
+  function blankMed() {
+    return { id: uid('med'), name: '', type: '', count: 1, times: ['morning'] };
+  }
+  function render() {
+    listEl.innerHTML = working.map((m, i) => `
+      <div class="med-edit-row" data-idx="${i}">
+        <input type="text" class="modal-input med-name" placeholder="Medication name (e.g. Apoquel)" value="${escapeHtml(m.name)}">
+        <input type="text" class="modal-input med-type" placeholder="Type / notes (e.g. allergy pill, 5mg)" value="${escapeHtml(m.type)}">
+        <div class="med-times-row">
+          ${MED_TIMES.map(t => `<button type="button" class="med-time-chip ${m.times.includes(t) ? 'active' : ''}" data-time="${t}">${t}</button>`).join('')}
+        </div>
+        <button type="button" class="med-remove-link" data-remove="${i}">Remove this medication</button>
+      </div>`).join('');
+
+    listEl.querySelectorAll('.med-edit-row').forEach(row => {
+      const idx = parseInt(row.getAttribute('data-idx'), 10);
+      row.querySelector('.med-name').addEventListener('input', e => { working[idx].name = e.target.value; });
+      row.querySelector('.med-type').addEventListener('input', e => { working[idx].type = e.target.value; });
+      row.querySelectorAll('.med-time-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+          const t = chip.getAttribute('data-time');
+          const times = working[idx].times;
+          if (times.includes(t)) { working[idx].times = times.filter(x => x !== t); }
+          else { times.push(t); }
+          // keep canonical order
+          working[idx].times = MED_TIMES.filter(x => working[idx].times.includes(x));
+          working[idx].count = working[idx].times.length || 1;
+          render();
+        });
+      });
+      row.querySelector('[data-remove]').addEventListener('click', () => {
+        working.splice(idx, 1);
+        render();
+      });
+    });
+  }
+
+  document.getElementById(addBtnId).addEventListener('click', () => {
+    working.push(blankMed());
+    render();
+  });
+
+  return {
+    set(meds) { working = (meds || []).map(m => ({ ...m, times: [...(m.times||[])] })); render(); },
+    addOneBlank() { working.push(blankMed()); render(); },
+    get() {
+      // drop empty (no name) meds; ensure count matches times
+      return working
+        .filter(m => m.name.trim())
+        .map(m => ({
+          id: m.id || uid('med'),
+          name: m.name.trim(),
+          type: m.type.trim(),
+          times: m.times.length ? MED_TIMES.filter(x => m.times.includes(x)) : ['morning'],
+          count: (m.times.length || 1)
+        }));
+    },
+    isEmpty() { return working.filter(m => m.name.trim()).length === 0; }
+  };
+}
+
+// Count doses given today for a specific med on the active dog
+function medDosesToday(medId) {
+  const today = new Date().toDateString();
+  return activeEntries().filter(e => e.type === 'med' && e.medId === medId && new Date(e.ts).toDateString() === today).length;
+}
+
+// Log a dose of a specific medication
+async function logMedDose(medId) {
+  const dog = activeDog();
+  const med = dog && (dog.meds || []).find(m => m.id === medId);
+  entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type: 'med', medId });
+  entries.sort((a,b) => a.ts - b.ts);
+  await persistAndSync();
+  renderAll();
+  showToast(med ? `${med.name} logged 💊` : 'Medication logged 💊');
+}
+
+// Medication log button: pick which med (or log directly if only one)
+function handleMedButton() {
+  const dog = activeDog();
+  const meds = (dog && dog.meds) || [];
+  if (meds.length === 0) { showToast('No medications set up — add one in dog settings'); return; }
+  if (meds.length === 1) { logMedDose(meds[0].id); return; }
+  // multiple: open picker
+  const list = document.getElementById('medPickerList');
+  list.innerHTML = meds.map(m => {
+    const given = medDosesToday(m.id);
+    return `<button class="med-picker-opt" data-med-id="${m.id}">
+      <div class="mp-name">💊 ${escapeHtml(m.name)}</div>
+      <div class="mp-sub">${escapeHtml(m.type || m.times.join(', '))} · ${given} of ${m.count} given today</div>
+    </button>`;
+  }).join('');
+  list.querySelectorAll('.med-picker-opt').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.getElementById('medPickerOverlay').classList.remove('show');
+      logMedDose(btn.getAttribute('data-med-id'));
+    });
+  });
+  document.getElementById('medPickerOverlay').classList.add('show');
+}
+document.getElementById('medBtn').addEventListener('click', handleMedButton);
+document.getElementById('medPickerCancel').addEventListener('click', () => document.getElementById('medPickerOverlay').classList.remove('show'));
+document.getElementById('medPickerOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('medPickerOverlay')) document.getElementById('medPickerOverlay').classList.remove('show'); });
+
+const addDogMedEditor = makeMedEditor('newDogMedList', 'newDogAddMedBtn');
+const editDogMedEditor = makeMedEditor('editDogMedList', 'editDogAddMedBtn');
+
 // Add dog modal
 const addDogModalOverlay = document.getElementById('addDogModalOverlay');
 function openAddDogModal() {
   document.getElementById('newDogName').value = '';
   setSexToggle('newDogSexToggle', 'female');
+  setMedToggle('no');
+  addDogMedEditor.set([]);
   addDogModalOverlay.classList.add('show');
   setTimeout(() => document.getElementById('newDogName').focus(), 50);
 }
+// Medication yes/no toggle in add-dog modal
+function setMedToggle(value) {
+  const toggle = document.getElementById('newDogMedToggle');
+  toggle.dataset.value = value;
+  toggle.querySelectorAll('.sex-toggle-opt').forEach(b => {
+    b.classList.toggle('active', b.getAttribute('data-med') === value);
+  });
+  document.getElementById('newDogMedSection').style.display = value === 'yes' ? 'block' : 'none';
+  if (value === 'yes' && addDogMedEditor.isEmpty()) addDogMedEditor.addOneBlank();
+}
+document.getElementById('newDogMedToggle').querySelectorAll('.sex-toggle-opt').forEach(btn => {
+  btn.addEventListener('click', () => setMedToggle(btn.getAttribute('data-med')));
+});
 document.getElementById('addDogModalCancel').addEventListener('click', () => addDogModalOverlay.classList.remove('show'));
 addDogModalOverlay.addEventListener('click', (e) => { if (e.target === addDogModalOverlay) addDogModalOverlay.classList.remove('show'); });
 document.getElementById('addDogModalConfirm').addEventListener('click', async () => {
@@ -1726,8 +2052,9 @@ document.getElementById('addDogModalConfirm').addEventListener('click', async ()
     showToast('Enter a name first');
     return;
   }
+  const meds = document.getElementById('newDogMedToggle').dataset.value === 'yes' ? addDogMedEditor.get() : [];
   const newId = uid('dog');
-  dogs.push({ id: newId, name, sex });
+  dogs.push({ id: newId, name, sex, meds });
   feedGoals[newId] = { min: 3, max: 4 };
   activeDogId = newId;
   await persistAndSync();
@@ -1749,6 +2076,7 @@ function openDogMenu(dogId) {
   document.getElementById('dogMenuTitle').textContent = dog.name;
   document.getElementById('renameDogInput').value = dog.name;
   setSexToggle('editDogSexToggle', dog.sex);
+  editDogMedEditor.set(dog.meds || []);
   dogMenuModalOverlay.classList.add('show');
 }
 document.getElementById('dogMenuCancel').addEventListener('click', () => dogMenuModalOverlay.classList.remove('show'));
@@ -1761,6 +2089,7 @@ document.getElementById('dogMenuRename').addEventListener('click', async () => {
   if (dog) {
     dog.name = newName;
     dog.sex = newSex;
+    dog.meds = editDogMedEditor.get();
   }
   await persistAndSync();
   renderAll();
