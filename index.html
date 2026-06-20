@@ -636,7 +636,55 @@
     flex-shrink: 0;
   }
 
-  .about-modal { max-width: 380px; }
+  /* About profile opens as a full-height scrollable sheet */
+  #aboutModalOverlay {
+    align-items: stretch;
+    justify-content: center;
+    padding: 0;
+  }
+  .about-modal {
+    max-width: 480px;
+    width: 100%;
+    max-height: 100%;
+    height: 100%;
+    border-radius: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 18px calc(20px + env(safe-area-inset-bottom));
+  }
+  .about-topbar {
+    position: sticky;
+    top: 0;
+    background: var(--charcoal-light);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 0 12px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--charcoal-lighter);
+    z-index: 5;
+  }
+  .about-topbar-title {
+    font-size: 0.8rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--cream-dim);
+  }
+  .about-topbar-close {
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 0.95rem;
+    color: var(--cream);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
   .about-header {
     display: flex;
     gap: 14px;
@@ -1555,6 +1603,10 @@
 
 <div class="modal-overlay" id="aboutModalOverlay">
   <div class="modal about-modal">
+    <div class="about-topbar">
+      <span class="about-topbar-title">Profile</span>
+      <button class="about-topbar-close" id="aboutTopClose" aria-label="Close">✕</button>
+    </div>
     <div class="about-header">
       <div class="about-photo-wrap">
         <div class="about-photo" id="aboutPhoto"><span class="about-avatar-placeholder">🐶</span></div>
@@ -1624,9 +1676,12 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '1.9.1'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '1.9.2'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '1.9.2', date: 'Jun 2026', notes: [
+    'Profile now opens as a full-screen, scrollable page with a sticky close button'
+  ]},
   { version: '1.9.1', date: 'Jun 2026', notes: [
     'Tidied up: age and foster info now live only in the profile card'
   ]},
@@ -3370,6 +3425,7 @@ document.getElementById('versionLink').addEventListener('click', openChangelog);
 // About / profile card
 document.getElementById('aboutCard').addEventListener('click', openAbout);
 document.getElementById('aboutClose').addEventListener('click', () => document.getElementById('aboutModalOverlay').classList.remove('show'));
+document.getElementById('aboutTopClose').addEventListener('click', () => document.getElementById('aboutModalOverlay').classList.remove('show'));
 document.getElementById('aboutModalOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('aboutModalOverlay')) document.getElementById('aboutModalOverlay').classList.remove('show'); });
 document.getElementById('aboutPhotoBtn').addEventListener('click', () => document.getElementById('aboutPhotoInput').click());
 document.getElementById('generatePersonalityBtn').addEventListener('click', generatePersonality);
