@@ -47,6 +47,7 @@
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
     min-height: 100vh;
     -webkit-tap-highlight-color: transparent;
+    overscroll-behavior-y: contain;
   }
 
   .wrap {
@@ -215,6 +216,32 @@
     display: inline-block;
   }
   .spinning .spin-icon {
+    animation: spin 0.7s linear infinite;
+  }
+  /* Pull-to-refresh indicator: fixed at the top of the viewport, pulled
+     into view by JS as the page translates down during the drag. Sits
+     above everything else (z-index) but below modals, so opening a modal
+     mid-pull just hides it behind the overlay rather than overlapping. */
+  .ptr-indicator {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -56px);
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--amber);
+    z-index: 150;
+    pointer-events: none;
+  }
+  .ptr-indicator.refreshing .spin-icon {
     animation: spin 0.7s linear infinite;
   }
   .sync-debug {
@@ -804,7 +831,7 @@
     width: 100%;
     max-height: 100%;
     height: 100%;
-    border-radius: 0;
+    border-radius: 20px;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     padding: 0 16px calc(20px + env(safe-area-inset-bottom));
@@ -1634,6 +1661,8 @@
 </head>
 <body>
 
+<div class="ptr-indicator" id="ptrIndicator"><span class="spin-icon">⟳</span></div>
+
 <div class="wrap">
   <header>
     <h1>Potty Tracker</h1>
@@ -2294,9 +2323,16 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '2.6.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '2.7.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '2.7.0', date: 'Jun 2026', notes: [
+    'Pull down from the top of the screen to refresh — pulls the latest synced data without a full page reload'
+  ]},
+  { version: '2.6.1', date: 'Jun 2026', notes: [
+    'Fixed: full-screen popups (Profile, Expenses, quiz, changelog) had square corners',
+    'All popups now have consistently rounded corners'
+  ]},
   { version: '2.6.0', date: 'Jun 2026', notes: [
     'Attach a receipt photo when logging an expense — tap the thumbnail anytime to view it full-screen',
     'Fixed: once one person had answered the personality quiz, the other person could never get in to answer — tapping the quiz now always offers to answer (or update), with results one tap further behind a "See results so far" link'
@@ -5027,6 +5063,77 @@ setInterval(async () => {
     renderAll();
   }
 }, 20000);
+
+// ---- Pull-to-refresh ----
+// Standard touch-drag gesture: only engages when the page itself is
+// scrolled to the very top (so it never fights a modal's own internal
+// scrolling, which has its own overflow-y: auto and is left alone here).
+// Pulling translates the whole .wrap down with rubber-band resistance;
+// releasing past PTR_TRIGGER_PX triggers the same lightweight pull-and-
+// render that the background sync uses (no hard page reload — that stays
+// on the manual Refresh button, since reloading on every casual pull
+// would be a jarring flash for a gesture people will use often).
+const PTR_TRIGGER_PX = 70;
+const PTR_MAX_PX = 110;
+let ptrStartY = null;
+let ptrCurrentPx = 0;
+let ptrRefreshing = false;
+const ptrIndicatorEl = document.getElementById('ptrIndicator');
+const ptrWrapEl = document.querySelector('.wrap');
+
+function ptrEligible() {
+  return window.scrollY <= 0 && !anyModalOpen() && !ptrRefreshing;
+}
+function ptrSetPull(px) {
+  ptrCurrentPx = px;
+  const eased = Math.min(px, PTR_MAX_PX);
+  ptrWrapEl.style.transform = px > 0 ? `translateY(${eased}px)` : '';
+  ptrIndicatorEl.style.transform = `translate(-50%, ${-56 + eased}px) rotate(${eased * 3}deg)`;
+}
+function ptrReset() {
+  ptrWrapEl.style.transition = 'transform 0.25s ease';
+  ptrIndicatorEl.style.transition = 'transform 0.25s ease';
+  ptrSetPull(0);
+  setTimeout(() => {
+    ptrWrapEl.style.transition = '';
+    ptrIndicatorEl.style.transition = '';
+  }, 250);
+}
+document.addEventListener('touchstart', (e) => {
+  if (!ptrEligible()) { ptrStartY = null; return; }
+  ptrStartY = e.touches[0].clientY;
+}, { passive: true });
+document.addEventListener('touchmove', (e) => {
+  if (ptrStartY === null) return;
+  const delta = e.touches[0].clientY - ptrStartY;
+  if (delta <= 0) { ptrSetPull(0); return; }
+  if (!ptrEligible()) { ptrStartY = null; ptrSetPull(0); return; }
+  // Rubber-band: each extra px of finger movement buys less visual travel
+  // the further you've already pulled, so it never feels like it teleports.
+  const resisted = Math.pow(delta, 0.7);
+  ptrSetPull(resisted);
+}, { passive: true });
+document.addEventListener('touchend', async () => {
+  if (ptrStartY === null) return;
+  ptrStartY = null;
+  if (ptrCurrentPx >= PTR_TRIGGER_PX && syncEnabled() && !syncInFlight) {
+    ptrRefreshing = true;
+    ptrIndicatorEl.classList.add('refreshing');
+    ptrWrapEl.style.transition = 'transform 0.2s ease';
+    ptrSetPull(56); // hold the indicator visible while the pull is in flight
+    try {
+      await pullFromCloud();
+      renderAll();
+    } catch (e) {
+      console.error('Pull-to-refresh failed', e);
+    }
+    ptrIndicatorEl.classList.remove('refreshing');
+    ptrRefreshing = false;
+    ptrReset();
+  } else {
+    ptrReset();
+  }
+});
 
 // Show the running version in the footer.
 function renderVersion() {
