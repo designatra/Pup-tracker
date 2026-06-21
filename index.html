@@ -545,6 +545,72 @@
     cursor: pointer;
     margin-bottom: 4px;
   }
+  .receipt-preview-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    padding: 8px;
+  }
+  .receipt-thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 8px;
+    object-fit: cover;
+    background: var(--charcoal-lighter);
+    flex-shrink: 0;
+    cursor: pointer;
+  }
+  .receipt-preview-label {
+    flex: 1;
+    font-size: 0.82rem;
+    color: var(--cream-dim);
+  }
+  .receipt-remove-btn {
+    background: none;
+    border: none;
+    color: var(--coral);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 8px;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .receipt-viewer-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.92);
+    z-index: 300;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+  }
+  .receipt-viewer-overlay.show { display: flex; }
+  .receipt-viewer-img {
+    max-width: 100%;
+    max-height: 84vh;
+    border-radius: 8px;
+    object-fit: contain;
+  }
+  .receipt-viewer-close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    color: var(--cream);
+    font-size: 1.1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+  }
   .med-picker-opt {
     width: 100%;
     text-align: left;
@@ -2076,6 +2142,16 @@
         <option value="">Household / not specific</option>
       </select>
     </div>
+    <div class="modal-row">
+      <label class="modal-label">Receipt photo (optional)</label>
+      <div id="receiptPreviewWrap" class="receipt-preview-wrap" style="display:none;">
+        <img id="receiptThumb" class="receipt-thumb" alt="Receipt">
+        <span class="receipt-preview-label">Saved with this expense</span>
+        <button type="button" class="receipt-remove-btn" id="receiptRemoveBtn">Remove</button>
+      </div>
+      <button type="button" class="med-add-row-btn" id="receiptAddBtn">📷 Add a receipt photo</button>
+      <input type="file" id="receiptPhotoInput" accept="image/*" style="display:none;">
+    </div>
     <div class="modal-footer">
       <div class="modal-actions">
         <button class="modal-btn cancel" id="expenseFormCancel">Cancel</button>
@@ -2088,6 +2164,11 @@
   </div>
 </div>
 
+<div class="receipt-viewer-overlay" id="receiptViewerOverlay">
+  <button class="receipt-viewer-close" id="receiptViewerClose" aria-label="Close">✕</button>
+  <img class="receipt-viewer-img" id="receiptViewerImg" alt="Receipt full view">
+</div>
+
 <div class="modal-overlay" id="quizNameOverlay">
   <div class="modal">
     <div class="modal-title">Who's answering?</div>
@@ -2097,6 +2178,7 @@
       <label class="modal-label">Or type a name</label>
       <input type="text" id="quizNameInput" class="modal-input" placeholder="Your name" autocomplete="off">
     </div>
+    <button type="button" class="custom-time-link" id="quizNameSeeResults" style="display:none;">See results so far</button>
     <div class="modal-footer">
       <div class="modal-actions">
         <button class="modal-btn cancel" id="quizNameCancel">Cancel</button>
@@ -2212,9 +2294,13 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '2.5.2'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '2.6.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '2.6.0', date: 'Jun 2026', notes: [
+    'Attach a receipt photo when logging an expense — tap the thumbnail anytime to view it full-screen',
+    'Fixed: once one person had answered the personality quiz, the other person could never get in to answer — tapping the quiz now always offers to answer (or update), with results one tap further behind a "See results so far" link'
+  ]},
   { version: '2.5.2', date: 'Jun 2026', notes: [
     'Fixed: button bar padding in popups was uneven',
     'Now a flat 24px all around the button bar'
@@ -3593,7 +3679,7 @@ function openExpenses() {
       <div class="about-stat-group-title">All expenses</div>
       ${sorted.map(x => {
         const dog = dogs.find(d => d.id === x.dogId);
-        const sub = [fmtDateShort(x.ts), EXPENSE_CATEGORY_ICONS[x.category] || '📦', x.category, dog ? dog.name : ''].filter(Boolean).join(' · ');
+        const sub = [fmtDateShort(x.ts), EXPENSE_CATEGORY_ICONS[x.category] || '📦', x.category, dog ? dog.name : '', x.receiptPhoto ? '📷' : ''].filter(Boolean).join(' · ');
         return `<button class="expense-row" data-expense-id="${x.id}">
           <span class="expense-row-main">
             <span class="expense-row-cat">${escapeHtml(x.note || x.category)}</span>
@@ -3612,6 +3698,7 @@ function openExpenses() {
 }
 
 let expenseFormTargetId = null;
+let expenseFormReceiptPhoto = null; // pending receipt photo (data URL) for the open form, or null if none
 function populateExpenseDogSelect() {
   const sel = document.getElementById('expenseDogId');
   sel.innerHTML = '<option value="">Household / not specific</option>' +
@@ -3622,10 +3709,23 @@ function updateExpenseFormFields() {
   document.getElementById('expenseAmountRow').style.display = isTravel ? 'none' : 'block';
   document.getElementById('expenseMilesRow').style.display = isTravel ? 'block' : 'none';
 }
+function renderReceiptPreview() {
+  const wrap = document.getElementById('receiptPreviewWrap');
+  const addBtn = document.getElementById('receiptAddBtn');
+  if (expenseFormReceiptPhoto) {
+    document.getElementById('receiptThumb').src = expenseFormReceiptPhoto;
+    wrap.style.display = 'flex';
+    addBtn.textContent = '📷 Replace receipt photo';
+  } else {
+    wrap.style.display = 'none';
+    addBtn.textContent = '📷 Add a receipt photo';
+  }
+}
 function openExpenseForm(expenseId) {
   populateExpenseDogSelect();
   const existing = expenseId ? expenses.find(x => x.id === expenseId) : null;
   expenseFormTargetId = expenseId || null;
+  expenseFormReceiptPhoto = existing ? (existing.receiptPhoto || null) : null;
   document.getElementById('expenseFormTitle').textContent = existing ? 'Edit expense' : 'Log an expense';
   document.getElementById('expenseCategory').value = existing ? existing.category : 'Food';
   document.getElementById('expenseNote').value = existing ? (existing.note || '') : '';
@@ -3635,9 +3735,38 @@ function openExpenseForm(expenseId) {
   document.getElementById('expenseDogId').value = existing ? (existing.dogId || '') : '';
   document.getElementById('expenseFormDeleteRow').style.display = existing ? 'block' : 'none';
   updateExpenseFormFields();
+  renderReceiptPreview();
   document.getElementById('expenseFormOverlay').classList.add('show');
 }
 document.getElementById('expenseCategory').addEventListener('change', updateExpenseFormFields);
+document.getElementById('receiptAddBtn').addEventListener('click', () => document.getElementById('receiptPhotoInput').click());
+document.getElementById('receiptPhotoInput').addEventListener('change', async (e) => {
+  const file = e.target.files && e.target.files[0];
+  if (!file) return;
+  try {
+    // 900px cap keeps receipts legible (more than the 400px dog-photo cap)
+    // while staying reasonably small for the synced JSONBin blob.
+    expenseFormReceiptPhoto = await downscaleImage(file, 900);
+    renderReceiptPreview();
+  } catch (err) {
+    console.error('Receipt photo error', err);
+    showToast("Couldn't load that image");
+  }
+  e.target.value = ''; // allow re-selecting the same file
+});
+document.getElementById('receiptRemoveBtn').addEventListener('click', () => {
+  expenseFormReceiptPhoto = null;
+  renderReceiptPreview();
+});
+document.getElementById('receiptThumb').addEventListener('click', () => {
+  if (!expenseFormReceiptPhoto) return;
+  document.getElementById('receiptViewerImg').src = expenseFormReceiptPhoto;
+  document.getElementById('receiptViewerOverlay').classList.add('show');
+});
+document.getElementById('receiptViewerClose').addEventListener('click', () => document.getElementById('receiptViewerOverlay').classList.remove('show'));
+document.getElementById('receiptViewerOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('receiptViewerOverlay')) document.getElementById('receiptViewerOverlay').classList.remove('show');
+});
 
 // ---- Personality quiz (weekly, two-person, builds a profile over time) ----
 function quizResponsesThisWeek() {
@@ -3685,8 +3814,15 @@ function openQuizNamePicker() {
     });
   });
   document.getElementById('quizNameInput').value = '';
+  const hasAnyResponses = quizResponses.some(q => q.dogId === activeDogId);
+  const seeResultsBtn = document.getElementById('quizNameSeeResults');
+  seeResultsBtn.style.display = hasAnyResponses ? 'block' : 'none';
   document.getElementById('quizNameOverlay').classList.add('show');
 }
+document.getElementById('quizNameSeeResults').addEventListener('click', () => {
+  document.getElementById('quizNameOverlay').classList.remove('show');
+  openQuizResults();
+});
 
 document.getElementById('quizNameCancel').addEventListener('click', () => document.getElementById('quizNameOverlay').classList.remove('show'));
 document.getElementById('quizNameOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('quizNameOverlay')) document.getElementById('quizNameOverlay').classList.remove('show'); });
@@ -3816,17 +3952,13 @@ function openQuizResults() {
 document.getElementById('quizResultsClose').addEventListener('click', () => document.getElementById('quizResultsOverlay').classList.remove('show'));
 document.getElementById('quizResultsOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('quizResultsOverlay')) document.getElementById('quizResultsOverlay').classList.remove('show'); });
 
-// Card entry point: if this week is fully answered by both known people,
-// tapping shows results; otherwise it starts the name picker.
+// Card entry point: always open the name picker so anyone can answer or
+// update their answer. Results stay one tap away via the "See results so
+// far" link inside the picker (shown whenever there's at least one
+// response logged for this dog), rather than being the only thing the
+// card can do once one person has ever answered.
 document.getElementById('quizCard').addEventListener('click', () => {
-  const known = [quizPersonLabel('person1'), quizPersonLabel('person2')].filter(Boolean);
-  const thisWeek = quizResponsesThisWeek();
-  const allDone = known.length >= 1 && known.every(p => thisWeek.some(q => q.person === p));
-  if (allDone && quizResponses.filter(q => q.dogId === activeDogId).length > 0) {
-    openQuizResults();
-  } else {
-    openQuizNamePicker();
-  }
+  openQuizNamePicker();
 });
 
 function renderAll() {
@@ -4637,10 +4769,10 @@ document.getElementById('expenseFormSave').addEventListener('click', async () =>
     const existing = expenses.find(x => x.id === expenseFormTargetId);
     if (existing) {
       existing.amount = amount; existing.miles = miles; existing.category = category; existing.ts = ts;
-      existing.note = note; existing.dogId = dogId;
+      existing.note = note; existing.dogId = dogId; existing.receiptPhoto = expenseFormReceiptPhoto;
     }
   } else {
-    expenses.push({ id: uid('exp'), ts, amount, miles, category, note, dogId });
+    expenses.push({ id: uid('exp'), ts, amount, miles, category, note, dogId, receiptPhoto: expenseFormReceiptPhoto });
   }
   expenses.sort((a,b) => a.ts - b.ts);
   await persistAndSync();
