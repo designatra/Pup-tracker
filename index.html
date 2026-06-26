@@ -360,22 +360,6 @@
     transform: translateY(4px);
     box-shadow: 0 1px 0 #574066, 0 2px 6px rgba(138,109,158,0.25);
   }
-  .sleep-btn {
-    background: linear-gradient(180deg, #4A5578 0%, #3A4460 100%);
-    color: #FFFCF6;
-    box-shadow: 0 5px 0 #2E3650, 0 6px 14px rgba(74,85,120,0.25);
-  }
-  .sleep-btn:active {
-    transform: translateY(4px);
-    box-shadow: 0 1px 0 #2E3650, 0 2px 6px rgba(74,85,120,0.25);
-  }
-  .sleep-btn.awake {
-    background: linear-gradient(180deg, #E0A93D 0%, #C8902A 100%);
-    box-shadow: 0 5px 0 #A6741F, 0 6px 14px rgba(224,169,61,0.25);
-  }
-  .sleep-btn.awake:active {
-    box-shadow: 0 1px 0 #A6741F, 0 2px 6px rgba(224,169,61,0.25);
-  }
 
   .status-row {
     display: flex;
@@ -479,25 +463,45 @@
     color: var(--cream-dim);
     margin-bottom: 8px;
   }
+  .med-swipe-wrap {
+    position: relative;
+    margin: 0 -8px;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  .med-swipe-wrap + .med-swipe-wrap {
+    border-top: 1px solid var(--charcoal-lighter);
+  }
+  .med-swipe-action {
+    position: absolute;
+    top: 0; right: 0; bottom: 0;
+    width: 84px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--coral);
+    color: #FFFCF6;
+    font-size: 0.78rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
   .med-status-row {
+    position: relative;
     display: flex;
     justify-content: space-between;
     align-items: center;
     width: 100%;
     padding: 8px 8px;
-    margin: 0 -8px;
-    background: none;
+    background: var(--charcoal-light);
     border: none;
     border-radius: 10px;
     cursor: pointer;
     text-align: left;
     font-family: inherit;
     -webkit-tap-highlight-color: transparent;
+    touch-action: pan-y;
   }
   .med-status-row:active { background: rgba(138,109,158,0.12); }
-  .med-status-row + .med-status-row {
-    border-top: 1px solid var(--charcoal-lighter);
-  }
   .med-status-row.done { opacity: 0.55; }
   .med-status-info { min-width: 0; }
   .med-status-name {
@@ -557,6 +561,34 @@
     border: none;
     color: var(--coral);
     font-size: 0.75rem;
+    padding: 2px 0;
+    cursor: pointer;
+  }
+  .med-edit-row.archived {
+    opacity: 0.6;
+  }
+  .med-archived-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--cream-dim);
+    background: var(--charcoal-light);
+    border-radius: 6px;
+    padding: 2px 8px;
+    margin-bottom: 8px;
+  }
+  .med-edit-row-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 8px;
+  }
+  .med-archive-link {
+    background: none;
+    border: none;
+    color: #8A6D9E;
+    font-size: 0.75rem;
+    font-weight: 600;
     padding: 2px 0;
     cursor: pointer;
   }
@@ -1380,8 +1412,6 @@
   .tl-dot.feed { background: var(--dustyblue); }
   .tl-dot.note { background: var(--cream-dim); }
   .tl-dot.med { background: #8A6D9E; }
-  .tl-dot.sleep { background: #4A5578; }
-  .tl-dot.wake { background: #E0A93D; }
   .tl-line {
     width: 2px;
     flex: 1;
@@ -1418,6 +1448,35 @@
     padding: 8px 8px;
     white-space: pre-wrap;
     max-width: 320px;
+  }
+  .vet-flag-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--coral);
+    background: rgba(217,119,87,0.14);
+    border-radius: 7px;
+    padding: 2px 7px;
+    margin-top: 4px;
+  }
+  .vet-flag-note-row {
+    background: rgba(217,119,87,0.08);
+    border: 1px solid rgba(217,119,87,0.35);
+    border-radius: 10px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+  }
+  .vet-flag-note-date {
+    font-size: 0.7rem;
+    color: var(--cream-dim);
+    margin-bottom: 2px;
+  }
+  .vet-flag-note-text {
+    font-size: 0.85rem;
+    color: var(--cream);
+    line-height: 1.4;
   }
   .tl-gap {
     font-size: 0.8rem;
@@ -1698,13 +1757,7 @@
     <button class="log-btn" id="logBtn">💦 She just peed</button>
     <button class="log-btn poop-primary" id="poopBtn">💩 Pooped</button>
   </div>
-  <div class="btn-row">
-    <button class="secondary-btn med-btn" id="medBtn" style="display:none;">💊 Medication</button>
-    <button class="secondary-btn feed-btn" id="feedBtn">🍽️ Fed</button>
-  </div>
-  <button class="secondary-btn sleep-btn" id="sleepBtn" style="width:100%; margin-bottom:16px;">😴 Went to sleep</button>
   <button class="accident-btn" id="accidentBtn">⚠️ Log an accident instead</button>
-  <button class="note-btn" id="noteBtn">📝 Add a note</button>
 
   <div class="potty-reminder" id="pottyReminder" style="display:none;"></div>
 
@@ -1731,7 +1784,7 @@
   <div class="feed-goal-card" id="feedGoalCard">
     <div class="feed-goal-text">
       <span class="label">Feedings today</span>
-      <span class="value" id="feedGoalValue">0 of 3–4</span>
+      <span class="value" id="feedGoalValue">0 of 3</span>
     </div>
     <button class="goal-edit-btn" id="goalEditBtn">Edit goal</button>
   </div>
@@ -1796,6 +1849,8 @@
 <div class="modal-overlay fab-sheet-overlay" id="fabSheetOverlay">
   <div class="fab-sheet">
     <div class="fab-sheet-title">Add</div>
+    <button class="fab-sheet-opt" id="fabLogFeed">🍽️ Log a feeding</button>
+    <button class="fab-sheet-opt" id="fabLogMed" style="display:none;">💊 Log medication</button>
     <button class="fab-sheet-opt" id="fabAddMed">💊 Add a medication</button>
     <button class="fab-sheet-opt" id="fabAddNote">📝 Add a note</button>
     <button class="fab-sheet-opt" id="fabAddDog">🐶 Add a dog</button>
@@ -1880,12 +1935,8 @@
   <div class="modal">
     <div class="modal-title">Daily feeding goal</div>
     <div class="modal-row">
-      <label class="modal-label">Min feedings/day</label>
-      <input type="number" id="goalMin" class="modal-input" min="1" max="10" value="3">
-    </div>
-    <div class="modal-row">
-      <label class="modal-label">Max feedings/day</label>
-      <input type="number" id="goalMax" class="modal-input" min="1" max="10" value="4">
+      <label class="modal-label">Feedings per day</label>
+      <input type="number" id="goalCount" class="modal-input" min="1" max="10" value="3">
     </div>
     <div class="modal-footer">
       <div class="modal-actions">
@@ -2080,7 +2131,10 @@
   <div class="modal about-modal">
     <div class="about-topbar">
       <span class="about-topbar-title">Profile</span>
-      <button class="about-topbar-close" id="aboutTopClose" aria-label="Close">✕</button>
+      <div style="display:flex; align-items:center; gap:8px;">
+        <button class="med-manage-btn" id="aboutEditBtn">✎ Edit</button>
+        <button class="about-topbar-close" id="aboutTopClose" aria-label="Close">✕</button>
+      </div>
     </div>
     <div class="about-header">
       <div class="about-photo-wrap">
@@ -2094,6 +2148,11 @@
       </div>
     </div>
     <div id="aboutStats"></div>
+
+    <div class="about-stat-group" id="vetFlagSection" style="display:none;">
+      <div class="about-stat-group-title">🩺 Flagged for vet</div>
+      <div id="vetFlagContent"></div>
+    </div>
 
     <div class="about-stat-group" id="personalitySection">
       <div class="about-stat-group-title">Personality</div>
@@ -2323,9 +2382,23 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '2.7.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '2.10.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '2.10.0', date: 'Jun 2026', notes: [
+    'Medications can now be archived instead of deleted — swipe a medication left on the home screen, or use Archive in Manage medications. Archived meds stop showing up to log but move to a read-only "Past medications" list on the Profile page, and their dose history still counts in stats'
+  ]},
+  { version: '2.9.0', date: 'Jun 2026', notes: [
+    'Poop entries now also show time since the last feeding, alongside time since the last poop',
+    'Notes mentioning symptoms like vomiting, limping, or lethargy now get a "Flag for vet" badge, and collect in a new Profile page section',
+    'Added an Edit button to the Profile page for quick access to breed, sex, and date fields'
+  ]},
+  { version: '2.8.0', date: 'Jun 2026', notes: [
+    'Daily feeding goal is now a single number instead of a range',
+    'Feed, log medication, and add a note moved off the home screen and into the + button — tap it to find them',
+    'Removed sleep/wake tracking',
+    'Fixed: tapping a log button (or the custom-time confirm) twice quickly could create two entries instead of one'
+  ]},
   { version: '2.7.0', date: 'Jun 2026', notes: [
     'Pull down from the top of the screen to refresh — pulls the latest synced data without a full page reload'
   ]},
@@ -2504,6 +2577,37 @@ const QUIZ_TRAITS = [
 ];
 const SYNC_CONFIG_KEY = 'sync-config';
 
+// Rule-based keyword list for flagging notes that may be worth a vet's
+// attention. Fully offline — plain lowercase substring/word matching, no AI
+// (this app has no backend to hold an API key safely). Starter list covers
+// common symptom-adjacent language; not medical advice, just a "you may want
+// to mention this at the vet" nudge.
+const VET_FLAG_KEYWORDS = [
+  'vomit', 'vomiting', 'threw up', 'throwing up',
+  'blood', 'bloody',
+  'limp', 'limping',
+  'lethargic', 'lethargy',
+  "won't eat", 'wont eat', 'not eating', 'refusing food', 'appetite',
+  'diarrhea', 'loose stool',
+  'swelling', 'swollen',
+  'seizure',
+  'wheezing', 'coughing', 'cough',
+  'pain', 'whimper', 'whimpering', 'yelp', 'yelping',
+  'rash', 'hot spot',
+  'discharge',
+  'won\u2019t walk', 'wont walk', 'won\u2019t put weight', 'favoring'
+];
+
+// Returns the subset of VET_FLAG_KEYWORDS found in a note's text (lowercase
+// substring match), or an empty array if none match. Run whenever a note is
+// saved/edited, and re-scanned when building the Profile page stats.
+function getVetFlags(text) {
+  if (!text) return [];
+  const lower = text.toLowerCase();
+  return VET_FLAG_KEYWORDS.filter(kw => lower.includes(kw));
+}
+
+
 let dogs = [];
 let activeDogId = null;
 let entries = []; // {id, dogId, ts, type}
@@ -2667,7 +2771,7 @@ function defaultData() {
     dogs: [{ id: dogId, name: 'Foster Pup', sex: 'female', breed: '', birthdate: null, birthdateReason: '', fosterStart: Date.now(), meds: [] }],
     activeDogId: dogId,
     entries: [],
-    feedGoals: { [dogId]: { min: 3, max: 4 } },
+    feedGoals: { [dogId]: { min: 3, max: 3 } },
     expenses: [],
     quizResponses: [],
     quizNames: { person1: '', person2: '' }
@@ -2704,7 +2808,7 @@ async function loadAll() {
       const d = defaultData();
       dogs = d.dogs; activeDogId = d.activeDogId; feedGoals = d.feedGoals;
     }
-    dogs.forEach(d => { if (!feedGoals[d.id]) feedGoals[d.id] = { min: 3, max: 4 }; });
+    dogs.forEach(d => { if (!feedGoals[d.id]) feedGoals[d.id] = { min: 3, max: 3 }; });
     dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
     dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
     dogs.forEach(d => { if (d.breed === undefined) d.breed = ''; if (d.birthdate === undefined) d.birthdate = null; if (d.birthdateReason === undefined) d.birthdateReason = ''; });
@@ -3025,7 +3129,7 @@ function activeEntries() {
   return entries.filter(e => e.dogId === activeDogId);
 }
 function activeGoal() {
-  return feedGoals[activeDogId] || { min: 3, max: 4 };
+  return feedGoals[activeDogId] || { min: 3, max: 3 };
 }
 function activeDog() {
   return dogs.find(d => d.id === activeDogId);
@@ -3205,9 +3309,9 @@ function renderNextFeeding() {
   card.style.display = 'block';
   let msg = `Based on ${p.poss} usual <strong>${fmtDurationLong(stats.avg)}</strong> gap between meals, next feeding around <strong>${fmtClock(suggested)}</strong>.`;
   if (todayCount >= goal.max) {
-    msg += ` ${p.subjCap} ${hasVerb} already had ${todayCount} feedings today — at ${p.poss} daily max.`;
-  } else if (todayCount < goal.min) {
-    msg += ` ${p.subjCap} ${hasVerb} had ${todayCount} of ${goal.min}–${goal.max} feedings today.`;
+    msg += ` ${p.subjCap} ${hasVerb} already had ${todayCount} feedings today — at ${p.poss} daily goal.`;
+  } else {
+    msg += ` ${p.subjCap} ${hasVerb} had ${todayCount} of ${goal.max} feedings today.`;
   }
   text.innerHTML = msg;
 }
@@ -3272,8 +3376,6 @@ function entryIcon(type) {
   if (type === 'accident') return '⚠️';
   if (type === 'note') return '📝';
   if (type === 'med') return '💊';
-  if (type === 'sleep') return '😴';
-  if (type === 'wake') return '☀️';
   return '💦';
 }
 
@@ -3324,6 +3426,15 @@ function renderTimeline() {
       // For an accident that's poop (or both), also show the poop counter line.
       const runningCount = (mfn) => myEntries.filter(e => mfn(e) && e.ts <= entry.ts && new Date(e.ts).toDateString() === dayStr).length;
 
+      // Time since the most recent feeding before this poop's timestamp, shown
+      // as a second line alongside the existing "since last poop" fill-line —
+      // both pieces of info stay visible rather than replacing one another.
+      const sinceFeedHtml = (poopEntry) => {
+        const priorFeed = myEntries.filter(e => e.type === 'feed' && e.ts < poopEntry.ts).sort((a,b) => b.ts - a.ts)[0];
+        if (!priorFeed) return '';
+        return `<div class="tl-fill-label">${fmtDuration(poopEntry.ts - priorFeed.ts)} since last feeding</div>`;
+      };
+
       const buildFill = (count, tgt, lbl, mfn, isAccidentRow) => {
         const total = Math.max(tgt, count);
         let segs = '';
@@ -3350,25 +3461,22 @@ function renderTimeline() {
 
       const isAccident = entry.type === 'accident';
       if (entry.type === 'accident' && (entry.accidentType === 'both')) {
-        gapHtml = buildFill(runningCount(isPee), PEE_TARGET, 'pee', isPee, true) + buildFill(runningCount(isPoop), POOP_TARGET, 'poop', isPoop, true);
+        gapHtml = buildFill(runningCount(isPee), PEE_TARGET, 'pee', isPee, true) + buildFill(runningCount(isPoop), POOP_TARGET, 'poop', isPoop, true) + sinceFeedHtml(entry);
       } else if (entry.type === 'accident' && entry.accidentType === 'poop') {
-        gapHtml = buildFill(runningCount(isPoop), POOP_TARGET, 'poop', isPoop, true);
+        gapHtml = buildFill(runningCount(isPoop), POOP_TARGET, 'poop', isPoop, true) + sinceFeedHtml(entry);
       } else if (family === 'potty') {
         gapHtml = buildFill(runningCount(matcher), target, label, isPee, isAccident);
       } else if (entry.type === 'poop') {
-        gapHtml = buildFill(runningCount(matcher), target, label, isPoop, isAccident);
+        gapHtml = buildFill(runningCount(matcher), target, label, isPoop, isAccident) + sinceFeedHtml(entry);
       } else {
         gapHtml = buildFill(runningCount(matcher), target, label, null, false);
       }
     }
     const noteHtml = entry.type === 'note' && entry.text
-      ? `<div class="tl-note-text" data-edit-note-id="${entry.id}" style="cursor:pointer;">${escapeHtml(entry.text)}</div>`
+      ? `<div class="tl-note-text" data-edit-note-id="${entry.id}" style="cursor:pointer;">${escapeHtml(entry.text)}</div>${getVetFlags(entry.text).length ? '<div class="vet-flag-badge">🩺 Flag for vet</div>' : ''}`
       : '';
     const medHtml = entry.type === 'med'
       ? `<div class="tl-gap">${escapeHtml(medNameFor(entry.medId))}</div>`
-      : '';
-    const sleepHtml = (entry.type === 'sleep' || entry.type === 'wake')
-      ? `<div class="tl-gap">${entry.type === 'sleep' ? 'Went to sleep' : 'Woke up'}</div>`
       : '';
     const actionHtml = `<button class="del-btn" data-edit-id="${entry.id}">edit</button>`;
     html += `
@@ -3383,7 +3491,6 @@ function renderTimeline() {
           </div>
           ${noteHtml}
           ${medHtml}
-          ${sleepHtml}
           ${gapHtml}
         </div>
       </div>`;
@@ -3402,58 +3509,25 @@ function renderFeedGoal() {
   const valueEl = document.getElementById('feedGoalValue');
   const goal = activeGoal();
   const todayFeeds = activeEntries().filter(e => e.type === 'feed' && new Date(e.ts).toDateString() === new Date().toDateString()).length;
-  valueEl.textContent = `${todayFeeds} of ${goal.min}–${goal.max}`;
-  valueEl.className = 'value' + (todayFeeds >= goal.min ? ' met' : '');
+  valueEl.textContent = `${todayFeeds} of ${goal.max}`;
+  valueEl.className = 'value' + (todayFeeds >= goal.max ? ' met' : '');
 }
 
 function renderActionLabels() {
   const p = activePronouns();
   const logBtn = document.getElementById('logBtn');
   if (logBtn) logBtn.textContent = `💦 ${p.subjCap} just peed`;
-  // Sleep toggle reflects current state
-  const sleepBtn = document.getElementById('sleepBtn');
-  if (sleepBtn) {
-    const asleep = isAsleep();
-    if (asleep) {
-      sleepBtn.textContent = `☀️ ${p.subjCap} woke up`;
-      sleepBtn.classList.add('awake');
-    } else {
-      sleepBtn.textContent = '😴 Went to sleep';
-      sleepBtn.classList.remove('awake');
-    }
-  }
-}
-
-// Is the dog currently asleep? Looks at the most recent sleep/wake entry.
-function isAsleep() {
-  const se = activeEntries().filter(e => e.type === 'sleep' || e.type === 'wake');
-  if (!se.length) return false;
-  const last = se.sort((a,b) => a.ts - b.ts)[se.length - 1];
-  return last.type === 'sleep';
-}
-
-async function toggleSleep() {
-  const asleep = isAsleep();
-  const type = asleep ? 'wake' : 'sleep';
-  entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type });
-  entries.sort((a,b) => a.ts - b.ts);
-  await persistAndSync();
-  renderAll();
-  showToast(type === 'sleep' ? 'Sleeping 😴' : 'Awake ☀️');
 }
 
 function renderMedication() {
   const dog = activeDog();
-  const meds = (dog && dog.meds) || [];
-  const btn = document.getElementById('medBtn');
+  const meds = ((dog && dog.meds) || []).filter(m => !m.archived);
   const card = document.getElementById('medStatusCard');
 
   if (meds.length === 0) {
-    btn.style.display = 'none';
     card.style.display = 'none';
     return;
   }
-  btn.style.display = 'flex';
   card.style.display = 'block';
 
   const list = document.getElementById('medStatusList');
@@ -3461,13 +3535,16 @@ function renderMedication() {
     const given = medDosesToday(m.id);
     const done = given >= m.count;
     const timesLabel = m.times && m.times.length ? m.times.join(', ') : 'daily';
-    return `<button class="med-status-row${done ? ' done' : ''}" data-med-id="${m.id}">
-      <div class="med-status-info">
-        <div class="med-status-name">${escapeHtml(m.name)}</div>
-        <div class="med-status-sub">${escapeHtml(m.type ? m.type + ' · ' : '')}${escapeHtml(timesLabel)}</div>
-      </div>
-      <div class="med-status-count ${done ? 'done' : ''}">${done ? '✓ ' : ''}${given} of ${m.count} today</div>
-    </button>`;
+    return `<div class="med-swipe-wrap" data-swipe-med-id="${m.id}">
+      <div class="med-swipe-action" data-archive-med-id="${m.id}">Archive</div>
+      <button class="med-status-row${done ? ' done' : ''}" data-med-id="${m.id}">
+        <div class="med-status-info">
+          <div class="med-status-name">${escapeHtml(m.name)}</div>
+          <div class="med-status-sub">${escapeHtml(m.type ? m.type + ' · ' : '')}${escapeHtml(timesLabel)}</div>
+        </div>
+        <div class="med-status-count ${done ? 'done' : ''}">${done ? '✓ ' : ''}${given} of ${m.count} today</div>
+      </button>
+    </div>`;
   }).join('');
 
   list.querySelectorAll('.med-status-row[data-med-id]').forEach(row => {
@@ -3483,6 +3560,78 @@ function renderMedication() {
       logMedDose(medId);
     });
   });
+
+  list.querySelectorAll('.med-swipe-wrap[data-swipe-med-id]').forEach(wrap => {
+    attachSwipeToArchive(wrap, () => archiveMedication(wrap.getAttribute('data-swipe-med-id')));
+  });
+}
+
+// Horizontal swipe-left-to-reveal gesture for a single row. Reveals a fixed-width
+// action behind the row; swiping past a threshold and releasing fires onReveal's
+// action button (tap-to-confirm), it doesn't auto-fire on release.
+const SWIPE_REVEAL_PX = 84;
+function attachSwipeToArchive(wrapEl, onArchive) {
+  const row = wrapEl.querySelector('.med-status-row');
+  const actionEl = wrapEl.querySelector('.med-swipe-action');
+  if (!row || !actionEl) return;
+  let startX = null, startY = null, dx = 0, dragging = false, decided = false, isOpen = false;
+
+  function setX(px) {
+    dx = Math.max(-SWIPE_REVEAL_PX, Math.min(0, px));
+    row.style.transform = `translateX(${dx}px)`;
+  }
+  function settle(open) {
+    isOpen = open;
+    row.style.transition = 'transform 0.18s ease';
+    setX(open ? -SWIPE_REVEAL_PX : 0);
+    setTimeout(() => { row.style.transition = ''; }, 180);
+  }
+  row.addEventListener('touchstart', (e) => {
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    dragging = true;
+    decided = false;
+  }, { passive: true });
+  row.addEventListener('touchmove', (e) => {
+    if (!dragging) return;
+    const curX = e.touches[0].clientX, curY = e.touches[0].clientY;
+    const deltaX = curX - startX, deltaY = curY - startY;
+    if (!decided) {
+      // Wait until the gesture is clearly horizontal before committing, so a
+      // vertical scroll through the card isn't hijacked into a swipe.
+      if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return;
+      if (Math.abs(deltaY) > Math.abs(deltaX)) { dragging = false; return; }
+      decided = true;
+    }
+    setX(Math.min(isOpen ? -SWIPE_REVEAL_PX : 0, deltaX));
+  }, { passive: true });
+  row.addEventListener('touchend', () => {
+    if (!dragging) return;
+    dragging = false;
+    if (!decided) return; // a plain tap — let the click handler run normally
+    settle(dx <= -SWIPE_REVEAL_PX / 2);
+  });
+  row.addEventListener('click', (e) => {
+    // If the row is currently swiped open, a tap on it just closes it again
+    // rather than logging a dose.
+    if (isOpen) { e.stopPropagation(); settle(false); }
+  }, { capture: true });
+  actionEl.addEventListener('click', () => {
+    settle(false);
+    onArchive();
+  });
+}
+
+// Archive a medication: stop it from showing as something to log going forward,
+// but keep its historical dose entries counted in stats (they really happened).
+async function archiveMedication(medId) {
+  const dog = activeDog();
+  const med = dog && (dog.meds || []).find(m => m.id === medId);
+  if (!med) return;
+  med.archived = true;
+  await persistAndSync();
+  renderAll();
+  showToast(`${med.name} archived — moved to Past medications`);
 }
 
 function renderAboutCard() {
@@ -3574,10 +3723,19 @@ function computeAboutStats() {
   groups.push({ title: 'Feeding', rows: feeding });
 
   // Medication
-  if (dog.meds && dog.meds.length) {
-    const medRows = dog.meds.map(m => [m.name, `${(m.times && m.times.join(', ')) || 'daily'}${m.type ? ' · ' + m.type : ''}`]);
+  const activeMeds = (dog.meds || []).filter(m => !m.archived);
+  const pastMeds = (dog.meds || []).filter(m => m.archived);
+  if (activeMeds.length) {
+    const medRows = activeMeds.map(m => [m.name, `${(m.times && m.times.join(', ')) || 'daily'}${m.type ? ' · ' + m.type : ''}`]);
     medRows.push(['Doses logged', `${medDoses.length}`]);
     groups.push({ title: 'Medication', rows: medRows });
+  } else if (pastMeds.length) {
+    // No active meds, but doses were logged historically — still show the count.
+    groups.push({ title: 'Medication', rows: [['Doses logged', `${medDoses.length}`]] });
+  }
+  if (pastMeds.length) {
+    const pastRows = pastMeds.map(m => [m.name, `${(m.times && m.times.join(', ')) || 'daily'}${m.type ? ' · ' + m.type : ''}`]);
+    groups.push({ title: 'Past medications', rows: pastRows });
   }
 
   // Tracking
@@ -3587,6 +3745,15 @@ function computeAboutStats() {
   ]});
 
   return groups;
+}
+
+// Collects every note for the active dog whose text matches a vet-flag
+// keyword, newest first. Re-scanned each time the Profile page is opened
+// (rather than stored), so edits to a note's text are always reflected.
+function getVetFlaggedNotes() {
+  return activeEntries()
+    .filter(e => e.type === 'note' && e.text && getVetFlags(e.text).length > 0)
+    .sort((a,b) => b.ts - a.ts);
 }
 
 function openAbout() {
@@ -3619,6 +3786,21 @@ function openAbout() {
           <span class="about-stat-value">${escapeHtml(String(val))}</span>
         </div>`).join('')}
     </div>`).join('');
+
+  // Flagged-for-vet notes: re-scanned fresh every time the profile opens.
+  const flaggedNotes = getVetFlaggedNotes();
+  const vetFlagSection = document.getElementById('vetFlagSection');
+  if (flaggedNotes.length === 0) {
+    vetFlagSection.style.display = 'none';
+  } else {
+    vetFlagSection.style.display = 'block';
+    const fmtDateShort = ms => new Date(ms).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    document.getElementById('vetFlagContent').innerHTML = flaggedNotes.map(n => `
+      <div class="vet-flag-note-row">
+        <div class="vet-flag-note-date">${fmtDateShort(n.ts)}</div>
+        <div class="vet-flag-note-text">${escapeHtml(n.text)}</div>
+      </div>`).join('');
+  }
 
   // Personality, built from the weekly quiz responses logged so far.
   const profile = buildPersonalityProfile(activeDogId);
@@ -4056,8 +4238,7 @@ function countWeekTypes(es) {
     feed: es.filter(e => e.type === 'feed').length,
     accident: es.filter(e => e.type === 'accident').length,
     med: es.filter(e => e.type === 'med').length,
-    note: es.filter(e => e.type === 'note').length,
-    sleep: es.filter(e => e.type === 'sleep').length
+    note: es.filter(e => e.type === 'note').length
   };
 }
 
@@ -4137,8 +4318,6 @@ function openWeekDetail() {
     if (e.type === 'note') return e.text || 'Note';
     if (e.type === 'med') return medNameFor(e.medId);
     if (e.type === 'accident') return 'Accident' + (e.accidentType ? ' (' + (e.accidentType==='both'?'pee + poop':e.accidentType) + ')' : '');
-    if (e.type === 'sleep') return 'Went to sleep';
-    if (e.type === 'wake') return 'Woke up';
     return { pee: 'Pee', poop: 'Poop', feed: 'Feeding' }[e.type] || e.type;
   };
   document.getElementById('weekDetailList').innerHTML = `
@@ -4149,29 +4328,47 @@ function openWeekDetail() {
   document.getElementById('weekDetailOverlay').classList.add('show');
 }
 
+// Shared guard against double-submits: rapid double-taps on a log button
+// (or a tap that lands right as a slow phone is still processing the first
+// one) used to create two entries before the button/modal had a chance to
+// react. withGuard() wraps an async action so a second call while the first
+// is still running is silently ignored.
+let actionInFlight = false;
+async function withGuard(fn) {
+  if (actionInFlight) return;
+  actionInFlight = true;
+  try {
+    await fn();
+  } finally {
+    actionInFlight = false;
+  }
+}
+
 async function logEntry(type) {
-  entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type });
-  entries.sort((a,b) => a.ts - b.ts);
-  await persistAndSync();
-  renderAll();
-  const toastMsg = { pee: 'Logged! 💦', poop: 'Poop logged 💩', feed: 'Feeding logged 🍽️', accident: 'Accident logged' };
-  showToast(toastMsg[type] || 'Logged!');
+  await withGuard(async () => {
+    entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type });
+    entries.sort((a,b) => a.ts - b.ts);
+    await persistAndSync();
+    renderAll();
+    const toastMsg = { pee: 'Logged! 💦', poop: 'Poop logged 💩', feed: 'Feeding logged 🍽️', accident: 'Accident logged' };
+    showToast(toastMsg[type] || 'Logged!');
+  });
 }
 
 // Log an accident with a subtype so it counts toward the right tracker(s).
 async function logAccident(accidentType) {
-  entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type: 'accident', accidentType });
-  entries.sort((a,b) => a.ts - b.ts);
-  await persistAndSync();
-  renderAll();
-  const label = { pee: 'Pee accident logged', poop: 'Poop accident logged', both: 'Accident logged (pee + poop)' };
-  showToast(label[accidentType] || 'Accident logged');
+  await withGuard(async () => {
+    entries.push({ id: uid(), dogId: activeDogId, ts: Date.now(), type: 'accident', accidentType });
+    entries.sort((a,b) => a.ts - b.ts);
+    await persistAndSync();
+    renderAll();
+    const label = { pee: 'Pee accident logged', poop: 'Poop accident logged', both: 'Accident logged (pee + poop)' };
+    showToast(label[accidentType] || 'Accident logged');
+  });
 }
 
 document.getElementById('logBtn').addEventListener('click', () => logEntry('pee'));
 document.getElementById('poopBtn').addEventListener('click', () => logEntry('poop'));
-document.getElementById('feedBtn').addEventListener('click', () => logEntry('feed'));
-document.getElementById('sleepBtn').addEventListener('click', toggleSleep);
 const accidentTypeOverlay = document.getElementById('accidentTypeOverlay');
 document.getElementById('accidentBtn').addEventListener('click', () => accidentTypeOverlay.classList.add('show'));
 document.getElementById('accidentTypeCancel').addEventListener('click', () => accidentTypeOverlay.classList.remove('show'));
@@ -4204,7 +4401,6 @@ function openNoteModal(entryId) {
   setTimeout(() => document.getElementById('noteText').focus(), 50);
 }
 
-document.getElementById('noteBtn').addEventListener('click', () => openNoteModal(null));
 document.getElementById('noteModalCancel').addEventListener('click', () => noteModalOverlay.classList.remove('show'));
 noteModalOverlay.addEventListener('click', (e) => { if (e.target === noteModalOverlay) noteModalOverlay.classList.remove('show'); });
 
@@ -4331,34 +4527,37 @@ document.getElementById('modalCancel').addEventListener('click', () => timeModal
 timeModalOverlay.addEventListener('click', (e) => { if (e.target === timeModalOverlay) timeModalOverlay.classList.remove('show'); });
 
 document.getElementById('modalConfirm').addEventListener('click', async () => {
-  const type = document.getElementById('modalType').value;
-  const dateVal = document.getElementById('modalDate').value;
-  const timeVal = document.getElementById('modalTime').value;
-  if (!dateVal || !timeVal) return;
-  const ts = new Date(`${dateVal}T${timeVal}`).getTime();
-  if (isNaN(ts)) return;
-  entries.push({ id: uid(), dogId: activeDogId, ts, type });
-  entries.sort((a,b) => a.ts - b.ts);
-  await persistAndSync();
-  renderAll();
-  timeModalOverlay.classList.remove('show');
-  showToast('Entry logged for ' + fmtTime(ts));
+  await withGuard(async () => {
+    const type = document.getElementById('modalType').value;
+    const dateVal = document.getElementById('modalDate').value;
+    const timeVal = document.getElementById('modalTime').value;
+    if (!dateVal || !timeVal) return;
+    const ts = new Date(`${dateVal}T${timeVal}`).getTime();
+    if (isNaN(ts)) return;
+    entries.push({ id: uid(), dogId: activeDogId, ts, type });
+    entries.sort((a,b) => a.ts - b.ts);
+    await persistAndSync();
+    renderAll();
+    timeModalOverlay.classList.remove('show');
+    showToast('Entry logged for ' + fmtTime(ts));
+  });
 });
 
 // Goal modal
 const goalModalOverlay = document.getElementById('goalModalOverlay');
 document.getElementById('goalEditBtn').addEventListener('click', () => {
   const goal = activeGoal();
-  document.getElementById('goalMin').value = goal.min;
-  document.getElementById('goalMax').value = goal.max;
+  document.getElementById('goalCount').value = goal.max;
   goalModalOverlay.classList.add('show');
 });
 document.getElementById('goalModalCancel').addEventListener('click', () => goalModalOverlay.classList.remove('show'));
 goalModalOverlay.addEventListener('click', (e) => { if (e.target === goalModalOverlay) goalModalOverlay.classList.remove('show'); });
 document.getElementById('goalModalConfirm').addEventListener('click', async () => {
-  const min = parseInt(document.getElementById('goalMin').value, 10) || 1;
-  const max = parseInt(document.getElementById('goalMax').value, 10) || min;
-  feedGoals[activeDogId] = { min, max: Math.max(min, max) };
+  const count = parseInt(document.getElementById('goalCount').value, 10) || 1;
+  // Internal data shape stays {min,max} (used throughout sync/merge/fill-line
+  // code) but both are always set equal now that the UI only asks for one
+  // number.
+  feedGoals[activeDogId] = { min: count, max: count };
   await persistAndSync();
   renderFeedGoal();
   goalModalOverlay.classList.remove('show');
@@ -4413,13 +4612,17 @@ function makeMedEditor(listElId, addBtnId) {
   }
   function render() {
     listEl.innerHTML = working.map((m, i) => `
-      <div class="med-edit-row" data-idx="${i}">
+      <div class="med-edit-row${m.archived ? ' archived' : ''}" data-idx="${i}">
+        ${m.archived ? '<div class="med-archived-tag">Archived</div>' : ''}
         <input type="text" class="modal-input med-name" placeholder="Medication name (e.g. Apoquel)" value="${escapeHtml(m.name)}">
         <input type="text" class="modal-input med-type" placeholder="Type / notes (e.g. allergy pill, 5mg)" value="${escapeHtml(m.type)}">
         <div class="med-times-row">
           ${MED_TIMES.map(t => `<button type="button" class="med-time-chip ${m.times.includes(t) ? 'active' : ''}" data-time="${t}">${t}</button>`).join('')}
         </div>
-        <button type="button" class="med-remove-link" data-remove="${i}">Remove this medication</button>
+        <div class="med-edit-row-actions">
+          <button type="button" class="med-archive-link" data-archive="${i}">${m.archived ? '↩ Unarchive' : 'Archive (stop logging doses)'}</button>
+          <button type="button" class="med-remove-link" data-remove="${i}">Remove this medication</button>
+        </div>
       </div>`).join('');
 
     listEl.querySelectorAll('.med-edit-row').forEach(row => {
@@ -4437,6 +4640,11 @@ function makeMedEditor(listElId, addBtnId) {
           working[idx].count = working[idx].times.length || 1;
           render();
         });
+      });
+      row.querySelector('[data-archive]').addEventListener('click', () => {
+        syncFromDom();
+        working[idx].archived = !working[idx].archived;
+        render();
       });
       row.querySelector('[data-remove]').addEventListener('click', () => {
         syncFromDom();
@@ -4465,7 +4673,8 @@ function makeMedEditor(listElId, addBtnId) {
           name: m.name.trim(),
           type: m.type.trim(),
           times: m.times.length ? MED_TIMES.filter(x => m.times.includes(x)) : ['morning'],
-          count: (m.times.length || 1)
+          count: (m.times.length || 1),
+          archived: !!m.archived
         }));
     },
     isEmpty() { syncFromDom(); return working.filter(m => m.name.trim()).length === 0; }
@@ -4492,7 +4701,7 @@ async function logMedDose(medId) {
 // Medication log button: pick which med (or log directly if only one)
 function handleMedButton() {
   const dog = activeDog();
-  const meds = (dog && dog.meds) || [];
+  const meds = ((dog && dog.meds) || []).filter(m => !m.archived);
   if (meds.length === 0) { showToast('No medications set up — add one in dog settings'); return; }
   if (meds.length === 1) { logMedDose(meds[0].id); return; }
   // multiple: open picker
@@ -4512,7 +4721,6 @@ function handleMedButton() {
   });
   document.getElementById('medPickerOverlay').classList.add('show');
 }
-document.getElementById('medBtn').addEventListener('click', handleMedButton);
 document.getElementById('medPickerCancel').addEventListener('click', () => document.getElementById('medPickerOverlay').classList.remove('show'));
 document.getElementById('medPickerOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('medPickerOverlay')) document.getElementById('medPickerOverlay').classList.remove('show'); });
 
@@ -4655,7 +4863,7 @@ document.getElementById('addDogModalConfirm').addEventListener('click', async ()
     fosterStart: fosterStart,
     meds
   });
-  feedGoals[newId] = { min: 3, max: 4 };
+  feedGoals[newId] = { min: 3, max: 3 };
   activeDogId = newId;
   await persistAndSync();
   renderAll();
@@ -4776,6 +4984,10 @@ document.getElementById('weekDetailClose').addEventListener('click', () => docum
 document.getElementById('weekDetailOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('weekDetailOverlay')) document.getElementById('weekDetailOverlay').classList.remove('show'); });
 document.getElementById('aboutClose').addEventListener('click', () => document.getElementById('aboutModalOverlay').classList.remove('show'));
 document.getElementById('aboutTopClose').addEventListener('click', () => document.getElementById('aboutModalOverlay').classList.remove('show'));
+document.getElementById('aboutEditBtn').addEventListener('click', () => {
+  document.getElementById('aboutModalOverlay').classList.remove('show');
+  openDogMenu(activeDogId);
+});
 document.getElementById('aboutModalOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('aboutModalOverlay')) document.getElementById('aboutModalOverlay').classList.remove('show'); });
 
 // Expenses
@@ -4876,9 +5088,15 @@ changelogModalOverlay.addEventListener('click', (e) => { if (e.target === change
 // Floating action button + action sheet
 const fabSheetOverlay = document.getElementById('fabSheetOverlay');
 function closeFabSheet() { fabSheetOverlay.classList.remove('show'); }
-document.getElementById('fab').addEventListener('click', () => fabSheetOverlay.classList.add('show'));
+document.getElementById('fab').addEventListener('click', () => {
+  const dog = activeDog();
+  document.getElementById('fabLogMed').style.display = (dog && dog.meds && dog.meds.filter(m => !m.archived).length) ? 'block' : 'none';
+  fabSheetOverlay.classList.add('show');
+});
 document.getElementById('fabCancel').addEventListener('click', closeFabSheet);
 fabSheetOverlay.addEventListener('click', (e) => { if (e.target === fabSheetOverlay) closeFabSheet(); });
+document.getElementById('fabLogFeed').addEventListener('click', () => { closeFabSheet(); logEntry('feed'); });
+document.getElementById('fabLogMed').addEventListener('click', () => { closeFabSheet(); handleMedButton(); });
 const addMedModalOverlay = document.getElementById('addMedModalOverlay');
 let medModalMode = 'add'; // 'add' = append new meds; 'manage' = edit full list
 function openMedModal(mode) {
@@ -5312,6 +5530,5 @@ function maybeShowWhatsNew() {
   }
 }
 </script>
-
 </body>
 </html>
