@@ -3059,9 +3059,14 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '3.3.1'; // Versioning: major release => bump first (X.0.0); feature update => bump middle (3.X.0); bug fix or small update => bump last (3.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '3.3.2'; // Versioning: major release => bump first (X.0.0); feature update => bump middle (3.X.0); bug fix or small update => bump last (3.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '3.3.2', date: 'Jun 2026', notes: [
+    'Fixed: picker bottom sheet (Medications / Drugs, Vaccines) now stays above the iOS keyboard — visualViewport shift resets cleanly on close',
+    'Fixed: background no longer scrolls when the picker sheet is open — scroll lock now correctly applies to the picker overlay',
+    'Fixed: tapping the dark backdrop behind the picker sheet now dismisses it'
+  ]},
   { version: '3.3.1', date: 'Jun 2026', notes: [
     'Medication card corners are now rounded again'
   ]},
@@ -4982,13 +4987,20 @@ async function saveVisitForm() {
 }
 
 // ---- Generic picker bottom sheet ----
+const pickerOverlayEl = document.getElementById('pickerOverlay');
+
+function closePicker() {
+  pickerOverlayEl.classList.remove('show');
+  pickerOverlayEl.style.bottom = '';
+  document.getElementById('pickerSearch').blur();
+}
+
 function openPicker(title, list, onSelect) {
   pickerCallback = onSelect;
   document.getElementById('pickerTitle').textContent = title;
   document.getElementById('pickerSearch').value = '';
   renderPickerList(list, '');
-  document.getElementById('pickerOverlay').classList.add('show');
-
+  pickerOverlayEl.classList.add('show');
   const searchEl = document.getElementById('pickerSearch');
   searchEl.oninput = () => renderPickerList(list, searchEl.value);
   searchEl.focus();
@@ -5007,7 +5019,7 @@ function renderPickerList(list, query) {
   el.querySelectorAll('.picker-opt').forEach(opt => {
     opt.addEventListener('click', () => {
       const val = opt.getAttribute('data-val');
-      document.getElementById('pickerOverlay').classList.remove('show');
+      closePicker();
       if (pickerCallback) pickerCallback(val);
     });
   });
@@ -5049,15 +5061,19 @@ document.getElementById('vetPageOverlay').addEventListener('click', (e) => { if 
 
 document.getElementById('vetVisitFormClose').addEventListener('click', () => document.getElementById('vetVisitFormOverlay').classList.remove('show'));
 
-document.getElementById('pickerCancel').addEventListener('click', () => document.getElementById('pickerOverlay').classList.remove('show'));
-// Shift picker above keyboard on iOS when visual viewport shrinks
+document.getElementById('pickerCancel').addEventListener('click', closePicker);
+// Dismiss picker when tapping the dark backdrop
+pickerOverlayEl.addEventListener('click', (e) => { if (e.target === pickerOverlayEl) closePicker(); });
+// Shift picker sheet above the iOS software keyboard using visualViewport
 if (window.visualViewport) {
-  window.visualViewport.addEventListener('resize', () => {
-    const overlay = document.getElementById('pickerOverlay');
-    if (!overlay.classList.contains('show')) return;
-    const kb = Math.max(0, window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop);
-    overlay.style.bottom = kb > 0 ? kb + 'px' : '';
-  });
+  function _syncPickerToKeyboard() {
+    if (!pickerOverlayEl.classList.contains('show')) return;
+    const vv = window.visualViewport;
+    const kb = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    pickerOverlayEl.style.bottom = kb > 0 ? kb + 'px' : '';
+  }
+  window.visualViewport.addEventListener('resize', _syncPickerToKeyboard);
+  window.visualViewport.addEventListener('scroll', _syncPickerToKeyboard);
 }
 
 document.getElementById('rxDetailConfirm').addEventListener('click', () => {
@@ -6645,7 +6661,7 @@ changelogModalOverlay.addEventListener('click', (e) => { if (e.target === change
 (function() {
   let scrollY = 0;
   function update() {
-    const anyOpen = document.querySelector('.modal-overlay.show') !== null;
+    const anyOpen = document.querySelector('.modal-overlay.show, .picker-overlay.show') !== null;
     if (anyOpen && !document.body.classList.contains('modal-open')) {
       scrollY = window.scrollY;
       document.body.style.top = `-${scrollY}px`;
