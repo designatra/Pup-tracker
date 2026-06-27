@@ -799,6 +799,56 @@
     padding: 2px 8px;
     margin-bottom: 8px;
   }
+  .med-archived-section-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--cream-dim);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin: 16px 0 8px;
+  }
+  .med-archived-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    gap: 10px;
+  }
+  .med-archived-info { min-width: 0; flex: 1; }
+  .med-archived-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: var(--cream-dim);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .med-archived-sub {
+    font-size: 0.72rem;
+    color: var(--cream-dim);
+    opacity: 0.7;
+    margin-top: 2px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .med-unarchive-btn {
+    background: none;
+    border: 1px solid var(--cream-dim);
+    color: var(--cream-dim);
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 5px 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    flex-shrink: 0;
+  }
+  .med-unarchive-btn:active { opacity: 0.6; }
   .med-edit-row-actions {
     display: flex;
     justify-content: space-between;
@@ -6000,9 +6050,12 @@ function makeMedEditor(listElId, addBtnId, onChangeCb) {
     });
   }
   function render() {
-    listEl.innerHTML = working.map((m, i) => `
-      <div class="med-edit-row${m.archived ? ' archived' : ''}" data-idx="${i}">
-        ${m.archived ? '<div class="med-archived-tag">Archived</div>' : ''}
+    const activeItems   = working.map((m, i) => ({ m, i })).filter(({ m }) => !m.archived);
+    const archivedItems = working.map((m, i) => ({ m, i })).filter(({ m }) =>  m.archived);
+
+    // Full editor cards for active meds
+    let html = activeItems.map(({ m, i }) => `
+      <div class="med-edit-row" data-idx="${i}">
         <div class="med-field-label" style="margin-top:0;">Medication name</div>
         <div class="med-name-wrap">
           <input type="text" class="modal-input med-name" placeholder="e.g. Apoquel" value="${escapeHtml(m.name)}" autocomplete="off">
@@ -6031,12 +6084,30 @@ function makeMedEditor(listElId, addBtnId, onChangeCb) {
         </div>
       </div>`).join('');
 
+    // Condensed archived section
+    if (archivedItems.length > 0) {
+      html += `<div class="med-archived-section-title">Archived</div>`;
+      html += archivedItems.map(({ m, i }) => {
+        const timesLabel = m.times && m.times.length ? m.times.join(', ') : 'daily';
+        const sub = [m.type, timesLabel].filter(Boolean).join(' · ');
+        return `<div class="med-archived-row" data-idx="${i}">
+          <div class="med-archived-info">
+            <div class="med-archived-name">${escapeHtml(m.name)}</div>
+            ${sub ? `<div class="med-archived-sub">${escapeHtml(sub)}</div>` : ''}
+          </div>
+          <button type="button" class="med-unarchive-btn" data-unarchive="${i}">Unarchive</button>
+        </div>`;
+      }).join('');
+    }
+
+    listEl.innerHTML = html;
+
+    // Wire active editor rows
     listEl.querySelectorAll('.med-edit-row').forEach(row => {
       const idx = parseInt(row.getAttribute('data-idx'), 10);
       const nameInput = row.querySelector('.med-name');
       const dropEl = row.querySelector('.med-name-dropdown');
 
-      // Name autocomplete
       function updateDrop(val) {
         const q = val.toLowerCase().trim();
         if (!q) { dropEl.classList.remove('open'); dropEl.innerHTML = ''; return; }
@@ -6077,7 +6148,18 @@ function makeMedEditor(listElId, addBtnId, onChangeCb) {
       });
       row.querySelector('[data-remove]').addEventListener('click', () => {
         syncFromDom();
-        openMedRemoveModal(idx, working[idx].name, working[idx].archived);
+        openMedRemoveModal(idx, working[idx].name);
+      });
+    });
+
+    // Wire unarchive buttons on archived rows
+    listEl.querySelectorAll('[data-unarchive]').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const idx = parseInt(btn.getAttribute('data-unarchive'), 10);
+        syncFromDom();
+        working[idx].archived = false;
+        render();
+        notifyChange();
       });
     });
   }
@@ -6092,19 +6174,19 @@ function makeMedEditor(listElId, addBtnId, onChangeCb) {
     if (modal) setTimeout(() => modal.scrollTo({ top: modal.scrollHeight, behavior: 'smooth' }), 50);
   });
 
-  // Remove modal integration
-  function openMedRemoveModal(idx, name, isArchived) {
+  // Remove modal integration (only called from active med cards)
+  function openMedRemoveModal(idx, name) {
     document.getElementById('medRemoveName').textContent = name || 'this medication';
     const overlay = document.getElementById('medRemoveOverlay');
     const archiveBtn = document.getElementById('medRemoveArchiveBtn');
     const deleteBtn = document.getElementById('medRemoveDeleteBtn');
-    archiveBtn.textContent = isArchived ? '↩ Unarchive — resume logging' : 'Archive — stop logging, keep history';
+    archiveBtn.textContent = 'Archive — stop logging, keep history';
 
     function cleanup() { overlay.classList.remove('show'); archiveBtn.onclick = null; deleteBtn.onclick = null; }
     archiveBtn.onclick = () => {
       cleanup();
       syncFromDom();
-      working[idx].archived = !working[idx].archived;
+      working[idx].archived = true;
       render();
       notifyChange();
     };
