@@ -954,6 +954,7 @@
     padding: 20px;
   }
   .modal-overlay.show { display: flex; }
+  body.modal-open { overflow: hidden; position: fixed; width: 100%; }
   .modal {
     background: var(--charcoal-light);
     border-radius: 20px;
@@ -2903,9 +2904,12 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '3.1.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '3.1.1'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '3.1.1', date: 'Jun 2026', notes: [
+    'Fixed: background no longer scrolls while a modal is open'
+  ]},
   { version: '3.1.0', date: 'Jun 2026', notes: [
     'Vet checklist — flagged notes now appear at the top of Vet Care as a "Before your visit" checklist; check each item off as you tell the vet, or mark all at once',
     'Vet photos — attach photos to a vet visit (skin issues, stool, limping, etc.) from the Vet Care page; optionally link a photo to a specific flagged note',
@@ -6352,6 +6356,24 @@ document.getElementById('changelogClose').addEventListener('click', () => change
 changelogModalOverlay.addEventListener('click', (e) => { if (e.target === changelogModalOverlay) changelogModalOverlay.classList.remove('show'); });
 
 // Floating action button + action sheet
+// Lock body scroll whenever any modal-overlay is open (prevents background scroll on mobile)
+(function() {
+  let scrollY = 0;
+  function update() {
+    const anyOpen = document.querySelector('.modal-overlay.show') !== null;
+    if (anyOpen && !document.body.classList.contains('modal-open')) {
+      scrollY = window.scrollY;
+      document.body.style.top = `-${scrollY}px`;
+      document.body.classList.add('modal-open');
+    } else if (!anyOpen && document.body.classList.contains('modal-open')) {
+      document.body.classList.remove('modal-open');
+      document.body.style.top = '';
+      window.scrollTo(0, scrollY);
+    }
+  }
+  new MutationObserver(update).observe(document.body, { subtree: true, attributes: true, attributeFilter: ['class'] });
+})();
+
 // Log filter dropdown
 (function() {
   const btn = document.getElementById('logFilterBtn');
