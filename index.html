@@ -1700,6 +1700,185 @@
     color: var(--cream);
     line-height: 1.4;
   }
+
+  /* Vet checklist (before-visit) */
+  .vet-checklist-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    background: rgba(217,119,87,0.07);
+    border: 1px solid rgba(217,119,87,0.3);
+    border-radius: 10px;
+    padding: 9px 11px;
+    margin-bottom: 7px;
+    transition: opacity 0.2s;
+  }
+  .vet-checklist-row.discussed {
+    opacity: 0.45;
+    background: rgba(138,178,138,0.07);
+    border-color: rgba(138,178,138,0.25);
+  }
+  .vet-checklist-cb {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: 2px solid var(--coral);
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    margin-top: 2px;
+    transition: background 0.15s, border-color 0.15s;
+    position: relative;
+  }
+  .vet-checklist-cb:checked {
+    background: var(--sage);
+    border-color: var(--sage);
+  }
+  .vet-checklist-cb:checked::after {
+    content: '✓';
+    position: absolute;
+    color: var(--charcoal);
+    font-size: 0.65rem;
+    font-weight: 900;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  .vet-checklist-body { flex: 1; min-width: 0; }
+  .vet-checklist-date { font-size: 0.68rem; color: var(--cream-dim); margin-bottom: 2px; }
+  .vet-checklist-text { font-size: 0.84rem; color: var(--cream); line-height: 1.4; }
+  .vet-checklist-photo-thumb {
+    width: 48px;
+    height: 48px;
+    object-fit: cover;
+    border-radius: 7px;
+    flex-shrink: 0;
+    cursor: pointer;
+    border: 1.5px solid var(--charcoal-lighter);
+  }
+  .vet-checklist-markall {
+    background: none;
+    border: 1px solid rgba(138,178,138,0.45);
+    border-radius: 7px;
+    color: var(--sage);
+    font-size: 0.76rem;
+    font-family: inherit;
+    padding: 5px 11px;
+    cursor: pointer;
+    margin-bottom: 11px;
+  }
+  .vet-photo-lightbox-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.85);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 900;
+  }
+  .vet-photo-lightbox-overlay img {
+    max-width: 92vw; max-height: 80vh; border-radius: 12px;
+  }
+  .vet-photo-lightbox-close {
+    position: absolute; top: 18px; right: 18px;
+    background: none; border: none; color: #fff;
+    font-size: 1.6rem; cursor: pointer; font-family: inherit;
+  }
+  /* Log filter dropdown */
+  .log-filter-btn {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: inherit;
+    font-size: 0.78rem;
+    padding: 5px 11px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .log-filter-btn.active {
+    border-color: var(--sage);
+    color: var(--sage);
+  }
+  .log-filter-badge {
+    background: var(--sage);
+    color: var(--charcoal);
+    border-radius: 10px;
+    font-size: 0.68rem;
+    font-weight: 700;
+    padding: 1px 6px;
+    min-width: 16px;
+    text-align: center;
+  }
+  .log-filter-dropdown {
+    position: absolute;
+    right: 0;
+    top: calc(100% + 6px);
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    padding: 12px;
+    min-width: 175px;
+    z-index: 200;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  }
+  .log-filter-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 9px;
+  }
+  .log-filter-opt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.85rem;
+    color: var(--cream);
+    padding: 5px 2px;
+    cursor: pointer;
+    border-radius: 6px;
+  }
+  .log-filter-opt input[type="checkbox"] {
+    width: 15px;
+    height: 15px;
+    accent-color: var(--sage);
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .log-filter-clear {
+    width: 100%;
+    margin-top: 10px;
+    background: none;
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 7px;
+    color: var(--cream-dim);
+    font-family: inherit;
+    font-size: 0.76rem;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  /* med editor pill count row */
+  .med-pills-row {
+    display: flex; align-items: center; gap: 8px;
+    margin-top: 8px;
+  }
+  .med-pills-label {
+    font-size: 0.76rem; color: var(--cream-dim); flex-shrink: 0;
+  }
+  .med-pills-select {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 8px;
+    color: var(--cream);
+    font-family: inherit;
+    font-size: 0.82rem;
+    padding: 4px 8px;
+    cursor: pointer;
+  }
+
   .tl-gap {
     font-size: 0.8rem;
     color: var(--cream-dim);
@@ -2062,7 +2241,23 @@
   </button>
 
   <div id="timelineWrap">
-    <div class="section-label">Log</div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:2px;">
+      <div class="section-label" style="margin-bottom:0;">Log</div>
+      <div style="position:relative;">
+        <button id="logFilterBtn" class="log-filter-btn">Filter <span id="logFilterBadge" class="log-filter-badge" style="display:none;"></span></button>
+        <div id="logFilterDropdown" class="log-filter-dropdown" style="display:none;">
+          <div class="log-filter-title">Show entry types</div>
+          <label class="log-filter-opt"><input type="checkbox" value="pee"> 💦 Pee</label>
+          <label class="log-filter-opt"><input type="checkbox" value="poop"> 💩 Poop</label>
+          <label class="log-filter-opt"><input type="checkbox" value="feed"> 🍽️ Feed</label>
+          <label class="log-filter-opt"><input type="checkbox" value="accident"> ⚠️ Accident</label>
+          <label class="log-filter-opt"><input type="checkbox" value="note"> 📝 Note</label>
+          <label class="log-filter-opt"><input type="checkbox" value="med"> 💊 Med</label>
+          <label class="log-filter-opt"><input type="checkbox" value="sleep"> 😴 Sleep / Wake</label>
+          <button id="logFilterClear" class="log-filter-clear">Clear filter</button>
+        </div>
+      </div>
+    </div>
     <div class="timeline" id="timeline">
       <div class="empty-state">
         <span class="paw">🐶</span>
@@ -2621,6 +2816,29 @@
   </div>
 </div>
 
+<!-- Add Vet Photo modal -->
+<div class="modal-overlay" id="vetPhotoOverlay">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-title">📷 Add photo for vet</div>
+    <div style="margin-bottom:12px;">
+      <input type="file" id="vetPhotoInput" accept="image/*" capture="environment" style="display:none;">
+      <div id="vetPhotoPreview" style="width:100%;height:140px;background:var(--charcoal-light);border-radius:10px;border:1.5px dashed var(--charcoal-lighter);display:flex;align-items:center;justify-content:center;cursor:pointer;overflow:hidden;" onclick="document.getElementById('vetPhotoInput').click()">
+        <span id="vetPhotoPreviewLabel" style="font-size:0.82rem;color:var(--cream-dim);">Tap to take or choose a photo</span>
+      </div>
+    </div>
+    <label class="modal-label">Caption (optional)</label>
+    <input type="text" class="modal-input" id="vetPhotoCaption" placeholder="e.g. Skin irritation on left ear">
+    <label class="modal-label" style="margin-top:10px;">Link to a flagged note (optional)</label>
+    <select class="modal-input" id="vetPhotoLinkSelect" style="cursor:pointer;">
+      <option value="">— none —</option>
+    </select>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" id="vetPhotoCancel">Cancel</button>
+      <button class="modal-btn confirm" id="vetPhotoSave">Save photo</button>
+    </div>
+  </div>
+</div>
+
 <!-- Add / Edit Visit full-page sheet -->
 <div class="modal-overlay" id="vetVisitFormOverlay">
   <div class="modal about-modal" id="vetVisitFormModal">
@@ -2685,9 +2903,16 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '3.0.3'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '3.1.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '3.1.0', date: 'Jun 2026', notes: [
+    'Vet checklist — flagged notes now appear at the top of Vet Care as a "Before your visit" checklist; check each item off as you tell the vet, or mark all at once',
+    'Vet photos — attach photos to a vet visit (skin issues, stool, limping, etc.) from the Vet Care page; optionally link a photo to a specific flagged note',
+    'Medication pill count — set pills per dose (0.25–4) in the medication editor; shown in the Vet Care medications summary',
+    'Log filter — filter the log by entry type (pee, poop, feed, accident, note, med, sleep) using a multi-select dropdown',
+    'Added "bleeding" and "hacking" to the vet flag keyword list'
+  ]},
   { version: '3.0.3', date: 'Jun 2026', notes: [
     'Log a vaccination directly from the + button — select from the pre-populated vaccine list or type a custom one, and it creates a quick visit record automatically'
   ]},
@@ -2910,7 +3135,8 @@ const SYNC_CONFIG_KEY = 'sync-config';
 // to mention this at the vet" nudge.
 const VET_FLAG_KEYWORDS = [
   'vomit', 'vomiting', 'threw up', 'throwing up',
-  'blood', 'bloody',
+  'blood', 'bloody', 'bleeding',
+  'hacking',
   'limp', 'limping',
   'lethargic', 'lethargy',
   "won't eat", 'wont eat', 'not eating', 'refusing food', 'appetite',
@@ -2973,6 +3199,8 @@ let deletedMedIds = {};   // med id -> deletion timestamp (so removed meds don't
 let deletedExpenseIds = {}; // expense id -> deletion timestamp
 let vetVisits = []; // {id, dogId, ts, reason, notes, doctorEmail, vaccinations:[{name}], prescriptions:[{id,name,dosage,frequency,startDate,notes}]}
 let deletedVetVisitIds = {}; // id -> deletion timestamp
+let vetPhotos = []; // {id, dogId, ts, photo, note, linkedEntryId, vetDiscussed, vetDiscussedAt}
+let deletedVetPhotoIds = {}; // id -> deletion timestamp
 let quizResponses = []; // {id, dogId, weekStart, person, answers: {traitKey: levelIndex|null}, ts}
 let quizNames = { person1: '', person2: '' }; // remembered names of the two people answering
 let syncConfig = { apiKey: '', binId: '' };
@@ -3116,6 +3344,7 @@ function applyTombstones() {
   dogs = dogs.filter(d => !deletedDogIds[d.id]);
   expenses = expenses.filter(x => !deletedExpenseIds[x.id]);
   vetVisits = vetVisits.filter(v => !deletedVetVisitIds[v.id]);
+  vetPhotos = vetPhotos.filter(p => !deletedVetPhotoIds[p.id]);
   Object.keys(feedGoals).forEach(id => { if (deletedDogIds[id]) delete feedGoals[id]; });
   if (!dogs.find(d => d.id === activeDogId) && dogs.length) {
     activeDogId = dogs[0].id;
@@ -3164,6 +3393,8 @@ async function loadAll() {
     deletedExpenseIds = data.deletedExpenseIds || {};
     vetVisits = data.vetVisits || [];
     deletedVetVisitIds = data.deletedVetVisitIds || {};
+    vetPhotos = data.vetPhotos || [];
+    deletedVetPhotoIds = data.deletedVetPhotoIds || {};
     if (dogs.length === 0) {
       const d = defaultData();
       dogs = d.dogs; activeDogId = d.activeDogId; feedGoals = d.feedGoals;
@@ -3178,15 +3409,15 @@ async function loadAll() {
   } catch (e) {
     const d = defaultData();
     dogs = d.dogs; activeDogId = d.activeDogId; entries = d.entries; feedGoals = d.feedGoals;
-    expenses = []; vetVisits = [];
+    expenses = []; vetVisits = []; vetPhotos = [];
     quizResponses = []; quizNames = { person1: '', person2: '' };
-    deletedEntryIds = {}; deletedDogIds = {}; deletedVetVisitIds = {};
+    deletedEntryIds = {}; deletedDogIds = {}; deletedVetVisitIds = {}; deletedVetPhotoIds = {};
   }
   entries.sort((a,b) => a.ts - b.ts);
 }
 
 function persistLocal() {
-  const data = { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds };
+  const data = { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, vetPhotos, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds, deletedVetPhotoIds };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -3308,6 +3539,11 @@ async function pullFromCloud() {
           if (!deletedVetVisitIds[id]) deletedVetVisitIds[id] = remote.deletedVetVisitIds[id];
         }
       }
+      if (remote.deletedVetPhotoIds) {
+        for (const id in remote.deletedVetPhotoIds) {
+          if (!deletedVetPhotoIds[id]) deletedVetPhotoIds[id] = remote.deletedVetPhotoIds[id];
+        }
+      }
       if (Array.isArray(remote.dogs) && remote.dogs.length) {
         const localById = {}; dogs.forEach(d => localById[d.id] = d);
         remote.dogs.forEach(rd => {
@@ -3380,6 +3616,15 @@ async function pullFromCloud() {
         remote.vetVisits.forEach(v => { if (!byId[v.id]) byId[v.id] = v; });
         vetVisits = Object.values(byId).sort((a,b) => a.ts - b.ts);
       }
+      if (Array.isArray(remote.vetPhotos)) {
+        const byId = {};
+        vetPhotos.forEach(p => byId[p.id] = p);
+        remote.vetPhotos.forEach(rp => {
+          const lp = byId[rp.id];
+          if (!lp || (rp.updatedAt || 0) >= (lp.updatedAt || 0)) byId[rp.id] = rp;
+        });
+        vetPhotos = Object.values(byId).sort((a,b) => a.ts - b.ts);
+      }
       if (remote.activeDogId && !dogs.find(d => d.id === activeDogId)) {
         activeDogId = remote.activeDogId;
       }
@@ -3414,7 +3659,7 @@ async function pushToCloud() {
   }
   syncInFlight = true;
   try {
-    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds });
+    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, vetPhotos, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds, deletedVetPhotoIds });
     clearStorageIssue();
     syncDiag.lastPushAt = Date.now();
     syncDiag.lastEntryCount = entries.length;
@@ -3434,7 +3679,7 @@ async function pushToCloud() {
 }
 
 async function createCloudBin() {
-  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds });
+  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, vetPhotos, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds, deletedVetPhotoIds });
   const id = data.metadata && data.metadata.id;
   if (!id) throw new Error('No bin id returned');
   return id;
@@ -3761,6 +4006,8 @@ function medNameFor(medId) {
   return med ? med.name : 'Medication';
 }
 
+let logTypeFilter = new Set(); // empty = show all
+
 function renderTimeline() {
   const wrap = document.getElementById('timeline');
   let myEntries = activeEntries();
@@ -3771,10 +4018,20 @@ function renderTimeline() {
     const { end } = currentWeekWindow();
     myEntries = myEntries.filter(e => e.ts >= end);
   }
+  // Apply type filter (sleep/wake share a checkbox value of 'sleep')
+  if (logTypeFilter.size > 0) {
+    myEntries = myEntries.filter(e => {
+      const t = (e.type === 'wake') ? 'sleep' : e.type;
+      return logTypeFilter.has(t);
+    });
+  }
+
   if (myEntries.length === 0) {
-    wrap.innerHTML = weekCardShown
-      ? `<div class="empty-state"><span class="paw">🐶</span>This week is just getting started — new logs will show up here.</div>`
-      : `<div class="empty-state"><span class="paw">🐶</span>Log pees, poops, feedings, and notes — everything shows up here.</div>`;
+    wrap.innerHTML = logTypeFilter.size > 0
+      ? `<div class="empty-state"><span class="paw">🐶</span>No entries match the current filter.</div>`
+      : weekCardShown
+        ? `<div class="empty-state"><span class="paw">🐶</span>This week is just getting started — new logs will show up here.</div>`
+        : `<div class="empty-state"><span class="paw">🐶</span>Log pees, poops, feedings, and notes — everything shows up here.</div>`;
     return;
   }
   const sorted = [...myEntries].sort((a,b) => b.ts - a.ts);
@@ -3992,7 +4249,7 @@ function renderVetHomeCard() {
       <p class="vet-home-card-since">No visits logged yet</p>
       <div class="vet-bar-track"><div class="vet-bar-fill" style="width:0%"></div></div>
       <div class="vet-bar-labels"><span></span><span>${intervalLabel}</span></div>
-      <p class="vet-home-card-rec">${freq || 'Tap to log a visit'}</p>`;
+      <p class="vet-home-card-rec">${freq || ''}</p>`;
     return;
   }
 
@@ -4051,6 +4308,56 @@ function renderVetPage() {
 
   let html = '';
 
+  // Before-visit checklist: flagged notes + vet photos
+  const flaggedNotes = getVetFlaggedNotes();
+  const dogPhotos = vetPhotos.filter(p => p.dogId === dog.id).sort((a,b) => a.ts - b.ts);
+  const hasChecklist = flaggedNotes.length > 0 || dogPhotos.length > 0;
+  html += `<div class="vet-section" id="vetChecklistSection">
+    <div class="vet-section-title">Before your visit</div>`;
+  if (!hasChecklist) {
+    html += `<p style="font-size:0.82rem;color:var(--cream-dim);margin:0 0 8px;">No flagged notes yet — notes mentioning symptoms like vomiting, limping, or blood will appear here as a checklist.</p>`;
+  } else {
+    const undiscussedNotes = flaggedNotes.filter(n => !n.vetDiscussed);
+    const undiscussedPhotos = dogPhotos.filter(p => !p.vetDiscussed);
+    const anyUndiscussed = undiscussedNotes.length + undiscussedPhotos.length > 0;
+    if (anyUndiscussed) {
+      html += `<button class="vet-checklist-markall" id="vetMarkAllBtn">✓ Mark all as discussed</button>`;
+    }
+    flaggedNotes.forEach(n => {
+      const fmtDate = new Date(n.ts).toLocaleDateString(undefined, {month:'short',day:'numeric',year:'numeric'});
+      const flags = getVetFlags(n.text).join(', ');
+      html += `<div class="vet-checklist-row${n.vetDiscussed ? ' discussed' : ''}" data-checklist-entry="${n.id}">
+        <input type="checkbox" class="vet-checklist-cb" ${n.vetDiscussed ? 'checked' : ''} data-cb-entry="${n.id}">
+        <div class="vet-checklist-body">
+          <div class="vet-checklist-date">${fmtDate} · 🩺 ${escapeHtml(flags)}</div>
+          <div class="vet-checklist-text">${escapeHtml(n.text)}</div>
+        </div>
+      </div>`;
+      // Show linked photos inline under their note
+      dogPhotos.filter(p => p.linkedEntryId === n.id).forEach(p => {
+        html += `<div class="vet-checklist-row${p.vetDiscussed ? ' discussed' : ''}" data-checklist-photo="${p.id}" style="margin-left:28px;">
+          <input type="checkbox" class="vet-checklist-cb" ${p.vetDiscussed ? 'checked' : ''} data-cb-photo="${p.id}">
+          <div class="vet-checklist-body">
+            <div class="vet-checklist-date">${new Date(p.ts).toLocaleDateString(undefined,{month:'short',day:'numeric'})}${p.note ? ' · ' + escapeHtml(p.note) : ''}</div>
+          </div>
+          <img class="vet-checklist-photo-thumb" src="${p.photo}" data-lightbox-photo="${p.id}" alt="vet photo">
+        </div>`;
+      });
+    });
+    // Unlinked photos
+    dogPhotos.filter(p => !p.linkedEntryId).forEach(p => {
+      html += `<div class="vet-checklist-row${p.vetDiscussed ? ' discussed' : ''}" data-checklist-photo="${p.id}">
+        <input type="checkbox" class="vet-checklist-cb" ${p.vetDiscussed ? 'checked' : ''} data-cb-photo="${p.id}">
+        <div class="vet-checklist-body">
+          <div class="vet-checklist-date">${new Date(p.ts).toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})} · 📷 Photo${p.note ? ' · ' + escapeHtml(p.note) : ''}</div>
+        </div>
+        <img class="vet-checklist-photo-thumb" src="${p.photo}" data-lightbox-photo="${p.id}" alt="vet photo">
+      </div>`;
+    });
+  }
+  html += `<button class="vet-plus-btn" id="addVetPhotoBtn" style="margin-top:8px;">📷 Add photo for vet</button>
+  </div>`;
+
   // Health issues
   html += `<div class="vet-section">
     <div class="vet-section-title">Health Issues</div>
@@ -4085,6 +4392,7 @@ function renderVetPage() {
   html += `<div class="vet-section">
     <div class="vet-section-title">Visit History</div>
     <button class="modal-btn confirm" id="addVetVisitBtn" style="width:100%;margin-bottom:12px;">+ Log New Visit</button>`;
+
   if (visits.length === 0) {
     html += `<p style="font-size:0.82rem;color:var(--cream-dim);margin:0;">No visits yet.</p>`;
   } else {
@@ -4110,7 +4418,7 @@ function renderVetPage() {
           const lastDose = [...entries].reverse().find(e => e.type==='med' && e.medId===m.id);
           html += `<div class="vet-rx-card">
             <div class="vet-rx-name">${escapeHtml(m.name)}</div>
-            <div class="vet-rx-detail">${escapeHtml(m.dosage||'')}${m.dosage&&m.count?' · ':''}${m.count} dose${m.count>1?'s':''}/day${lastDose?' · Last: '+fmtRelativeDate(lastDose.ts):''}</div>
+            <div class="vet-rx-detail">${escapeHtml(m.dosage||'')}${m.dosage?' · ':''}${m.count} dose${m.count>1?'s':''}/day${m.pillsPerDose && m.pillsPerDose !== 1 ? ' · '+m.pillsPerDose+' pill'+(m.pillsPerDose!==1?'s':'')+'/dose' : ''}${lastDose?' · Last: '+fmtRelativeDate(lastDose.ts):''}</div>
           </div>`;
         });
       }
@@ -4143,6 +4451,66 @@ function renderVetPage() {
   html += `</div>`;
 
   content.innerHTML = html;
+
+  // Checklist: toggle "told the vet" on note entries
+  content.querySelectorAll('[data-cb-entry]').forEach(cb => {
+    cb.addEventListener('change', async () => {
+      const id = cb.getAttribute('data-cb-entry');
+      const entry = entries.find(e => e.id === id);
+      if (!entry) return;
+      entry.vetDiscussed = cb.checked;
+      entry.vetDiscussedAt = cb.checked ? Date.now() : null;
+      entry.updatedAt = Date.now();
+      await persistAndSync();
+      renderVetPage();
+    });
+  });
+
+  // Checklist: toggle "told the vet" on vet photos
+  content.querySelectorAll('[data-cb-photo]').forEach(cb => {
+    cb.addEventListener('change', async () => {
+      const id = cb.getAttribute('data-cb-photo');
+      const photo = vetPhotos.find(p => p.id === id);
+      if (!photo) return;
+      photo.vetDiscussed = cb.checked;
+      photo.vetDiscussedAt = cb.checked ? Date.now() : null;
+      photo.updatedAt = Date.now();
+      await persistAndSync();
+      renderVetPage();
+    });
+  });
+
+  // Mark all as discussed
+  const markAllBtn = document.getElementById('vetMarkAllBtn');
+  if (markAllBtn) {
+    markAllBtn.addEventListener('click', async () => {
+      if (!confirm('Mark all flagged notes and photos as discussed with the vet?')) return;
+      const now = Date.now();
+      getVetFlaggedNotes().filter(n => !n.vetDiscussed).forEach(n => {
+        n.vetDiscussed = true; n.vetDiscussedAt = now; n.updatedAt = now;
+      });
+      vetPhotos.filter(p => p.dogId === dog.id && !p.vetDiscussed).forEach(p => {
+        p.vetDiscussed = true; p.vetDiscussedAt = now; p.updatedAt = now;
+      });
+      await persistAndSync();
+      renderVetPage();
+    });
+  }
+
+  // Add vet photo button
+  document.getElementById('addVetPhotoBtn').addEventListener('click', () => openVetPhotoModal());
+
+  // Photo lightbox
+  content.querySelectorAll('[data-lightbox-photo]').forEach(img => {
+    img.addEventListener('click', () => {
+      const src = img.src;
+      const lb = document.createElement('div');
+      lb.className = 'vet-photo-lightbox-overlay';
+      lb.innerHTML = `<button class="vet-photo-lightbox-close">✕</button><img src="${src}">`;
+      lb.addEventListener('click', e => { if (e.target === lb || e.target.classList.contains('vet-photo-lightbox-close')) lb.remove(); });
+      document.body.appendChild(lb);
+    });
+  });
 
   // Expand/collapse visit cards
   content.querySelectorAll('.vet-visit-card').forEach(card => {
@@ -4189,6 +4557,73 @@ function renderVetPage() {
   // Add visit
   document.getElementById('addVetVisitBtn').addEventListener('click', () => openAddVisitForm());
 }
+
+// ---- Vet Photo modal ----
+let vetPhotoData = null; // base64 data URL while modal is open
+
+function openVetPhotoModal() {
+  vetPhotoData = null;
+  document.getElementById('vetPhotoInput').value = '';
+  document.getElementById('vetPhotoCaption').value = '';
+  const preview = document.getElementById('vetPhotoPreview');
+  preview.style.backgroundImage = '';
+  preview.style.backgroundSize = '';
+  preview.style.backgroundPosition = '';
+  document.getElementById('vetPhotoPreviewLabel').style.display = 'block';
+
+  // Populate link dropdown with current dog's flagged notes
+  const sel = document.getElementById('vetPhotoLinkSelect');
+  sel.innerHTML = '<option value="">— none —</option>';
+  getVetFlaggedNotes().forEach(n => {
+    const date = new Date(n.ts).toLocaleDateString(undefined, {month:'short',day:'numeric'});
+    const preview_text = n.text.length > 40 ? n.text.slice(0, 40) + '…' : n.text;
+    const opt = document.createElement('option');
+    opt.value = n.id;
+    opt.textContent = `${date}: ${preview_text}`;
+    sel.appendChild(opt);
+  });
+
+  document.getElementById('vetPhotoOverlay').classList.add('show');
+}
+
+document.getElementById('vetPhotoInput').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  vetPhotoData = await downscaleImage(file, 800);
+  const preview = document.getElementById('vetPhotoPreview');
+  preview.style.backgroundImage = `url(${vetPhotoData})`;
+  preview.style.backgroundSize = 'cover';
+  preview.style.backgroundPosition = 'center';
+  document.getElementById('vetPhotoPreviewLabel').style.display = 'none';
+});
+
+document.getElementById('vetPhotoCancel').addEventListener('click', () => {
+  document.getElementById('vetPhotoOverlay').classList.remove('show');
+});
+document.getElementById('vetPhotoOverlay').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('vetPhotoOverlay')) document.getElementById('vetPhotoOverlay').classList.remove('show');
+});
+
+document.getElementById('vetPhotoSave').addEventListener('click', async () => {
+  if (!vetPhotoData) { alert('Please choose a photo first.'); return; }
+  const dog = activeDog();
+  if (!dog) return;
+  const note = document.getElementById('vetPhotoCaption').value.trim();
+  const linkedEntryId = document.getElementById('vetPhotoLinkSelect').value || null;
+  vetPhotos.push({
+    id: uid('vp'),
+    dogId: dog.id,
+    ts: Date.now(),
+    photo: vetPhotoData,
+    note,
+    linkedEntryId,
+    vetDiscussed: false,
+    vetDiscussedAt: null
+  });
+  await persistAndSync();
+  document.getElementById('vetPhotoOverlay').classList.remove('show');
+  renderVetPage();
+});
 
 // ---- Add Visit form ----
 let vetFormVaccines = []; // [{name}]
@@ -5415,8 +5850,9 @@ function makeMedEditor(listElId, addBtnId) {
   let working = []; // [{id, name, type, count, times:[]}]
   const listEl = document.getElementById(listElId);
 
+  const PILL_OPTIONS = [0.25, 0.5, 0.75, 1, 1.25, 1.5, 1.75, 2, 2.5, 3, 3.5, 4];
   function blankMed() {
-    return { id: uid('med'), name: '', type: '', count: 1, times: ['morning'] };
+    return { id: uid('med'), name: '', type: '', count: 1, times: ['morning'], pillsPerDose: 1 };
   }
   // Pull current values out of the DOM inputs into `working` so nothing typed
   // is lost when we re-render (e.g. after tapping a time chip).
@@ -5426,8 +5862,10 @@ function makeMedEditor(listElId, addBtnId) {
       if (!working[idx]) return;
       const nameEl = row.querySelector('.med-name');
       const typeEl = row.querySelector('.med-type');
+      const pillsEl = row.querySelector('.med-pills-select');
       if (nameEl) working[idx].name = nameEl.value;
       if (typeEl) working[idx].type = typeEl.value;
+      if (pillsEl) working[idx].pillsPerDose = parseFloat(pillsEl.value) || 1;
     });
   }
   function render() {
@@ -5436,6 +5874,12 @@ function makeMedEditor(listElId, addBtnId) {
         ${m.archived ? '<div class="med-archived-tag">Archived</div>' : ''}
         <input type="text" class="modal-input med-name" placeholder="Medication name (e.g. Apoquel)" value="${escapeHtml(m.name)}">
         <input type="text" class="modal-input med-type" placeholder="Type / notes (e.g. allergy pill, 5mg)" value="${escapeHtml(m.type)}">
+        <div class="med-pills-row">
+          <span class="med-pills-label">Pills per dose:</span>
+          <select class="med-pills-select">
+            ${PILL_OPTIONS.map(v => `<option value="${v}"${(m.pillsPerDose||1) === v ? ' selected' : ''}>${v}</option>`).join('')}
+          </select>
+        </div>
         <div class="med-times-row">
           ${MED_TIMES.map(t => `<button type="button" class="med-time-chip ${m.times.includes(t) ? 'active' : ''}" data-time="${t}">${t}</button>`).join('')}
         </div>
@@ -5449,6 +5893,7 @@ function makeMedEditor(listElId, addBtnId) {
       const idx = parseInt(row.getAttribute('data-idx'), 10);
       row.querySelector('.med-name').addEventListener('input', e => { working[idx].name = e.target.value; });
       row.querySelector('.med-type').addEventListener('input', e => { working[idx].type = e.target.value; });
+      row.querySelector('.med-pills-select').addEventListener('change', e => { working[idx].pillsPerDose = parseFloat(e.target.value) || 1; });
       row.querySelectorAll('.med-time-chip').forEach(chip => {
         chip.addEventListener('click', () => {
           syncFromDom();
@@ -5494,6 +5939,7 @@ function makeMedEditor(listElId, addBtnId) {
           type: m.type.trim(),
           times: m.times.length ? MED_TIMES.filter(x => m.times.includes(x)) : ['morning'],
           count: (m.times.length || 1),
+          pillsPerDose: m.pillsPerDose || 1,
           archived: !!m.archived
         }));
     },
@@ -5906,6 +6352,54 @@ document.getElementById('changelogClose').addEventListener('click', () => change
 changelogModalOverlay.addEventListener('click', (e) => { if (e.target === changelogModalOverlay) changelogModalOverlay.classList.remove('show'); });
 
 // Floating action button + action sheet
+// Log filter dropdown
+(function() {
+  const btn = document.getElementById('logFilterBtn');
+  const dropdown = document.getElementById('logFilterDropdown');
+  const badge = document.getElementById('logFilterBadge');
+  const clearBtn = document.getElementById('logFilterClear');
+
+  function updateBadge() {
+    const count = logTypeFilter.size;
+    if (count > 0) {
+      badge.textContent = count;
+      badge.style.display = 'inline';
+      btn.classList.add('active');
+    } else {
+      badge.style.display = 'none';
+      btn.classList.remove('active');
+    }
+  }
+
+  btn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    dropdown.style.display = dropdown.style.display === 'none' ? 'block' : 'none';
+  });
+
+  dropdown.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+    cb.addEventListener('change', () => {
+      if (cb.checked) logTypeFilter.add(cb.value);
+      else logTypeFilter.delete(cb.value);
+      updateBadge();
+      renderTimeline();
+    });
+  });
+
+  clearBtn.addEventListener('click', () => {
+    logTypeFilter.clear();
+    dropdown.querySelectorAll('input[type="checkbox"]').forEach(cb => cb.checked = false);
+    updateBadge();
+    dropdown.style.display = 'none';
+    renderTimeline();
+  });
+
+  document.addEventListener('click', (e) => {
+    if (!btn.contains(e.target) && !dropdown.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+})();
+
 const fabSheetOverlay = document.getElementById('fabSheetOverlay');
 function closeFabSheet() { fabSheetOverlay.classList.remove('show'); }
 document.getElementById('fab').addEventListener('click', () => {
