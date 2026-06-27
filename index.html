@@ -463,27 +463,8 @@
     color: var(--cream-dim);
     margin-bottom: 8px;
   }
-  .med-swipe-wrap {
-    position: relative;
-    margin: 0 -8px;
-    overflow: hidden;
-    border-radius: 10px;
-  }
-  .med-swipe-wrap + .med-swipe-wrap {
+  .med-status-row + .med-status-row {
     border-top: 1px solid var(--charcoal-lighter);
-  }
-  .med-swipe-action {
-    position: absolute;
-    top: 0; right: 0; bottom: 0;
-    width: 84px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--coral);
-    color: #FFFCF6;
-    font-size: 0.78rem;
-    font-weight: 700;
-    cursor: pointer;
   }
   .med-status-row {
     position: relative;
@@ -522,6 +503,247 @@
     margin-left: 8px;
   }
   .med-status-count.done { color: var(--sage); }
+
+  /* ---- Vet home card ---- */
+  .vet-home-card {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    -webkit-tap-highlight-color: transparent;
+    box-sizing: border-box;
+  }
+  .vet-home-card-toprow {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 14px;
+  }
+  .vet-home-card-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+  .vet-home-card-since {
+    font-size: 0.75rem;
+    color: var(--cream-dim);
+    margin: 0 0 3px;
+  }
+  .vet-home-card-bignum {
+    font-family: 'Fraunces', Georgia, serif;
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin: 0 0 12px;
+    line-height: 1;
+  }
+  .vet-home-card-bignum.overdue { color: var(--coral); }
+  .vet-bar-track {
+    background: var(--charcoal-lighter);
+    border-radius: 4px;
+    height: 6px;
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 6px;
+  }
+  .vet-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    background: var(--sage);
+    transition: width 0.3s ease;
+  }
+  .vet-bar-fill.overdue { background: var(--coral); }
+  .vet-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.68rem;
+    color: var(--cream-dim);
+    margin-bottom: 10px;
+  }
+  .vet-bar-labels.overdue { color: var(--coral); }
+  .vet-home-card-rec {
+    font-size: 0.73rem;
+    color: var(--cream-dim);
+    margin: 0;
+  }
+  .vet-home-card-rec.overdue { color: var(--coral); }
+
+  /* ---- Vet full-page content ---- */
+  .vet-section { margin-bottom: 22px; }
+  .vet-section-title {
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 10px;
+  }
+  .vet-visit-card {
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 12px;
+    padding: 13px 14px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+  .vet-visit-card-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  .vet-visit-card-reason {
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--cream);
+  }
+  .vet-visit-card-date {
+    font-size: 0.74rem;
+    color: var(--cream-dim);
+    flex-shrink: 0;
+    margin-left: 8px;
+  }
+  .vet-visit-card-body {
+    display: none;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--charcoal-lighter);
+  }
+  .vet-visit-card-body.open { display: block; }
+  .vet-visit-sub {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: var(--sage);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin: 10px 0 5px;
+  }
+  .vet-visit-sub:first-child { margin-top: 0; }
+  .vet-tag {
+    display: inline-block;
+    background: rgba(138,178,138,0.18);
+    color: var(--cream);
+    font-size: 0.76rem;
+    border-radius: 20px;
+    padding: 3px 10px;
+    margin: 2px 3px 2px 0;
+  }
+  .vet-tag.pending { background: rgba(210,170,90,0.22); color: var(--amber, #C8962A); }
+  .vet-rx-card {
+    background: var(--charcoal);
+    border-radius: 8px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+  }
+  .vet-rx-name { font-size: 0.85rem; font-weight: 700; color: var(--cream); }
+  .vet-rx-detail { font-size: 0.74rem; color: var(--cream-dim); margin-top: 2px; }
+  .vet-visit-note { font-size: 0.82rem; color: var(--cream-dim); line-height: 1.5; }
+  .vet-email-link { color: var(--sage); font-size: 0.8rem; text-decoration: none; }
+
+  /* health issues */
+  .health-issue-row {
+    display: flex;
+    align-items: center;
+    background: var(--charcoal-light);
+    border: 1px solid var(--charcoal-lighter);
+    border-radius: 10px;
+    padding: 10px 12px;
+    margin-bottom: 6px;
+    gap: 10px;
+  }
+  .health-issue-name { flex: 1; font-size: 0.88rem; font-weight: 600; color: var(--cream); }
+  .health-issue-del {
+    background: none; border: none; color: var(--cream-dim);
+    font-size: 1.1rem; cursor: pointer; padding: 2px 6px; font-family: inherit;
+  }
+
+  /* ---- Add Visit form ---- */
+  .vet-form-block {
+    background: var(--charcoal);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 12px;
+  }
+  .vet-form-block-title {
+    font-size: 0.7rem; font-weight: 700; color: var(--sage);
+    text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 10px;
+  }
+  .vet-med-ro-row {
+    display: flex; justify-content: space-between; align-items: flex-start;
+    padding: 6px 0; border-bottom: 1px solid var(--charcoal-lighter); font-size: 0.82rem;
+  }
+  .vet-med-ro-row:last-child { border-bottom: none; }
+  .vet-med-ro-name { font-weight: 600; color: var(--cream); }
+  .vet-med-ro-detail { color: var(--cream-dim); font-size: 0.75rem; text-align: right; max-width: 50%; }
+  .vet-added-list { margin-bottom: 8px; }
+  .vet-added-row {
+    display: flex; align-items: center; gap: 8px;
+    background: var(--charcoal-light); border-radius: 8px;
+    padding: 7px 10px; margin-bottom: 5px; font-size: 0.82rem;
+  }
+  .vet-added-row span { flex: 1; color: var(--cream); }
+  .vet-added-del { background: none; border: none; color: var(--cream-dim); cursor: pointer; font-size: 1rem; padding: 0 4px; font-family: inherit; }
+  .vet-plus-btn {
+    display: flex; align-items: center; justify-content: center; gap: 6px;
+    background: none; border: 1.5px dashed var(--charcoal-lighter);
+    border-radius: 8px; padding: 9px 12px; font-size: 0.83rem;
+    color: var(--sage); cursor: pointer; font-family: inherit; width: 100%;
+  }
+  .autocomplete-wrap { position: relative; }
+  .autocomplete-dropdown {
+    position: absolute; top: 100%; left: 0; right: 0;
+    background: var(--charcoal-light); border: 1px solid var(--charcoal-lighter);
+    border-radius: 10px; z-index: 250; max-height: 190px; overflow-y: auto;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.2); margin-top: 2px;
+  }
+  .autocomplete-opt {
+    padding: 10px 14px; font-size: 0.88rem; color: var(--cream);
+    cursor: pointer; border-bottom: 1px solid var(--charcoal-lighter);
+  }
+  .autocomplete-opt:last-child { border-bottom: none; }
+  .autocomplete-opt:active { background: rgba(138,109,158,0.15); }
+
+  /* ---- Picker bottom sheet ---- */
+  .picker-overlay {
+    position: fixed; inset: 0; background: rgba(0,0,0,0.45);
+    z-index: 400; display: none; align-items: flex-end; justify-content: center;
+  }
+  .picker-overlay.show { display: flex; }
+  .picker-sheet {
+    background: var(--charcoal-light); border-radius: 20px 20px 0 0;
+    width: 100%; max-width: 480px; max-height: 80vh;
+    display: flex; flex-direction: column; padding: 16px 16px 32px;
+  }
+  .picker-sheet-title {
+    font-size: 0.95rem; font-weight: 700; color: var(--cream);
+    margin-bottom: 12px; text-align: center;
+  }
+  .picker-search {
+    background: var(--charcoal); border: 1.5px solid var(--charcoal-lighter);
+    border-radius: 10px; padding: 10px 14px; font-size: 0.9rem;
+    color: var(--cream); font-family: inherit; width: 100%; box-sizing: border-box; margin-bottom: 10px;
+  }
+  .picker-list { overflow-y: auto; flex: 1; }
+  .picker-opt {
+    padding: 12px 12px; border-bottom: 1px solid var(--charcoal-lighter);
+    font-size: 0.88rem; color: var(--cream); cursor: pointer;
+  }
+  .picker-opt:last-child { border-bottom: none; }
+  .picker-opt:active { background: rgba(138,109,158,0.12); }
+  .picker-opt.add-new { color: var(--sage); font-weight: 700; }
+  .picker-cancel {
+    margin-top: 10px; background: var(--charcoal); border: none;
+    border-radius: 10px; padding: 12px; font-size: 0.9rem;
+    color: var(--cream-dim); cursor: pointer; font-family: inherit; width: 100%;
+  }
 
   .med-edit-row {
     background: var(--charcoal);
@@ -1831,6 +2053,14 @@
     <div class="about-card-chevron">›</div>
   </button>
 
+  <button class="vet-home-card" id="vetHomeCard" style="display:none;">
+    <div class="vet-home-card-toprow">
+      <div class="vet-home-card-title">🩺 Vet Care</div>
+      <span style="color:var(--sage);font-size:1.1rem;">›</span>
+    </div>
+    <div id="vetHomeCardInner"></div>
+  </button>
+
   <div id="timelineWrap">
     <div class="section-label">Log</div>
     <div class="timeline" id="timeline">
@@ -1852,6 +2082,7 @@
     <button class="fab-sheet-opt" id="fabLogFeed">🍽️ Log a feeding</button>
     <button class="fab-sheet-opt" id="fabLogMed" style="display:none;">💊 Log medication</button>
     <button class="fab-sheet-opt" id="fabAddMed">💊 Add a medication</button>
+    <button class="fab-sheet-opt" id="fabLogVaccine">💉 Log a vaccination</button>
     <button class="fab-sheet-opt" id="fabAddNote">📝 Add a note</button>
     <button class="fab-sheet-opt" id="fabAddDog">🐶 Add a dog</button>
     <button class="fab-sheet-opt" id="fabCustomTime">🕒 Log with a custom time</button>
@@ -2379,12 +2610,107 @@
   </div>
 </div>
 
+<!-- Vet full-page sheet -->
+<div class="modal-overlay" id="vetPageOverlay">
+  <div class="modal about-modal" id="vetPageModal">
+    <div class="about-topbar">
+      <span class="about-topbar-title" id="vetPageTitle">🩺 Vet Care</span>
+      <button class="about-topbar-close" id="vetPageClose" aria-label="Close">✕</button>
+    </div>
+    <div id="vetPageContent" style="padding:16px;"></div>
+  </div>
+</div>
+
+<!-- Add / Edit Visit full-page sheet -->
+<div class="modal-overlay" id="vetVisitFormOverlay">
+  <div class="modal about-modal" id="vetVisitFormModal">
+    <div class="about-topbar">
+      <span class="about-topbar-title" id="vetVisitFormTitle">Log Vet Visit</span>
+      <button class="about-topbar-close" id="vetVisitFormClose" aria-label="Close">✕</button>
+    </div>
+    <div id="vetVisitFormContent" style="padding:16px;"></div>
+  </div>
+</div>
+
+<!-- Picker bottom sheet (vaccines & drugs) -->
+<div class="picker-overlay" id="pickerOverlay">
+  <div class="picker-sheet">
+    <div class="picker-sheet-title" id="pickerTitle">Select</div>
+    <input type="text" class="picker-search" id="pickerSearch" placeholder="Search…">
+    <div class="picker-list" id="pickerList"></div>
+    <button class="picker-cancel" id="pickerCancel">Cancel</button>
+  </div>
+</div>
+
+<!-- Rx detail mini-modal (dosage/frequency/start date) -->
+<div class="modal-overlay" id="rxDetailOverlay">
+  <div class="modal" style="max-width:360px;">
+    <div class="modal-title" id="rxDetailTitle">Add Prescription</div>
+    <label class="modal-label">Dosage</label>
+    <input type="text" class="modal-input" id="rxDosage" placeholder="e.g. 50mg">
+    <label class="modal-label" style="margin-top:10px;">Times per day</label>
+    <input type="number" class="modal-input" id="rxFrequency" min="1" max="10" value="1">
+    <label class="modal-label" style="margin-top:10px;">Start date</label>
+    <input type="date" class="modal-input" id="rxStartDate">
+    <label class="modal-label" style="margin-top:10px;">Notes (optional)</label>
+    <input type="text" class="modal-input" id="rxNotes" placeholder="e.g. with food">
+    <label class="modal-label" style="margin-top:10px;">Also add to medication tracker?</label>
+    <div style="display:flex;gap:10px;margin-top:4px;">
+      <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--cream);cursor:pointer;">
+        <input type="radio" name="rxAddToMeds" id="rxAddToMedsYes" value="yes" checked> Yes
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;font-size:0.88rem;color:var(--cream);cursor:pointer;">
+        <input type="radio" name="rxAddToMeds" id="rxAddToMedsNo" value="no"> No
+      </label>
+    </div>
+    <div class="modal-footer">
+      <button class="modal-btn cancel" id="rxDetailCancel">Cancel</button>
+      <button class="modal-btn confirm" id="rxDetailConfirm">Add</button>
+    </div>
+  </div>
+</div>
+
+<!-- Health issue add modal -->
+<div class="modal-overlay" id="healthIssueOverlay">
+  <div class="modal" style="max-width:340px;">
+    <div class="modal-title">Add Health Issue</div>
+    <input type="text" class="modal-input" id="healthIssueName" placeholder="e.g. Seasonal allergies">
+    <div class="modal-footer">
+      <button class="modal-btn cancel" id="healthIssueCancel">Cancel</button>
+      <button class="modal-btn confirm" id="healthIssueConfirm">Add</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '2.10.0'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '3.0.3'; // Versioning: new feature => bump minor (1.X.0); bug fix => bump patch (1.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '3.0.3', date: 'Jun 2026', notes: [
+    'Log a vaccination directly from the + button — select from the pre-populated vaccine list or type a custom one, and it creates a quick visit record automatically'
+  ]},
+  { version: '3.0.2', date: 'Jun 2026', notes: [
+    'Vet Care home card now shows a progress bar — time elapsed since last visit fills toward the recommended interval, turns coral when overdue'
+  ]},
+  { version: '3.0.1', date: 'Jun 2026', notes: [
+    'Fixed: scratching, itching, and itchy now trigger the 🩺 Flag for vet badge on notes'
+  ]},
+  { version: '3.0.0', date: 'Jun 2026', notes: [
+    'New: Vet Care — log vet visits with reason, notes, vaccines given, and new prescriptions; a 🩺 card on the home screen shows your last visit and an age-based checkup suggestion',
+    'Vaccinations recorded in any visit are aggregated into a full vaccination history on the Vet Care page',
+    'New prescriptions added during a visit are auto-added to the medication tracker (with a Pending badge if the start date is in the future)',
+    'Health issues (allergies, chronic conditions) can be tracked as a persistent list on the Vet Care page',
+    'Tap the doctor email field to open your mail app and send notes directly to your vet'
+  ]},
+  { version: '2.10.2', date: 'Jun 2026', notes: [
+    'Fixed: removed swipe-to-archive gesture from medication rows — Archive and Remove are now only available inside Manage medications'
+  ]},
+  { version: '2.10.1', date: 'Jun 2026', notes: [
+    'Fixed: daily feeding goal now sticks after saving — a merge-order bug caused the cloud copy to overwrite a just-saved local change during the pull-before-push sync step',
+    'Fixed: the red Archive overlay on medication rows no longer bleeds through on top of the "X of X today" count — a missing z-index let the absolutely-positioned action sit above the row button'
+  ]},
   { version: '2.10.0', date: 'Jun 2026', notes: [
     'Medications can now be archived instead of deleted — swipe a medication left on the home screen, or use Archive in Manage medications. Archived meds stop showing up to log but move to a read-only "Past medications" list on the Profile page, and their dose history still counts in stats'
   ]},
@@ -2594,9 +2920,37 @@ const VET_FLAG_KEYWORDS = [
   'wheezing', 'coughing', 'cough',
   'pain', 'whimper', 'whimpering', 'yelp', 'yelping',
   'rash', 'hot spot',
+  'scratch', 'scratching', 'itch', 'itching', 'itchy',
   'discharge',
   'won\u2019t walk', 'wont walk', 'won\u2019t put weight', 'favoring'
 ];
+
+const VISIT_REASONS = [
+  'Annual wellness exam','Vaccination','Illness','Injury','Follow-up',
+  'Dental cleaning','Spay / neuter','Parasite prevention','Skin / coat issue',
+  'Digestive issue','Respiratory issue','Behavioral concern','Emergency',
+  'Weight check','Post-surgery check','Eye / ear issue','Allergy check'
+];
+const VACCINE_LIST = [
+  'Rabies','DHPP (Distemper/Parvo)','Bordetella','Leptospirosis','Lyme',
+  'Canine Influenza','DAP','Heartworm test','Flea / tick prevention','CIV H3N2','CIV H3N8'
+];
+const DRUG_LIST = [
+  'Amoxicillin','Amoxicillin-Clavulanate','Apoquel','Atopica','Azithromycin',
+  'Benadryl (diphenhydramine)','Carprofen','Cephalexin','Clindamycin','Cytopoint',
+  'Doxycycline','Enrofloxacin','Famotidine','Gabapentin','Hydroxyzine',
+  'Meloxicam','Metronidazole','Omeprazole','Phenobarbital','Prednisolone',
+  'Prednisone','Trazodone','Tramadol','Trimethoprim-Sulfa','Ursodiol'
+];
+// Age-based vet visit frequency recommendation
+function vetVisitFrequency(dog) {
+  if (!dog || !dog.birthdate) return null;
+  const ageMonths = (Date.now() - new Date(dog.birthdate).getTime()) / (1000 * 60 * 60 * 24 * 30.4);
+  if (ageMonths < 6) return 'Every 3–4 weeks during puppy series';
+  if (ageMonths < 12) return 'Every 6 months recommended';
+  if (ageMonths < 84) return 'Once a year recommended'; // 7 years
+  return 'Every 6 months recommended (senior)';
+}
 
 // Returns the subset of VET_FLAG_KEYWORDS found in a note's text (lowercase
 // substring match), or an empty array if none match. Run whenever a note is
@@ -2617,6 +2971,8 @@ let deletedEntryIds = {}; // id -> deletion timestamp (tombstones so deletes syn
 let deletedDogIds = {};   // id -> deletion timestamp
 let deletedMedIds = {};   // med id -> deletion timestamp (so removed meds don't resync)
 let deletedExpenseIds = {}; // expense id -> deletion timestamp
+let vetVisits = []; // {id, dogId, ts, reason, notes, doctorEmail, vaccinations:[{name}], prescriptions:[{id,name,dosage,frequency,startDate,notes}]}
+let deletedVetVisitIds = {}; // id -> deletion timestamp
 let quizResponses = []; // {id, dogId, weekStart, person, answers: {traitKey: levelIndex|null}, ts}
 let quizNames = { person1: '', person2: '' }; // remembered names of the two people answering
 let syncConfig = { apiKey: '', binId: '' };
@@ -2759,6 +3115,7 @@ function applyTombstones() {
   entries = entries.filter(e => !deletedEntryIds[e.id]);
   dogs = dogs.filter(d => !deletedDogIds[d.id]);
   expenses = expenses.filter(x => !deletedExpenseIds[x.id]);
+  vetVisits = vetVisits.filter(v => !deletedVetVisitIds[v.id]);
   Object.keys(feedGoals).forEach(id => { if (deletedDogIds[id]) delete feedGoals[id]; });
   if (!dogs.find(d => d.id === activeDogId) && dogs.length) {
     activeDogId = dogs[0].id;
@@ -2773,6 +3130,7 @@ function defaultData() {
     entries: [],
     feedGoals: { [dogId]: { min: 3, max: 3 } },
     expenses: [],
+    vetVisits: [],
     quizResponses: [],
     quizNames: { person1: '', person2: '' }
   };
@@ -2804,6 +3162,8 @@ async function loadAll() {
     deletedDogIds = data.deletedDogIds || {};
     deletedMedIds = data.deletedMedIds || {};
     deletedExpenseIds = data.deletedExpenseIds || {};
+    vetVisits = data.vetVisits || [];
+    deletedVetVisitIds = data.deletedVetVisitIds || {};
     if (dogs.length === 0) {
       const d = defaultData();
       dogs = d.dogs; activeDogId = d.activeDogId; feedGoals = d.feedGoals;
@@ -2812,20 +3172,21 @@ async function loadAll() {
     dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
     dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
     dogs.forEach(d => { if (d.breed === undefined) d.breed = ''; if (d.birthdate === undefined) d.birthdate = null; if (d.birthdateReason === undefined) d.birthdateReason = ''; });
+    dogs.forEach(d => { if (!Array.isArray(d.healthIssues)) d.healthIssues = []; });
     backfillFosterStart();
     applyTombstones();
   } catch (e) {
     const d = defaultData();
     dogs = d.dogs; activeDogId = d.activeDogId; entries = d.entries; feedGoals = d.feedGoals;
-    expenses = [];
+    expenses = []; vetVisits = [];
     quizResponses = []; quizNames = { person1: '', person2: '' };
-    deletedEntryIds = {}; deletedDogIds = {};
+    deletedEntryIds = {}; deletedDogIds = {}; deletedVetVisitIds = {};
   }
   entries.sort((a,b) => a.ts - b.ts);
 }
 
 function persistLocal() {
-  const data = { dogs, activeDogId, entries, feedGoals, expenses, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds };
+  const data = { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds };
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
@@ -2942,6 +3303,11 @@ async function pullFromCloud() {
           if (!deletedExpenseIds[id]) deletedExpenseIds[id] = remote.deletedExpenseIds[id];
         }
       }
+      if (remote.deletedVetVisitIds) {
+        for (const id in remote.deletedVetVisitIds) {
+          if (!deletedVetVisitIds[id]) deletedVetVisitIds[id] = remote.deletedVetVisitIds[id];
+        }
+      }
       if (Array.isArray(remote.dogs) && remote.dogs.length) {
         const localById = {}; dogs.forEach(d => localById[d.id] = d);
         remote.dogs.forEach(rd => {
@@ -2983,7 +3349,10 @@ async function pullFromCloud() {
         entries = Object.values(byId).sort((a,b) => a.ts - b.ts);
       }
       if (remote.feedGoals) {
-        feedGoals = { ...feedGoals, ...remote.feedGoals };
+        // Local wins on conflict: if the user just changed the goal on this device
+        // and a pull-before-push runs immediately after, the remote (stale) value
+        // must not overwrite what was just saved locally.
+        feedGoals = { ...remote.feedGoals, ...feedGoals };
       }
       if (Array.isArray(remote.expenses)) {
         const byId = {};
@@ -3005,11 +3374,18 @@ async function pullFromCloud() {
           person2: quizNames.person2 || remote.quizNames.person2 || ''
         };
       }
+      if (Array.isArray(remote.vetVisits)) {
+        const byId = {};
+        vetVisits.forEach(v => byId[v.id] = v);
+        remote.vetVisits.forEach(v => { if (!byId[v.id]) byId[v.id] = v; });
+        vetVisits = Object.values(byId).sort((a,b) => a.ts - b.ts);
+      }
       if (remote.activeDogId && !dogs.find(d => d.id === activeDogId)) {
         activeDogId = remote.activeDogId;
       }
       dogs.forEach(d => { if (!d.sex || d.sex === 'unknown') d.sex = 'female'; });
       dogs.forEach(d => { if (!Array.isArray(d.meds)) d.meds = []; });
+      dogs.forEach(d => { if (!Array.isArray(d.healthIssues)) d.healthIssues = []; });
       dogs.forEach(d => { if (d.breed === undefined) d.breed = ''; if (d.birthdate === undefined) d.birthdate = null; if (d.birthdateReason === undefined) d.birthdateReason = ''; });
       backfillFosterStart();
       // Apply tombstones AFTER merging so deleted items don't get re-added
@@ -3038,7 +3414,7 @@ async function pushToCloud() {
   }
   syncInFlight = true;
   try {
-    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, expenses, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds });
+    await jsonbinRequest('PUT', `/b/${syncConfig.binId}`, { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds });
     clearStorageIssue();
     syncDiag.lastPushAt = Date.now();
     syncDiag.lastEntryCount = entries.length;
@@ -3058,7 +3434,7 @@ async function pushToCloud() {
 }
 
 async function createCloudBin() {
-  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, expenses, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds });
+  const data = await jsonbinRequest('POST', '/b', { dogs, activeDogId, entries, feedGoals, expenses, vetVisits, quizResponses, quizNames, deletedEntryIds, deletedDogIds, deletedMedIds, deletedExpenseIds, deletedVetVisitIds });
   const id = data.metadata && data.metadata.id;
   if (!id) throw new Error('No bin id returned');
   return id;
@@ -3535,16 +3911,13 @@ function renderMedication() {
     const given = medDosesToday(m.id);
     const done = given >= m.count;
     const timesLabel = m.times && m.times.length ? m.times.join(', ') : 'daily';
-    return `<div class="med-swipe-wrap" data-swipe-med-id="${m.id}">
-      <div class="med-swipe-action" data-archive-med-id="${m.id}">Archive</div>
-      <button class="med-status-row${done ? ' done' : ''}" data-med-id="${m.id}">
+    return `<button class="med-status-row${done ? ' done' : ''}" data-med-id="${m.id}">
         <div class="med-status-info">
           <div class="med-status-name">${escapeHtml(m.name)}</div>
           <div class="med-status-sub">${escapeHtml(m.type ? m.type + ' · ' : '')}${escapeHtml(timesLabel)}</div>
         </div>
         <div class="med-status-count ${done ? 'done' : ''}">${done ? '✓ ' : ''}${given} of ${m.count} today</div>
-      </button>
-    </div>`;
+      </button>`;
   }).join('');
 
   list.querySelectorAll('.med-status-row[data-med-id]').forEach(row => {
@@ -3560,66 +3933,6 @@ function renderMedication() {
       logMedDose(medId);
     });
   });
-
-  list.querySelectorAll('.med-swipe-wrap[data-swipe-med-id]').forEach(wrap => {
-    attachSwipeToArchive(wrap, () => archiveMedication(wrap.getAttribute('data-swipe-med-id')));
-  });
-}
-
-// Horizontal swipe-left-to-reveal gesture for a single row. Reveals a fixed-width
-// action behind the row; swiping past a threshold and releasing fires onReveal's
-// action button (tap-to-confirm), it doesn't auto-fire on release.
-const SWIPE_REVEAL_PX = 84;
-function attachSwipeToArchive(wrapEl, onArchive) {
-  const row = wrapEl.querySelector('.med-status-row');
-  const actionEl = wrapEl.querySelector('.med-swipe-action');
-  if (!row || !actionEl) return;
-  let startX = null, startY = null, dx = 0, dragging = false, decided = false, isOpen = false;
-
-  function setX(px) {
-    dx = Math.max(-SWIPE_REVEAL_PX, Math.min(0, px));
-    row.style.transform = `translateX(${dx}px)`;
-  }
-  function settle(open) {
-    isOpen = open;
-    row.style.transition = 'transform 0.18s ease';
-    setX(open ? -SWIPE_REVEAL_PX : 0);
-    setTimeout(() => { row.style.transition = ''; }, 180);
-  }
-  row.addEventListener('touchstart', (e) => {
-    startX = e.touches[0].clientX;
-    startY = e.touches[0].clientY;
-    dragging = true;
-    decided = false;
-  }, { passive: true });
-  row.addEventListener('touchmove', (e) => {
-    if (!dragging) return;
-    const curX = e.touches[0].clientX, curY = e.touches[0].clientY;
-    const deltaX = curX - startX, deltaY = curY - startY;
-    if (!decided) {
-      // Wait until the gesture is clearly horizontal before committing, so a
-      // vertical scroll through the card isn't hijacked into a swipe.
-      if (Math.abs(deltaX) < 8 && Math.abs(deltaY) < 8) return;
-      if (Math.abs(deltaY) > Math.abs(deltaX)) { dragging = false; return; }
-      decided = true;
-    }
-    setX(Math.min(isOpen ? -SWIPE_REVEAL_PX : 0, deltaX));
-  }, { passive: true });
-  row.addEventListener('touchend', () => {
-    if (!dragging) return;
-    dragging = false;
-    if (!decided) return; // a plain tap — let the click handler run normally
-    settle(dx <= -SWIPE_REVEAL_PX / 2);
-  });
-  row.addEventListener('click', (e) => {
-    // If the row is currently swiped open, a tap on it just closes it again
-    // rather than logging a dose.
-    if (isOpen) { e.stopPropagation(); settle(false); }
-  }, { capture: true });
-  actionEl.addEventListener('click', () => {
-    settle(false);
-    onArchive();
-  });
 }
 
 // Archive a medication: stop it from showing as something to log going forward,
@@ -3633,6 +3946,512 @@ async function archiveMedication(medId) {
   renderAll();
   showToast(`${med.name} archived — moved to Past medications`);
 }
+
+// ============================================================
+// VET CARE
+// ============================================================
+
+function dogVetVisits(dogId) {
+  return vetVisits.filter(v => v.dogId === (dogId || activeDogId)).sort((a,b) => b.ts - a.ts);
+}
+
+function fmtRelativeDate(ts) {
+  const days = Math.floor((Date.now() - ts) / 86400000);
+  if (days === 0) return 'Today';
+  if (days === 1) return 'Yesterday';
+  if (days < 14) return `${days} days ago`;
+  if (days < 60) return `${Math.round(days/7)} weeks ago`;
+  const months = Math.round(days/30.4);
+  return `${months} month${months===1?'':'s'} ago`;
+}
+
+// ---- Home card ----
+function vetIntervalDays(dog) {
+  if (!dog || !dog.birthdate) return 365; // default annual
+  const ageMonths = (Date.now() - new Date(dog.birthdate).getTime()) / (1000 * 60 * 60 * 24 * 30.4);
+  if (ageMonths < 6) return 28;   // puppy: ~4 weeks
+  if (ageMonths < 12) return 180; // young pup: 6 months
+  if (ageMonths < 84) return 365; // adult: annual
+  return 182;                      // senior: 6 months
+}
+
+function renderVetHomeCard() {
+  const dog = activeDog();
+  const card = document.getElementById('vetHomeCard');
+  if (!dog) { card.style.display = 'none'; return; }
+  card.style.display = 'flex';
+
+  const inner = document.getElementById('vetHomeCardInner');
+  const visits = dogVetVisits(dog.id);
+  const intervalDays = vetIntervalDays(dog);
+  const intervalLabel = intervalDays <= 30 ? `${intervalDays} days` : intervalDays < 365 ? `${Math.round(intervalDays/30)} months` : '12 months';
+  const freq = vetVisitFrequency(dog);
+
+  if (visits.length === 0) {
+    inner.innerHTML = `
+      <p class="vet-home-card-since">No visits logged yet</p>
+      <div class="vet-bar-track"><div class="vet-bar-fill" style="width:0%"></div></div>
+      <div class="vet-bar-labels"><span></span><span>${intervalLabel}</span></div>
+      <p class="vet-home-card-rec">${freq || 'Tap to log a visit'}</p>`;
+    return;
+  }
+
+  const lastVisit = visits[0];
+  const daysSince = Math.floor((Date.now() - lastVisit.ts) / 86400000);
+  const pct = Math.min(100, Math.round((daysSince / intervalDays) * 100));
+  const overdue = daysSince >= intervalDays;
+
+  // Human-readable elapsed
+  let elapsed;
+  if (daysSince === 0) elapsed = 'Today';
+  else if (daysSince < 14) elapsed = `${daysSince} day${daysSince===1?'':'s'}`;
+  else if (daysSince < 60) elapsed = `${Math.round(daysSince/7)} weeks`;
+  else elapsed = `${Math.round(daysSince/30.4)} months`;
+
+  const cls = overdue ? ' overdue' : '';
+  const nextMsg = overdue
+    ? `Overdue — recommended every ${intervalLabel}.`
+    : `Recommended every ${intervalLabel}. Next checkup at ${intervalLabel}.`;
+
+  inner.innerHTML = `
+    <p class="vet-home-card-since">Since last visit</p>
+    <p class="vet-home-card-bignum${cls}">${elapsed}</p>
+    <div class="vet-bar-track"><div class="vet-bar-fill${cls}" style="width:${pct}%"></div></div>
+    <div class="vet-bar-labels${cls}"><span>Last visit</span><span>${intervalLabel}</span></div>
+    <p class="vet-home-card-rec${cls}">${nextMsg}</p>`;
+}
+
+// ---- Full-page vet sheet ----
+function openVetPage() {
+  document.getElementById('vetPageOverlay').classList.add('show');
+  const dog = activeDog();
+  document.getElementById('vetPageTitle').textContent = '🩺 Vet Care' + (dog ? ' · ' + dog.name : '');
+  renderVetPage();
+}
+function closeVetPage() {
+  document.getElementById('vetPageOverlay').classList.remove('show');
+}
+
+function renderVetPage() {
+  const dog = activeDog();
+  const content = document.getElementById('vetPageContent');
+  if (!dog) { content.innerHTML = '<p style="color:var(--cream-dim)">No dog selected.</p>'; return; }
+
+  const visits = dogVetVisits(dog.id);
+  const healthIssues = dog.healthIssues || [];
+
+  // Aggregate all vaccinations from all visits (most recent per name)
+  const vacMap = {};
+  [...visits].reverse().forEach(v => {
+    (v.vaccinations || []).forEach(vacc => {
+      vacMap[vacc.name] = vacc;
+    });
+  });
+  const allVaccines = Object.values(vacMap);
+
+  let html = '';
+
+  // Health issues
+  html += `<div class="vet-section">
+    <div class="vet-section-title">Health Issues</div>
+    <div id="vetHealthIssueList">`;
+  if (healthIssues.length === 0) {
+    html += `<p style="font-size:0.82rem;color:var(--cream-dim);margin:0 0 8px;">None recorded.</p>`;
+  } else {
+    healthIssues.forEach(h => {
+      html += `<div class="health-issue-row">
+        <span class="health-issue-name">${escapeHtml(h.name)}</span>
+        <button class="health-issue-del" data-del-issue="${h.id}">✕</button>
+      </div>`;
+    });
+  }
+  html += `</div>
+    <button class="vet-plus-btn" id="addHealthIssueBtn">+ Add health issue</button>
+  </div>`;
+
+  // Vaccinations
+  html += `<div class="vet-section">
+    <div class="vet-section-title">Vaccinations</div>`;
+  if (allVaccines.length === 0) {
+    html += `<p style="font-size:0.82rem;color:var(--cream-dim);margin:0 0 8px;">None recorded.</p>`;
+  } else {
+    allVaccines.forEach(v => {
+      html += `<span class="vet-tag">${escapeHtml(v.name)}</span>`;
+    });
+  }
+  html += `</div>`;
+
+  // Visit history
+  html += `<div class="vet-section">
+    <div class="vet-section-title">Visit History</div>
+    <button class="modal-btn confirm" id="addVetVisitBtn" style="width:100%;margin-bottom:12px;">+ Log New Visit</button>`;
+  if (visits.length === 0) {
+    html += `<p style="font-size:0.82rem;color:var(--cream-dim);margin:0;">No visits yet.</p>`;
+  } else {
+    visits.forEach(v => {
+      const dateStr = new Date(v.ts).toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+      const rxCount = (v.prescriptions||[]).length;
+      const vaccCount = (v.vaccinations||[]).length;
+      html += `<div class="vet-visit-card" data-visit-id="${v.id}">
+        <div class="vet-visit-card-head">
+          <div class="vet-visit-card-reason">${escapeHtml(v.reason||'Visit')}</div>
+          <div class="vet-visit-card-date">${dateStr}</div>
+        </div>
+        <div style="font-size:0.74rem;color:var(--cream-dim);margin-top:4px;">
+          ${vaccCount ? `${vaccCount} vaccine${vaccCount>1?'s':''} · ` : ''}${rxCount ? `${rxCount} Rx` : ''}
+        </div>
+        <div class="vet-visit-card-body" id="vbody-${v.id}">`;
+
+      // Current meds at time of visit (for reference — just active meds now)
+      const activeMeds = (dog.meds||[]).filter(m=>!m.archived);
+      if (activeMeds.length) {
+        html += `<div class="vet-visit-sub">Current Medications</div>`;
+        activeMeds.forEach(m => {
+          const lastDose = [...entries].reverse().find(e => e.type==='med' && e.medId===m.id);
+          html += `<div class="vet-rx-card">
+            <div class="vet-rx-name">${escapeHtml(m.name)}</div>
+            <div class="vet-rx-detail">${escapeHtml(m.dosage||'')}${m.dosage&&m.count?' · ':''}${m.count} dose${m.count>1?'s':''}/day${lastDose?' · Last: '+fmtRelativeDate(lastDose.ts):''}</div>
+          </div>`;
+        });
+      }
+
+      if ((v.vaccinations||[]).length) {
+        html += `<div class="vet-visit-sub">Vaccines Given</div>`;
+        v.vaccinations.forEach(vc => { html += `<span class="vet-tag">${escapeHtml(vc.name)}</span>`; });
+      }
+      if ((v.prescriptions||[]).length) {
+        html += `<div class="vet-visit-sub">Prescriptions</div>`;
+        v.prescriptions.forEach(rx => {
+          const isPending = rx.startDate && new Date(rx.startDate) > new Date();
+          html += `<div class="vet-rx-card">
+            <div class="vet-rx-name">${escapeHtml(rx.name)}${isPending?` <span class="vet-tag pending" style="font-size:0.7rem;padding:2px 7px;">Pending ${new Date(rx.startDate).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>`:''}</div>
+            <div class="vet-rx-detail">${[rx.dosage, rx.frequency ? rx.frequency+'×/day' : '', rx.notes].filter(Boolean).join(' · ')}</div>
+          </div>`;
+        });
+      }
+      if (v.notes) {
+        html += `<div class="vet-visit-sub">Notes</div><div class="vet-visit-note">${escapeHtml(v.notes)}</div>`;
+      }
+      if (v.doctorEmail) {
+        html += `<div class="vet-visit-sub">Doctor</div><a class="vet-email-link" href="mailto:${escapeHtml(v.doctorEmail)}">${escapeHtml(v.doctorEmail)}</a>`;
+      }
+
+      html += `<button class="modal-btn cancel" data-del-visit="${v.id}" style="width:100%;margin-top:12px;font-size:0.78rem;">Delete visit</button>`;
+      html += `</div></div>`;
+    });
+  }
+  html += `</div>`;
+
+  content.innerHTML = html;
+
+  // Expand/collapse visit cards
+  content.querySelectorAll('.vet-visit-card').forEach(card => {
+    card.addEventListener('click', (e) => {
+      if (e.target.closest('[data-del-visit]')) return;
+      const id = card.getAttribute('data-visit-id');
+      const body = document.getElementById('vbody-' + id);
+      if (body) body.classList.toggle('open');
+    });
+  });
+
+  // Delete visit
+  content.querySelectorAll('[data-del-visit]').forEach(btn => {
+    btn.addEventListener('click', async (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-del-visit');
+      if (!confirm('Delete this visit record?')) return;
+      deletedVetVisitIds[id] = Date.now();
+      vetVisits = vetVisits.filter(v => v.id !== id);
+      await persistAndSync();
+      renderVetPage();
+      renderVetHomeCard();
+    });
+  });
+
+  // Delete health issue
+  content.querySelectorAll('[data-del-issue]').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const id = btn.getAttribute('data-del-issue');
+      const dog = activeDog();
+      if (!dog) return;
+      dog.healthIssues = (dog.healthIssues||[]).filter(h => h.id !== id);
+      await persistAndSync();
+      renderVetPage();
+    });
+  });
+
+  // Add health issue
+  document.getElementById('addHealthIssueBtn').addEventListener('click', () => {
+    document.getElementById('healthIssueName').value = '';
+    document.getElementById('healthIssueOverlay').classList.add('show');
+  });
+
+  // Add visit
+  document.getElementById('addVetVisitBtn').addEventListener('click', () => openAddVisitForm());
+}
+
+// ---- Add Visit form ----
+let vetFormVaccines = []; // [{name}]
+let vetFormRx = [];       // [{id, name, dosage, frequency, startDate, notes}]
+let pickerCallback = null;
+
+function openAddVisitForm() {
+  vetFormVaccines = [];
+  vetFormRx = [];
+  document.getElementById('vetVisitFormTitle').textContent = 'Log Vet Visit';
+  renderAddVisitForm();
+  document.getElementById('vetVisitFormOverlay').classList.add('show');
+}
+
+function renderAddVisitForm() {
+  const dog = activeDog();
+  const activeMeds = dog ? (dog.meds||[]).filter(m=>!m.archived) : [];
+  const today = new Date().toISOString().slice(0,10);
+
+  let html = `
+  <div class="vet-form-block">
+    <div class="vet-form-block-title">Visit Details</div>
+    <label class="modal-label">Date</label>
+    <input type="date" class="modal-input" id="vfDate" value="${today}">
+    <label class="modal-label" style="margin-top:10px;">Reason for visit</label>
+    <div class="autocomplete-wrap">
+      <input type="text" class="modal-input" id="vfReason" placeholder="e.g. Annual wellness exam" autocomplete="off">
+      <div class="autocomplete-dropdown" id="vfReasonDropdown" style="display:none;"></div>
+    </div>
+    <label class="modal-label" style="margin-top:10px;">Doctor / clinic email (optional)</label>
+    <input type="email" class="modal-input" id="vfEmail" placeholder="vet@clinic.com">
+  </div>`;
+
+  // Current meds (read-only)
+  if (activeMeds.length) {
+    html += `<div class="vet-form-block">
+      <div class="vet-form-block-title">Current Medications</div>`;
+    activeMeds.forEach(m => {
+      const lastDose = [...entries].reverse().find(e=>e.type==='med'&&e.medId===m.id);
+      html += `<div class="vet-med-ro-row">
+        <span class="vet-med-ro-name">${escapeHtml(m.name)}</span>
+        <span class="vet-med-ro-detail">${escapeHtml(m.dosage||'')} · ${m.count}×/day${lastDose?' · Last: '+fmtRelativeDate(lastDose.ts):''}</span>
+      </div>`;
+    });
+    html += `</div>`;
+  }
+
+  // Vaccines
+  html += `<div class="vet-form-block">
+    <div class="vet-form-block-title">Vaccines Given</div>
+    <div class="vet-added-list" id="vfVaccineList"></div>
+    <button class="vet-plus-btn" id="vfAddVaccineBtn">+ Add vaccine</button>
+  </div>`;
+
+  // Prescriptions
+  html += `<div class="vet-form-block">
+    <div class="vet-form-block-title">New Prescriptions</div>
+    <div class="vet-added-list" id="vfRxList"></div>
+    <button class="vet-plus-btn" id="vfAddRxBtn">+ Add prescription</button>
+  </div>`;
+
+  // Notes
+  html += `<div class="vet-form-block">
+    <div class="vet-form-block-title">Visit Notes</div>
+    <textarea class="modal-input" id="vfNotes" rows="4" placeholder="What did the vet say?" style="resize:none;height:auto;"></textarea>
+  </div>`;
+
+  html += `<div style="display:flex;gap:10px;margin-bottom:32px;">
+    <button class="modal-btn cancel" id="vfCancel" style="flex:1;">Cancel</button>
+    <button class="modal-btn confirm" id="vfSave" style="flex:1;">Save Visit</button>
+  </div>`;
+
+  document.getElementById('vetVisitFormContent').innerHTML = html;
+
+  renderVfVaccineList();
+  renderVfRxList();
+
+  // Reason autocomplete
+  const reasonInput = document.getElementById('vfReason');
+  const reasonDrop = document.getElementById('vfReasonDropdown');
+  reasonInput.addEventListener('input', () => {
+    const q = reasonInput.value.toLowerCase();
+    const matches = q.length < 1 ? VISIT_REASONS : VISIT_REASONS.filter(r => r.toLowerCase().includes(q));
+    if (matches.length === 0) { reasonDrop.style.display = 'none'; return; }
+    reasonDrop.innerHTML = matches.map(r => `<div class="autocomplete-opt" data-val="${escapeHtml(r)}">${escapeHtml(r)}</div>`).join('');
+    reasonDrop.style.display = 'block';
+    reasonDrop.querySelectorAll('.autocomplete-opt').forEach(opt => {
+      opt.addEventListener('click', () => { reasonInput.value = opt.getAttribute('data-val'); reasonDrop.style.display = 'none'; });
+    });
+  });
+  reasonInput.addEventListener('focus', () => { if (!reasonInput.value) reasonInput.dispatchEvent(new Event('input')); });
+  document.addEventListener('click', (e) => { if (!e.target.closest('.autocomplete-wrap')) reasonDrop.style.display = 'none'; }, { once: false });
+
+  document.getElementById('vfAddVaccineBtn').addEventListener('click', () => openPicker('Vaccines', VACCINE_LIST, (name) => {
+    if (!vetFormVaccines.find(v=>v.name===name)) vetFormVaccines.push({name});
+    renderVfVaccineList();
+  }));
+
+  document.getElementById('vfAddRxBtn').addEventListener('click', () => openPicker('Medications / Drugs', DRUG_LIST, (name) => {
+    openRxDetail(name);
+  }));
+
+  document.getElementById('vfCancel').addEventListener('click', () => {
+    document.getElementById('vetVisitFormOverlay').classList.remove('show');
+  });
+
+  document.getElementById('vfSave').addEventListener('click', () => saveVisitForm());
+}
+
+function renderVfVaccineList() {
+  const el = document.getElementById('vfVaccineList');
+  if (!el) return;
+  el.innerHTML = vetFormVaccines.map((v,i) => `
+    <div class="vet-added-row">
+      <span>${escapeHtml(v.name)}</span>
+      <button class="vet-added-del" data-vi="${i}">✕</button>
+    </div>`).join('');
+  el.querySelectorAll('[data-vi]').forEach(btn => {
+    btn.addEventListener('click', () => { vetFormVaccines.splice(parseInt(btn.getAttribute('data-vi')),1); renderVfVaccineList(); });
+  });
+}
+
+function renderVfRxList() {
+  const el = document.getElementById('vfRxList');
+  if (!el) return;
+  el.innerHTML = vetFormRx.map((rx,i) => `
+    <div class="vet-added-row">
+      <span>${escapeHtml(rx.name)}${rx.dosage?' · '+escapeHtml(rx.dosage):''}${rx.frequency?' · '+rx.frequency+'×/day':''}</span>
+      <button class="vet-added-del" data-ri="${i}">✕</button>
+    </div>`).join('');
+  el.querySelectorAll('[data-ri]').forEach(btn => {
+    btn.addEventListener('click', () => { vetFormRx.splice(parseInt(btn.getAttribute('data-ri')),1); renderVfRxList(); });
+  });
+}
+
+async function saveVisitForm() {
+  const dateVal = document.getElementById('vfDate').value;
+  const reason = document.getElementById('vfReason').value.trim() || 'Vet visit';
+  const notes = document.getElementById('vfNotes').value.trim();
+  const doctorEmail = document.getElementById('vfEmail').value.trim();
+  const ts = dateVal ? new Date(dateVal).setHours(12,0,0,0) : Date.now();
+
+  const visit = {
+    id: uid('vet'),
+    dogId: activeDogId,
+    ts,
+    reason,
+    notes,
+    doctorEmail,
+    vaccinations: vetFormVaccines.slice(),
+    prescriptions: vetFormRx.slice()
+  };
+  vetVisits.push(visit);
+
+  // Auto-add prescriptions to med tracker
+  const dog = activeDog();
+  if (dog) {
+    for (const rx of vetFormRx) {
+      const existing = (dog.meds||[]).find(m => m.name.toLowerCase() === rx.name.toLowerCase());
+      if (!existing) {
+        if (!Array.isArray(dog.meds)) dog.meds = [];
+        dog.meds.push({
+          id: uid('med'),
+          name: rx.name,
+          type: 'Prescription',
+          dosage: rx.dosage || '',
+          count: parseInt(rx.frequency)||1,
+          times: [],
+          notes: rx.notes || '',
+          startDate: rx.startDate || null,
+          archived: false
+        });
+      }
+    }
+  }
+
+  await persistAndSync();
+  document.getElementById('vetVisitFormOverlay').classList.remove('show');
+  renderVetPage();
+  renderAll();
+  showToast('Visit saved');
+}
+
+// ---- Generic picker bottom sheet ----
+function openPicker(title, list, onSelect) {
+  pickerCallback = onSelect;
+  document.getElementById('pickerTitle').textContent = title;
+  document.getElementById('pickerSearch').value = '';
+  renderPickerList(list, '');
+  document.getElementById('pickerOverlay').classList.add('show');
+
+  const searchEl = document.getElementById('pickerSearch');
+  searchEl.oninput = () => renderPickerList(list, searchEl.value);
+  searchEl.focus();
+}
+
+function renderPickerList(list, query) {
+  const q = query.toLowerCase().trim();
+  const matches = q ? list.filter(x => x.toLowerCase().includes(q)) : list;
+  const el = document.getElementById('pickerList');
+  let html = matches.map(x => `<div class="picker-opt" data-val="${escapeHtml(x)}">${escapeHtml(x)}</div>`).join('');
+  const exactMatch = list.some(x => x.toLowerCase() === q);
+  if (q && !exactMatch) {
+    html += `<div class="picker-opt add-new" data-val="${escapeHtml(query)}">+ Add "${escapeHtml(query)}"</div>`;
+  }
+  el.innerHTML = html;
+  el.querySelectorAll('.picker-opt').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const val = opt.getAttribute('data-val');
+      document.getElementById('pickerOverlay').classList.remove('show');
+      if (pickerCallback) pickerCallback(val);
+    });
+  });
+}
+
+// ---- Rx detail modal ----
+let pendingRxName = '';
+function openRxDetail(name) {
+  pendingRxName = name;
+  document.getElementById('rxDetailTitle').textContent = `Add: ${name}`;
+  document.getElementById('rxDosage').value = '';
+  document.getElementById('rxFrequency').value = '1';
+  document.getElementById('rxStartDate').value = new Date().toISOString().slice(0,10);
+  document.getElementById('rxNotes').value = '';
+  document.getElementById('rxAddToMedsYes').checked = true;
+  document.getElementById('rxDetailOverlay').classList.add('show');
+}
+
+// ---- Health issue add modal ----
+document.getElementById('healthIssueConfirm').addEventListener('click', async () => {
+  const name = document.getElementById('healthIssueName').value.trim();
+  if (!name) return;
+  const dog = activeDog();
+  if (!dog) return;
+  if (!Array.isArray(dog.healthIssues)) dog.healthIssues = [];
+  dog.healthIssues.push({ id: uid('hi'), name, ts: Date.now() });
+  document.getElementById('healthIssueOverlay').classList.remove('show');
+  await persistAndSync();
+  renderVetPage();
+});
+document.getElementById('healthIssueCancel').addEventListener('click', () => {
+  document.getElementById('healthIssueOverlay').classList.remove('show');
+});
+
+// ---- Wire event listeners ----
+document.getElementById('vetHomeCard').addEventListener('click', openVetPage);
+document.getElementById('vetPageClose').addEventListener('click', closeVetPage);
+document.getElementById('vetPageOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('vetPageOverlay')) closeVetPage(); });
+
+document.getElementById('vetVisitFormClose').addEventListener('click', () => document.getElementById('vetVisitFormOverlay').classList.remove('show'));
+
+document.getElementById('pickerCancel').addEventListener('click', () => document.getElementById('pickerOverlay').classList.remove('show'));
+
+document.getElementById('rxDetailConfirm').addEventListener('click', () => {
+  const dosage = document.getElementById('rxDosage').value.trim();
+  const frequency = parseInt(document.getElementById('rxFrequency').value)||1;
+  const startDate = document.getElementById('rxStartDate').value;
+  const notes = document.getElementById('rxNotes').value.trim();
+  vetFormRx.push({ id: uid('rx'), name: pendingRxName, dosage, frequency, startDate, notes });
+  document.getElementById('rxDetailOverlay').classList.remove('show');
+  renderVfRxList();
+});
+document.getElementById('rxDetailCancel').addEventListener('click', () => document.getElementById('rxDetailOverlay').classList.remove('show'));
 
 function renderAboutCard() {
   const dog = activeDog();
@@ -4192,6 +5011,7 @@ function renderAll() {
   renderTimeline();
   renderFeedGoal();
   renderMedication();
+  renderVetHomeCard();
 }
 
 // ---- Weekly summary ----
@@ -5144,6 +5964,26 @@ document.getElementById('addMedSave').addEventListener('click', async () => {
   showToast(medModalMode === 'manage' ? 'Medications updated 💊' : 'Medication added 💊');
 });
 document.getElementById('fabAddNote').addEventListener('click', () => { closeFabSheet(); openNoteModal(null); });
+document.getElementById('fabLogVaccine').addEventListener('click', () => {
+  closeFabSheet();
+  openPicker('Log vaccination', VACCINE_LIST, async (name) => {
+    // Create a minimal vet visit record for just this vaccine
+    const visit = {
+      id: uid('vet'),
+      dogId: activeDogId,
+      ts: Date.now(),
+      reason: 'Vaccination',
+      notes: '',
+      doctorEmail: '',
+      vaccinations: [{ name }],
+      prescriptions: []
+    };
+    vetVisits.push(visit);
+    await persistAndSync();
+    renderVetHomeCard();
+    showToast(`${name} logged`);
+  });
+});
 document.getElementById('fabAddDog').addEventListener('click', () => { closeFabSheet(); openAddDogModal(); });
 document.getElementById('fabCustomTime').addEventListener('click', () => { closeFabSheet(); openTimeModal(); });
 
