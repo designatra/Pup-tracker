@@ -3059,9 +3059,12 @@
 <div class="toast" id="toast">Logged!</div>
 
 <script>
-const APP_VERSION = '3.3.2'; // Versioning: major release => bump first (X.0.0); feature update => bump middle (3.X.0); bug fix or small update => bump last (3.3.X). Shown in footer and used for auto-update.
+const APP_VERSION = '3.4.0'; // Versioning: major release => bump first (X.0.0); feature update => bump middle (3.X.0); bug fix or small update => bump last (3.3.X). Shown in footer and used for auto-update.
 // Changelog shown when tapping the version number. Newest first.
 const CHANGELOG = [
+  { version: '3.4.0', date: 'Jun 2026', notes: [
+    'Vet visits can now be edited after they\'ve been added — tap a visit to expand it, then tap "Edit visit" to update the date, reason, vaccines, prescriptions, notes, or doctor email'
+  ]},
   { version: '3.3.2', date: 'Jun 2026', notes: [
     'Fixed: picker bottom sheet (Medications / Drugs, Vaccines) now stays above the iOS keyboard — visualViewport shift resets cleanly on close',
     'Fixed: background no longer scrolls when the picker sheet is open — scroll lock now correctly applies to the picker overlay',
@@ -4623,7 +4626,10 @@ function renderVetPage() {
         html += `<div class="vet-visit-sub">Doctor</div><a class="vet-email-link" href="mailto:${escapeHtml(v.doctorEmail)}">${escapeHtml(v.doctorEmail)}</a>`;
       }
 
-      html += `<button class="modal-btn cancel" data-del-visit="${v.id}" style="width:100%;margin-top:12px;font-size:0.78rem;">Delete visit</button>`;
+      html += `<div style="display:flex;gap:8px;margin-top:12px;">
+        <button class="modal-btn confirm" data-edit-visit="${v.id}" style="flex:1;font-size:0.78rem;">Edit visit</button>
+        <button class="modal-btn cancel" data-del-visit="${v.id}" style="flex:1;font-size:0.78rem;">Delete visit</button>
+      </div>`;
       html += `</div></div>`;
     });
   }
@@ -4695,9 +4701,19 @@ function renderVetPage() {
   content.querySelectorAll('.vet-visit-card').forEach(card => {
     card.addEventListener('click', (e) => {
       if (e.target.closest('[data-del-visit]')) return;
+      if (e.target.closest('[data-edit-visit]')) return;
       const id = card.getAttribute('data-visit-id');
       const body = document.getElementById('vbody-' + id);
       if (body) body.classList.toggle('open');
+    });
+  });
+
+  // Edit visit
+  content.querySelectorAll('[data-edit-visit]').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const id = btn.getAttribute('data-edit-visit');
+      openEditVisitForm(id);
     });
   });
 
@@ -4807,13 +4823,38 @@ document.getElementById('vetPhotoSave').addEventListener('click', async () => {
 // ---- Add Visit form ----
 let vetFormVaccines = []; // [{name}]
 let vetFormRx = [];       // [{id, name, dosage, frequency, startDate, notes}]
+let editingVisitId = null;
 let pickerCallback = null;
 
 function openAddVisitForm() {
   vetFormVaccines = [];
   vetFormRx = [];
+  editingVisitId = null;
   document.getElementById('vetVisitFormTitle').textContent = 'Log Vet Visit';
   renderAddVisitForm();
+  document.getElementById('vetVisitFormOverlay').classList.add('show');
+}
+
+function openEditVisitForm(visitId) {
+  const visit = vetVisits.find(v => v.id === visitId);
+  if (!visit) return;
+  editingVisitId = visitId;
+  vetFormVaccines = (visit.vaccinations || []).map(v => ({...v}));
+  vetFormRx = (visit.prescriptions || []).map(rx => ({...rx}));
+  document.getElementById('vetVisitFormTitle').textContent = 'Edit Visit';
+  renderAddVisitForm();
+  // Pre-fill form fields after render
+  const dateInput = document.getElementById('vfDate');
+  if (dateInput && visit.ts) {
+    const d = new Date(visit.ts);
+    dateInput.value = d.toISOString().slice(0, 10);
+  }
+  const reasonInput = document.getElementById('vfReason');
+  if (reasonInput) reasonInput.value = visit.reason || '';
+  const emailInput = document.getElementById('vfEmail');
+  if (emailInput) emailInput.value = visit.doctorEmail || '';
+  const notesInput = document.getElementById('vfNotes');
+  if (notesInput) notesInput.value = visit.notes || '';
   document.getElementById('vetVisitFormOverlay').classList.add('show');
 }
 
@@ -4872,7 +4913,7 @@ function renderAddVisitForm() {
 
   html += `<div style="display:flex;gap:10px;margin-bottom:32px;">
     <button class="modal-btn cancel" id="vfCancel" style="flex:1;">Cancel</button>
-    <button class="modal-btn confirm" id="vfSave" style="flex:1;">Save Visit</button>
+    <button class="modal-btn confirm" id="vfSave" style="flex:1;">${editingVisitId ? 'Update Visit' : 'Save Visit'}</button>
   </div>`;
 
   document.getElementById('vetVisitFormContent').innerHTML = html;
@@ -4906,6 +4947,7 @@ function renderAddVisitForm() {
   }));
 
   document.getElementById('vfCancel').addEventListener('click', () => {
+    editingVisitId = null;
     document.getElementById('vetVisitFormOverlay').classList.remove('show');
   });
 
@@ -4945,36 +4987,54 @@ async function saveVisitForm() {
   const doctorEmail = document.getElementById('vfEmail').value.trim();
   const ts = dateVal ? new Date(dateVal).setHours(12,0,0,0) : Date.now();
 
-  const visit = {
-    id: uid('vet'),
-    dogId: activeDogId,
-    ts,
-    reason,
-    notes,
-    doctorEmail,
-    vaccinations: vetFormVaccines.slice(),
-    prescriptions: vetFormRx.slice()
-  };
-  vetVisits.push(visit);
+  if (editingVisitId) {
+    // Update existing visit
+    const idx = vetVisits.findIndex(v => v.id === editingVisitId);
+    if (idx !== -1) {
+      vetVisits[idx] = {
+        ...vetVisits[idx],
+        ts,
+        reason,
+        notes,
+        doctorEmail,
+        vaccinations: vetFormVaccines.slice(),
+        prescriptions: vetFormRx.slice(),
+        updatedAt: Date.now()
+      };
+    }
+    editingVisitId = null;
+  } else {
+    const visit = {
+      id: uid('vet'),
+      dogId: activeDogId,
+      ts,
+      reason,
+      notes,
+      doctorEmail,
+      vaccinations: vetFormVaccines.slice(),
+      prescriptions: vetFormRx.slice()
+    };
+    vetVisits.push(visit);
 
-  // Auto-add prescriptions to med tracker
-  const dog = activeDog();
-  if (dog) {
-    for (const rx of vetFormRx) {
-      const existing = (dog.meds||[]).find(m => m.name.toLowerCase() === rx.name.toLowerCase());
-      if (!existing) {
-        if (!Array.isArray(dog.meds)) dog.meds = [];
-        dog.meds.push({
-          id: uid('med'),
-          name: rx.name,
-          type: 'Prescription',
-          dosage: rx.dosage || '',
-          count: parseInt(rx.frequency)||1,
-          times: [],
-          notes: rx.notes || '',
-          startDate: rx.startDate || null,
-          archived: false
-        });
+    // Auto-add prescriptions to med tracker only on new visits
+    const dog = activeDog();
+    if (dog) {
+      for (const rx of vetFormRx) {
+        const existing = (dog.meds||[]).find(m => m.name.toLowerCase() === rx.name.toLowerCase());
+        if (!existing) {
+          if (!Array.isArray(dog.meds)) dog.meds = [];
+          dog.meds.push({
+            id: uid('med'),
+            name: rx.name,
+            type: 'Prescription',
+            dosage: rx.dosage || '',
+            count: parseInt(rx.frequency)||1,
+            times: [],
+            notes: rx.notes || '',
+            startDate: rx.startDate || null,
+            archived: false
+          });
+        }
       }
     }
   }
@@ -5059,7 +5119,10 @@ document.getElementById('vetHomeCard').addEventListener('click', openVetPage);
 document.getElementById('vetPageClose').addEventListener('click', closeVetPage);
 document.getElementById('vetPageOverlay').addEventListener('click', (e) => { if (e.target === document.getElementById('vetPageOverlay')) closeVetPage(); });
 
-document.getElementById('vetVisitFormClose').addEventListener('click', () => document.getElementById('vetVisitFormOverlay').classList.remove('show'));
+document.getElementById('vetVisitFormClose').addEventListener('click', () => {
+  editingVisitId = null;
+  document.getElementById('vetVisitFormOverlay').classList.remove('show');
+});
 
 document.getElementById('pickerCancel').addEventListener('click', closePicker);
 // Dismiss picker when tapping the dark backdrop
